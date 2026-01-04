@@ -45,6 +45,13 @@ jobs:
         echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
         echo "Version: ${VERSION}"
 
+    - name: Clean up temp and unsigned APKs
+      run: |
+        rm -f app/build/outputs/apk/generic/release/*-temp.apk
+        find app/build/outputs/apk/generic/release/ -name "*.apk" ! -name "*-signed.apk" -delete
+        echo "Remaining APKs:"
+        ls -lh app/build/outputs/apk/generic/release/*.apk
+
     - name: Create Release
       uses: softprops/action-gh-release@v2
       env:
@@ -75,12 +82,12 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          app/build/outputs/apk/generic/release/*.apk
+          app/build/outputs/apk/generic/release/*-signed.apk
 
     - name: Upload Artifacts (Backup)
       uses: actions/upload-artifact@v4
       with:
-        name: apk-files
-        path: app/build/outputs/apk/**/*.apk
+        name: signed-apks
+        path: app/build/outputs/apk/generic/release/*-signed.apk
         if-no-files-found: error
         retention-days: 20
