@@ -8,8 +8,10 @@ import android.util.Log
 import com.junkfood.seal.App.Companion.context
 import com.junkfood.seal.download.DownloaderV2
 import com.junkfood.seal.util.NotificationUtil
+import com.junkfood.seal.util.makeToast
 import com.yausername.youtubedl_android.YoutubeDL
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 

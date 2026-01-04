@@ -16,9 +16,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import com.junkfood.seal.App
 import com.junkfood.seal.R
 import com.junkfood.seal.util.PreferenceUtil
 import com.junkfood.seal.util.UpdateUtil
+import com.junkfood.seal.util.makeToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

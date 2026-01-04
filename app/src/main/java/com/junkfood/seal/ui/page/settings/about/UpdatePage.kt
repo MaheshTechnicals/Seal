@@ -51,6 +51,7 @@ import com.junkfood.seal.util.PreferenceUtil.updateInt
 import com.junkfood.seal.util.STABLE
 import com.junkfood.seal.util.UPDATE_CHANNEL
 import com.junkfood.seal.util.UpdateUtil
+import com.junkfood.seal.util.makeToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

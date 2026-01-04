@@ -100,6 +100,7 @@ import com.junkfood.seal.util.SUBTITLE
 import com.junkfood.seal.util.THUMBNAIL
 import com.junkfood.seal.util.UpdateUtil
 import com.junkfood.seal.util.YT_DLP_VERSION
+import com.junkfood.seal.util.makeToast
 import com.yausername.youtubedl_android.YoutubeDL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

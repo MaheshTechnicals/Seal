@@ -52,6 +52,7 @@ import com.junkfood.seal.ui.component.PreferenceItem
 import com.junkfood.seal.ui.component.PreferenceSwitchWithDivider
 import com.junkfood.seal.util.AUTO_UPDATE
 import com.junkfood.seal.util.PreferenceUtil
+import com.junkfood.seal.util.makeToast
 
 private const val releaseURL = "https://github.com/JunkFood02/Seal/releases"
 private const val repoUrl = "https://github.com/JunkFood02/Seal"

@@ -12,9 +12,12 @@ import android.webkit.MimeTypeMap
 import androidx.annotation.CheckResult
 import androidx.core.content.FileProvider
 import androidx.documentfile.provider.DocumentFile
+import com.junkfood.seal.App
 import com.junkfood.seal.App.Companion.context
 import com.junkfood.seal.R
 import java.io.File
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.internal.closeQuietly
 
 const val AUDIO_REGEX = "(mp3|aac|opus|m4a)$"
