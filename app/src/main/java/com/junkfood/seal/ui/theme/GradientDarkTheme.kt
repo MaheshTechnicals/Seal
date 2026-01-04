@@ -11,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
@@ -189,8 +191,8 @@ fun animatedCardAppearance(): State<Float> {
     
     LaunchedEffect(Unit) {
         // Run animations in parallel using coroutines
-        kotlinx.coroutines.coroutineScope {
-            kotlinx.coroutines.launch {
+        coroutineScope {
+            launch {
                 scale.animateTo(
                     targetValue = 1f,
                     animationSpec = tween(
@@ -199,7 +201,7 @@ fun animatedCardAppearance(): State<Float> {
                     )
                 )
             }
-            kotlinx.coroutines.launch {
+            launch {
                 alpha.animateTo(
                     targetValue = 1f,
                     animationSpec = tween(
