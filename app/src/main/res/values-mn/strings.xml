@@ -136,7 +136,7 @@
     <string name="permission_issue_desc">Татаж авах/ болон Баримт бичиг/ гаднах лавлахуудыг дэмждэггүй</string>
     <string name="battery_configuration">Зайны тохиргоо</string>
     <string name="battery_configuration_desc">Энэ програмыг далд татаж авахын тулд батерейны оновчлолыг үл тоомсорло</string>
-    <string name="service_title">Seal татаж авч байна…</string>
+    <string name="service_title">Seal Plus татаж авч байна…</string>
     <string name="unknown_error">Үл мэдэгдэх алдаа</string>
     <string name="translate">Орчуулах</string>
     <string name="translate_desc">Энэ програмыг Hosted Weblate дээр орчуулахад тусална уу</string>
@@ -292,7 +292,7 @@
     <string name="temporary_directory_desc">Түр зуурын файлуудыг дотоод директорт хадгалах</string>
     <string name="sponsor">Ивээн тэтгэгч</string>
     <string name="sponsor_desc">GitHub дээр ивээн тэтгэж энэ програмыг дэмжээрэй</string>
-    <string name="sponsor_msg">Seal нь үргэлж үнэ төлбөргүй, хүн бүрт нээлттэй эх сурвалж байх болно. Хэрэв танд таалагдаж байвал GitHub дээр намайг ивээн тэтгэх талаар бодож үзээрэй!</string>
+    <string name="sponsor_msg">Seal Plus нь үргэлж үнэ төлбөргүй, хүн бүрт нээлттэй эх сурвалж байх болно. Хэрэв танд таалагдаж байвал GitHub дээр намайг ивээн тэтгэх талаар бодож үзээрэй!</string>
     <string name="feedback">Санал хүсэлт</string>
     <string name="sponsors">Ивээн тэтгэгчид</string>
     <string name="audio_format">Аудио формат</string>

@@ -122,7 +122,7 @@
     <string name="permission_issue_desc">Directorios fuera de las carpetas «Download/» y «Documents/» no están soportados</string>
     <string name="battery_configuration">Configuración de la batería</string>
     <string name="battery_configuration_desc">Ignorar la optimización de la batería para esta aplicación en segundo plano</string>
-    <string name="service_title">Seal está descargando…</string>
+    <string name="service_title">Seal Plus está descargando…</string>
     <string name="unknown_error">Ha ocurrido un error desconocido</string>
     <string name="translate">Traducir</string>
     <string name="translate_desc">Ayuda a traducir esta aplicación en Hosted Weblate</string>
@@ -165,7 +165,7 @@
     <string name="multiselect_item_count">%1$d vídeo(s), %2$d archivo(s) de audio</string>
     <string name="delete_multiple_items_msg">¿Eliminar %1$d elemento(s) de tu historial de descargas para siempre\?</string>
     <string name="check_for_updates_desc">Buscar automáticamente por la última versión disponible en GitHub</string>
-    <string name="app_up_to_date">Seal ya está puesto al día</string>
+    <string name="app_up_to_date">Seal Plus ya está puesto al día</string>
     <string name="update">Actualizar</string>
     <string name="check_for_updates">Buscar actualizaciones</string>
     <string name="aria2_desc">Usa aria2c como descargador externo</string>
@@ -279,7 +279,7 @@
     <string name="temporary_directory_desc">Almacena archivos temporales en el directorio seleccionado</string>
     <string name="sponsor">Patrocinador</string>
     <string name="sponsor_desc">Apoya esta aplicación patrocinando en GitHub</string>
-    <string name="sponsor_msg">Seal será siempre gratuito y de código abierto para todos. Si te gusta, ¡considera la posibilidad de patrocinarme en GitHub!</string>
+    <string name="sponsor_msg">Seal Plus será siempre gratuito y de código abierto para todos. Si te gusta, ¡considera la posibilidad de patrocinarme en GitHub!</string>
     <string name="feedback">Comentario</string>
     <string name="sponsors">Patrocinadores</string>
     <string name="audio_format">Formato del audio</string>

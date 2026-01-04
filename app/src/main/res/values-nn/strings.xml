@@ -78,7 +78,7 @@
     <string name="permission_issue">Problem med gøymetilgjenget</string>
     <string name="battery_configuration">Batteri-innstilling</string>
     <string name="battery_configuration_desc">Hopp over batteriforlenging for denne appen, slik at han kan hente ting i bakgrunnen</string>
-    <string name="service_title">Seal hentar…</string>
+    <string name="service_title">Seal Plus hentar…</string>
     <string name="unknown_error">Ukjent mistak</string>
     <string name="translate">Omsett</string>
     <string name="translate_desc">Hjelp til med å omsetja denne appen hos Hosted Weblate</string>
@@ -269,7 +269,7 @@
     <string name="okay">Greitt</string>
     <string name="got_it">Skjønar</string>
     <string name="feature_unavailable">Funksjonen er ikkje tilgjengeleg</string>
-    <string name="sponsor_msg">Seal vil for alltid vera kostnadsfri og ha ein open kjeldekode. Om du vil kan du stø meg på GitHub.</string>
+    <string name="sponsor_msg">Seal Plus vil for alltid vera kostnadsfri og ha ein open kjeldekode. Om du vil kan du stø meg på GitHub.</string>
     <string name="auto_update">Sjølvoppdater</string>
     <string name="enable_auto_update">Slå på sjølvoppdatering</string>
     <string name="audio_format_preference">Ynkst ljodformat</string>

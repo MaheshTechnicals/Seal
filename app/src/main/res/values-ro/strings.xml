@@ -179,7 +179,7 @@
     <string name="filesize_gb">%.2f G</string>
     <string name="apply">Aplică</string>
     <string name="unlimited">Nelimitat</string>
-    <string name="sponsor_msg">Seal va fi întotdeauna gratuit și open source pentru toată lumea. Dacă îți place, te rog să mă sponsorizezi pe GitHub!</string>
+    <string name="sponsor_msg">Seal Plus va fi întotdeauna gratuit și open source pentru toată lumea. Dacă îți place, te rog să mă sponsorizezi pe GitHub!</string>
     <string name="convert_audio_format_desc">Recodificarea fișierelor audio va duce la pierderea calității audio și la creșterea dimensiunii fișierului.</string>
     <string name="clip_video">Clipează video</string>
     <string name="convert_audio_format">Convertiți formatul audio</string>
@@ -232,7 +232,7 @@
     <string name="subdirectory_desc">Salvați fișierele în folderele numite ca și câmpurile respective</string>
     <string name="multiselect_mode">Modul Multiselect</string>
     <string name="print_details_desc">Imprimă mesaje detaliate la descărcare</string>
-    <string name="service_title">Seal se descarcă…</string>
+    <string name="service_title">Seal Plus se descarcă…</string>
     <string name="language_settings">Setați limba de afișare</string>
     <string name="delete_info_msg">Eliminați definitiv \"%1$s” din istoricul descărcărilor\?</string>
     <string name="readme_desc">Verificați depozitul GitHub și README</string>

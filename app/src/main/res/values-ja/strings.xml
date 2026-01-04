@@ -137,7 +137,7 @@
     <string name="github_issue_desc">バグ報告や機能要望</string>
     <string name="info_copied">情報がクリップボードにコピーされました</string>
     <string name="remove_template">削除しますか？</string>
-    <string name="service_title">Seal でダウンロード中…</string>
+    <string name="service_title">Seal Plus でダウンロード中…</string>
     <string name="subdirectory">サブフォルダに保存</string>
     <string name="subdirectory_desc">以下の項目名の各フォルダ内にファイルを保存</string>
     <string name="battery_configuration_desc">バックグラウンドでダウンロードするにはこのアプリのバッテリー最適化を無効にしてください</string>

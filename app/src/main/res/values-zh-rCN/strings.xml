@@ -127,7 +127,7 @@
     <string name="permission_issue_desc">无法下载到除 Download/ 及 Documents/ 以外的目录</string>
     <string name="battery_configuration">后台下载设置</string>
     <string name="battery_configuration_desc">允许本应用在后台运行以在后台进行下载</string>
-    <string name="service_title">Seal 正在进行下载…</string>
+    <string name="service_title">Seal Plus 正在进行下载…</string>
     <string name="unknown_error">出现不可预知的错误</string>
     <string name="translate">翻译</string>
     <string name="translate_desc">在 Weblate 上帮助我们翻译此应用</string>
@@ -280,7 +280,7 @@
     <string name="temporary_directory_desc">将临时文件储存在内部目录中</string>
     <string name="sponsor">赞助</string>
     <string name="sponsor_desc">在 GitHub 上赞助以支持本应用</string>
-    <string name="sponsor_msg">Seal 将永远保持免费与开源，如果你想要支持它的持续开发与改进，请考虑在 GitHub 上赞助我！</string>
+    <string name="sponsor_msg">Seal Plus 将永远保持免费与开源，如果你想要支持它的持续开发与改进，请考虑在 GitHub 上赞助我！</string>
     <string name="feedback">反馈</string>
     <string name="sponsors">赞助</string>
     <string name="no_downloaded_media">下载记录空空如也</string>
@@ -289,7 +289,7 @@
     <string name="clip_video_desc">在格式选择页面进行视频剪辑</string>
     <string name="clip_video_dialog_msg">该功能将使用 FFmpeg 以下载选定部分的视频，该功能仍处于试验阶段，剪辑不会完全准确，且并非所有格式都支持该功能，使用该功能时的下载速度将会显著减慢。</string>
     <string name="audio_format">音频格式</string>
-    <string name="auto_update_disabled_msg">%1$s 版本无法使用自动更新，如果你的设备并未安装 %1$s，或想要升级到测试版本以提前体验 Seal 中即将加入的新功能，请考虑 %2$s。</string>
+    <string name="auto_update_disabled_msg">%1$s 版本无法使用自动更新，如果你的设备并未安装 %1$s，或想要升级到测试版本以提前体验 Seal Plus 中即将加入的新功能，请考虑 %2$s。</string>
     <string name="switch_to_github_builds">切换至 GitHub 版本</string>
     <string name="okay">好</string>
     <string name="got_it">好</string>
@@ -336,9 +336,9 @@
     <string name="refresh_cookies_desc">点击打开网页以刷新 cookies：</string>
     <string name="ua_header">用户代理</string>
     <string name="export_to_file">导出到文件</string>
-    <string name="custom_command_usage_msg">yt-dlp 是一款强大的命令行视频下载工具。通过提供直观的图形用户界面（GUI）、 常见命令行的预设以及其他附加功能，Seal 使该工具更易使用。
+    <string name="custom_command_usage_msg">yt-dlp 是一款强大的命令行视频下载工具。通过提供直观的图形用户界面（GUI）、 常见命令行的预设以及其他附加功能，Seal Plus 使该工具更易使用。
 \n
-\n对于 yt-dlp 的高级用法，Seal 允许你直接创建、保存并执行自定义的命令行模板，就像在命令行终端上操作一样。
+\n对于 yt-dlp 的高级用法，Seal Plus 允许你直接创建、保存并执行自定义的命令行模板，就像在命令行终端上操作一样。
 \n
 \n使用自定义命令行时，多数 GUI 选项和功能会被禁用。</string>
     <string name="presets">预设</string>

@@ -116,7 +116,7 @@
     <string name="permission_issue_desc">Folder selain Download and Document tidak disokong</string>
     <string name="battery_configuration">Konfigurasi bateri</string>
     <string name="battery_configuration_desc">Abaikan pengoptimuman bateri bagi aplikasi ini untuk membolehkannya berjalan di latar belakang</string>
-    <string name="service_title">Seal sedang memuat turun…</string>
+    <string name="service_title">Seal Plus sedang memuat turun…</string>
     <string name="translate">Terjemah</string>
     <string name="translate_desc">Bantu terjemah aplikasi ini on Hosted Weblate</string>
     <string name="prefix">Templat laluan</string>
@@ -290,5 +290,5 @@
     <string name="sponsor">Taja</string>
     <string name="feedback">Maklum balas</string>
     <string name="sponsors">Penaja</string>
-    <string name="sponsor_msg">Seal akan sentiasa menjadi percuma dan sumber terbuka untuk semua orang. Jika anda suka, sila pertimbangkan untuk menaja saya di GitHub!</string>
+    <string name="sponsor_msg">Seal Plus akan sentiasa menjadi percuma dan sumber terbuka untuk semua orang. Jika anda suka, sila pertimbangkan untuk menaja saya di GitHub!</string>
 </resources>

@@ -3,7 +3,7 @@
 	<img src="fastlane/metadata/android/en-US/images/icon.png" width=160 height=160 >
 </p>
 <h1 align="center">
-Seal
+Seal Plus
 </h1>
 </div>
 

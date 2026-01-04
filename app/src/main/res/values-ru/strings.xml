@@ -54,7 +54,7 @@
     <string name="download_directory_desc">Выберите место для хранения видео- и аудио-файлов</string>
     <string name="permission_issue">Запрет доступа к хранилищу</string>
     <string name="battery_configuration">Настройки энергопотребления</string>
-    <string name="service_title">Seal скачивает…</string>
+    <string name="service_title">Seal Plus скачивает…</string>
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="translate">Перевод</string>
     <string name="translate_desc">Помогите с переводом на Hosted Weblate</string>
@@ -281,7 +281,7 @@
     <string name="sponsor_desc">Поддержать приложение путём спонсирования на GitHub</string>
     <string name="feedback">Обратная связь</string>
     <string name="sponsors">Спонсоры</string>
-    <string name="sponsor_msg">Seal всегда будет бесплатным и с открытым исходным кодом для всех. Если вам нравится это приложение, пожалуйста, подумайте о спонсорстве на GitHub!</string>
+    <string name="sponsor_msg">Seal Plus всегда будет бесплатным и с открытым исходным кодом для всех. Если вам нравится это приложение, пожалуйста, подумайте о спонсорстве на GitHub!</string>
     <string name="audio_format">Формат аудио</string>
     <string name="beta_features">Бета</string>
     <string name="enable_experimental_feature">Включить экспериментальную функцию\?</string>

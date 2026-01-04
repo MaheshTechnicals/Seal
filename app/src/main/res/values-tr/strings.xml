@@ -64,7 +64,7 @@
     <string name="download_directory_desc">Videoların ve ses dosyalarının nerede saklanacağını seçin</string>
     <string name="permission_issue">Depolama izni sorunu</string>
     <string name="battery_configuration">Pil yapılandırması</string>
-    <string name="service_title">Seal indiriyor…</string>
+    <string name="service_title">Seal Plus indiriyor…</string>
     <string name="unknown_error">Bilinmeyen hata</string>
     <string name="translate_desc">Hosted Weblate\'de bu uygulamanın çevrilmesine yardımcı olun</string>
     <string name="video_directory">Video klasörü</string>
@@ -285,13 +285,13 @@
     <string name="temporary_directory_desc">Geçici dosyaları dahili dizinde saklayın</string>
     <string name="sponsor">Sponsor</string>
     <string name="sponsor_desc">GitHub\'da sponsor olarak bu uygulamayı destekleyin</string>
-    <string name="sponsor_msg">Seal her zaman ücretsiz ve herkes için açık kaynak olacaktır. Beğendiyseniz, lütfen GitHub\'da bana sponsor olmayı düşünün!</string>
+    <string name="sponsor_msg">Seal Plus her zaman ücretsiz ve herkes için açık kaynak olacaktır. Beğendiyseniz, lütfen GitHub\'da bana sponsor olmayı düşünün!</string>
     <string name="feedback">Geri bildirim</string>
     <string name="sponsors">Sponsorlar</string>
     <string name="msg_from_developer">Geliştiriciden Mesaj</string>
     <string name="sponsor_msg2">Çok teşekkür ederim!</string>
     <string name="okay">Tamam.</string>
-    <string name="auto_update_disabled_msg">%1$s yapıları için otomatik güncelleme mevcut değildir. Cihazınızda %1$s yüklü değilse veya Seal\'de gelecek yeni özellikleri önizlemek istiyorsanız, lütfen %2$s\'i düşünün.</string>
+    <string name="auto_update_disabled_msg">%1$s yapıları için otomatik güncelleme mevcut değildir. Cihazınızda %1$s yüklü değilse veya Seal Plus\'de gelecek yeni özellikleri önizlemek istiyorsanız, lütfen %2$s\'i düşünün.</string>
     <string name="switch_to_github_builds">GitHub derlemelerine geçiş</string>
     <string name="got_it">Anladım</string>
     <string name="feature_unavailable">Özellik mevcut değil</string>
@@ -337,9 +337,9 @@
     <string name="unknown">Bilinmeyen</string>
     <string name="export_to_file">Dosyaya aktar</string>
     <string name="custom">Özel</string>
-    <string name="custom_command_usage_msg">yt-dlp, videoları indirmek için güçlü bir komut satırı aracıdır. Seal, sezgisel bir GUI, ortak komutlar için ön ayarlar ve diğer ek özellikler sağlayarak yt-dlp\'nin kullanımını kolaylaştırır.
+    <string name="custom_command_usage_msg">yt-dlp, videoları indirmek için güçlü bir komut satırı aracıdır. Seal Plus, sezgisel bir GUI, ortak komutlar için ön ayarlar ve diğer ek özellikler sağlayarak yt-dlp\'nin kullanımını kolaylaştırır.
 \n
-\n yt-dlp\'nin gelişmiş kullanımı için Seal, tıpkı bir terminalde olduğu gibi özel komut şablonlarını doğrudan oluşturmanıza, kaydetmenize ve yürütmenize olanak tanır.
+\n yt-dlp\'nin gelişmiş kullanımı için Seal Plus, tıpkı bir terminalde olduğu gibi özel komut şablonlarını doğrudan oluşturmanıza, kaydetmenize ve yürütmenize olanak tanır.
 \n
 \n Özel komutlar kullanıldığında GUI seçeneklerinin ve özelliklerinin çoğu devre dışı bırakılır.</string>
     <string name="clear_download_archive">İndirme arşivi temizlensin mi\?</string>

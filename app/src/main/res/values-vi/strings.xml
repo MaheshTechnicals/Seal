@@ -138,7 +138,7 @@
     <string name="permission_issue_desc">Các đường dẫn ngoài Download/ và Documents/ không được hỗ trợ</string>
     <string name="battery_configuration">Cấu hình pin</string>
     <string name="battery_configuration_desc">Bỏ qua Tối ưu hóa pin để ứng dụng này tải xuống trong nền</string>
-    <string name="service_title">Seal đang tải xuống…</string>
+    <string name="service_title">Seal Plus đang tải xuống…</string>
     <string name="unknown_error">Lỗi không xác định</string>
     <string name="translate">Dịch</string>
     <string name="translate_desc">Giúp dịch ứng dụng này trên Hosted Weblate</string>
@@ -223,7 +223,7 @@
     <string name="matrix_space">Khu vực Matrix</string>
     <string name="video_title_sample_text">Văn bản mẫu tiêu đề video</string>
     <string name="abs_hint">Đa số các nền tảng phát trực tuyến video đều phân phối âm thanh và video riêng biệt, bạn có thể chọn và hợp nhất định dạng chỉ có âm thanh với định dạng chỉ có video thành một video duy nhất.</string>
-    <string name="sponsor_msg">Seal sẽ luôn miễn phí và là mã nguồn mở cho tất cả mọi người. Nếu bạn thích nó, vui lòng xem xét tài trợ cho tôi trên GitHub!</string>
+    <string name="sponsor_msg">Seal Plus sẽ luôn miễn phí và là mã nguồn mở cho tất cả mọi người. Nếu bạn thích nó, vui lòng xem xét tài trợ cho tôi trên GitHub!</string>
     <string name="title">Tiêu đề</string>
     <string name="remove_cookie_profile_desc">Xóa mục này cho \"%1$s\"? Xin lưu ý rằng các cookie được lưu trữ cho trang web này sẽ không bị xóa.</string>
     <string name="clip_video_dialog_msg">Các lượt tải xuống sử dụng tính năng này sẽ được ủy quyền cho FFmpeg để tải xuống các phần đã chọn của video, tính năng này vẫn đang thử nghiệm và việc cắt sẽ không hoàn toàn chính xác, không phải tất cả các định dạng đều hỗ trợ tính năng này và bạn có thể gặp phải tốc độ tải xuống chậm hơn.</string>
@@ -255,7 +255,7 @@
     <string name="sponsor">Tài trợ</string>
     <string name="sponsor_desc">Hỗ trợ ứng dụng này bằng cách tài trợ trên GitHub</string>
     <string name="switch_to_github_builds">chuyển sang các bản dựng GitHub</string>
-    <string name="auto_update_disabled_msg">Tự động cập nhật không khả dụng cho các bản dựng %1$s. Nếu bạn chưa cài đặt %1$s trên thiết bị của mình hoặc muốn xem trước các tính năng mới sắp tới trong Seal, vui lòng xem xét %2$s.</string>
+    <string name="auto_update_disabled_msg">Tự động cập nhật không khả dụng cho các bản dựng %1$s. Nếu bạn chưa cài đặt %1$s trên thiết bị của mình hoặc muốn xem trước các tính năng mới sắp tới trong Seal Plus, vui lòng xem xét %2$s.</string>
     <string name="okay">Đồng ý</string>
     <string name="feature_unavailable">Tính năng không khả dụng</string>
     <string name="msg_from_developer">Tin nhắn từ nhà phát triển</string>
@@ -322,9 +322,9 @@
     <string name="custom_command_directory_desc">Chỉ định thư mục đầu ra khi sử dụng lệnh tùy chỉnh</string>
     <string name="folder_picker">Trình chọn thư mục</string>
     <string name="prefer_compatibility_desc">Ưu tiên định dạng MP4(H.264) để chia sẻ với các ứng dụng khác</string>
-    <string name="custom_command_usage_msg">yt-dlp là công cụ dòng lệnh mạnh mẽ để tải xuống băng hình. Seal giúp sử dụng yt-dlp dễ dàng hơn bằng cách cung cấp GUI trực quan, cài đặt trước cho các lệnh phổ biến và các tính năng bổ sung khác.
+    <string name="custom_command_usage_msg">yt-dlp là công cụ dòng lệnh mạnh mẽ để tải xuống băng hình. Seal Plus giúp sử dụng yt-dlp dễ dàng hơn bằng cách cung cấp GUI trực quan, cài đặt trước cho các lệnh phổ biến và các tính năng bổ sung khác.
 \n
-\nĐể sử dụng yt-dlp nâng cao, Seal cho phép bạn tạo, lưu và thực thi trực tiếp các mẫu lệnh tùy chỉnh, giống như trong một thiết bị đầu cuối.
+\nĐể sử dụng yt-dlp nâng cao, Seal Plus cho phép bạn tạo, lưu và thực thi trực tiếp các mẫu lệnh tùy chỉnh, giống như trong một thiết bị đầu cuối.
 \n
 \nKhi sử dụng các lệnh tùy chỉnh, hầu hết các tùy chọn và tính năng GUI sẽ bị tắt.</string>
     <string name="download_type">Loại tải xuống</string>

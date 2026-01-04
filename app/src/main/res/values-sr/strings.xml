@@ -101,7 +101,7 @@
     <string name="subdirectory">Сачувај у потфолдер</string>
     <string name="permission_issue">Проблем с дозволом за приступ меморији</string>
     <string name="battery_configuration">Конфигурација батерије</string>
-    <string name="service_title">Seal преузима…</string>
+    <string name="service_title">Seal Plus преузима…</string>
     <string name="translate">Преведи</string>
     <string name="prefix">Шаблон путање</string>
     <string name="embed_subtitles">Угради титлове</string>
@@ -279,7 +279,7 @@
     <string name="temporary_directory_desc">Чувајте привремене фајлове у унутрашњем фолдеру</string>
     <string name="feedback">Повратне информације</string>
     <string name="sponsors">Спонзори</string>
-    <string name="sponsor_msg">Seal ће увек бити бесплатан и отвореног кода за све. Ако вам се свиђа, размислите о томе да ме спонзоришете на GitHub-у!</string>
+    <string name="sponsor_msg">Seal Plus ће увек бити бесплатан и отвореног кода за све. Ако вам се свиђа, размислите о томе да ме спонзоришете на GitHub-у!</string>
     <string name="sponsor">Спонзориши</string>
     <string name="sponsor_desc">Подржите ову апликацију спонзорисањем на GitHub-у</string>
     <string name="audio_format">Формат аудио снимка</string>

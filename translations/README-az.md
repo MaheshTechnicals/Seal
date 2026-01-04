@@ -2,7 +2,7 @@
 
 <img width="" src="fastlane/metadata/android/en-US/images/icon.png"  width=160 height=160  align="center">
 
-# Seal
+# Seal Plus
 
 ### Android üçün Video/Səs Yükləyici
 
@@ -112,9 +112,7 @@ Siz [Hosted Weblate](https://hosted.weblate.org/projects/seal/)-də Seal-ı tər
 
 ## 🧱 Kreditlər
 
-Seal [youtubedl-android](https://github.com/yausername/youtubedl-android) əsasında [yt-dlp](https://github.com/yt-dlp/yt-dlp) ilə sadə GUI-dir.  
-
-Bəzi UI dizaynları və kodları [Read You](https://github.com/Ashinch/ReadYou) və [Music You](https://github.com/Kyant0/MusicYou)-dan götürülmüşdür.
+Seal Plus [youtubedl-android](https://github.com/yausername/youtubedl-android) əsasında [yt-dlp](https://github.com/yt-dlp/yt-dlp) ilə sadə GUI-dir.
 
 [dvd](https://github.com/yausername/dvd)
 

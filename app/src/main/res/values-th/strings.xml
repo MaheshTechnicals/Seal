@@ -67,7 +67,7 @@
     <string name="github_issue">Issue ใน GitHub</string>
     <string name="task_canceled">ยกเลิกงานดาวน์โหลดแล้ว</string>
     <string name="unknown_error">ข้อผิดพลาดที่ไม่รู้จัก</string>
-    <string name="service_title">Seal กำลังดาวน์โหลด…</string>
+    <string name="service_title">Seal Plus กำลังดาวน์โหลด…</string>
     <string name="battery_configuration_desc">ละเว้นการเพิ่มประสิทธิภาพแบตเตอรี่สำหรับแอพฯ นี้เพื่อดาวน์โหลดในพื้นหลัง</string>
     <string name="downloading_indicator_text">กำลังดาวน์โหลด…</string>
     <string name="info_copied">­ข้อมูลถูกคัดลอกไปยังคลิปบอร์ดแล้ว</string>
@@ -280,7 +280,7 @@
     <string name="subtitle">ซับไตเติ้ล</string>
     <string name="video_title_sample_text">ตัวอย่างข้อความของไตเติ้ล</string>
     <string name="running_tasks">กำลังรันงาน</string>
-    <string name="sponsor_msg">Seal จะยังคงเป็นซอร์ตฟรีและเปิดกว้างสำหรับทุกคน ถ้าคุณชอบมัน กรุณาพิจารณาสนับสนุนฉันใน GitHub!</string>
+    <string name="sponsor_msg">Seal Plus จะยังคงเป็นซอร์ตฟรีและเปิดกว้างสำหรับทุกคน ถ้าคุณชอบมัน กรุณาพิจารณาสนับสนุนฉันใน GitHub!</string>
     <string name="format_sorting_desc">จัดเรียงรูปแบบด้วยตัวเลือก -S ของ yt-dlp</string>
     <string name="update_channel_desc">ติดตั้งรุ่นก่อนวางจำหน่ายเพื่อดูลักษณะใหม่และการเปลี่ยนแปลง
 \n

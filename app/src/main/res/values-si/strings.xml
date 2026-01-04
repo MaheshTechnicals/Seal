@@ -43,7 +43,7 @@
     <string name="video_url">වීඩියො සබැඳිය</string>
     <string name="share_fail_msg">බෙදාගත් අන්තර්ගතයෙන් URL ගැලපීමට නොහැක</string>
     <string name="share_success_msg">බෙදාගත් අන්තර්ගතයෙන් වීඩියෝ සබැඳිය කියවමින් පවතී…</string>
-    <string name="service_title">Seal බාගත කරගනිමින් පවතී…</string>
+    <string name="service_title">Seal Plus බාගත කරගනිමින් පවතී…</string>
     <string name="unknown_error">නොදන්නා දෝෂයක්</string>
     <string name="translate">පරිවර්තනය</string>
     <string name="translate_desc">යෙදුම Hosted Weblate මත පරිවර්තනය කිරීමට සහාය වන්න</string>

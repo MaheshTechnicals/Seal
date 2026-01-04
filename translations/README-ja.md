@@ -3,7 +3,7 @@
 	<img src="fastlane/metadata/android/en-US/images/icon.png" width=160 height=160 >
 </p>
 <h1 align="center">
-Seal
+Seal Plus
 </h1>
 </div>
 
@@ -85,7 +85,7 @@ height="70">](https://f-droid.org/packages/com.junkfood.seal/)
 
 ## 💖 スポンサー
 
-Seal は誰にとっても常にフリーでオープンソースです。気に入っていただけたら[スポンサーになることもご検討ください](https://github.com/sponsors/JunkFood02)!
+Seal Plus は誰にとっても常にフリーでオープンソースです。気に入っていただけたら[スポンサーになることもご検討ください](https://github.com/sponsors/JunkFood02)!
 
 ## 🤝 貢献
 

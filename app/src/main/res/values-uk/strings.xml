@@ -126,7 +126,7 @@
     <string name="permission_issue_desc">Директорії за межами Documents/ й Download/ не пiдтримуються</string>
     <string name="battery_configuration">Налаштування батареї</string>
     <string name="battery_configuration_desc">Ігнорувати оптимізації батареї для фонових завантажень</string>
-    <string name="service_title">Seal завантажує…</string>
+    <string name="service_title">Seal Plus завантажує…</string>
     <string name="unknown_error">Невідома помилка</string>
     <string name="translate">Перекласти</string>
     <string name="translate_desc">Допоможіть перекласти Seal на Weblate</string>
@@ -281,7 +281,7 @@
     <string name="feedback">Зворотний зв\'язок</string>
     <string name="sponsors">Спонсори</string>
     <string name="sponsor_desc">Підтримайте цей застосунок, спонсоруючи нас на GitHub</string>
-    <string name="sponsor_msg">Seal завжди буде безплатним і відкритим для всіх. Якщо вам це подобається, подумайте про те, щоб стати моїм спонсором на GitHub!</string>
+    <string name="sponsor_msg">Seal Plus завжди буде безплатним і відкритим для всіх. Якщо вам це подобається, подумайте про те, щоб стати моїм спонсором на GitHub!</string>
     <string name="no_downloaded_media">Немає завантажених медіа</string>
     <string name="beta_features">Бета</string>
     <string name="clip_video_desc">Створюйте відеокліпи на сторінці вибору формату</string>

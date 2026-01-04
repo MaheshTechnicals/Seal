@@ -5,6 +5,17 @@ All notable changes (starting from v1.7.3) to stable releases will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+* **Rebranded from "Seal" to "Seal Plus"**
+  * Updated application name to "Seal Plus"
+  * Changed application ID from `com.junkfood.seal` to `com.junkfood.sealplus`
+  * Updated all README files and documentation
+  * Debug variant now shows "Seal Plus Debug"
+  * Preview variant now shows "Seal Plus Preview"
+
 ## [v2.1.1][2.1.1] - 2026-01-04
 
 ### 2026 Platform Updates

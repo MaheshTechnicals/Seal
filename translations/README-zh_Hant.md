@@ -2,7 +2,7 @@
 
 <img width="" src="fastlane/metadata/android/en-US/images/icon.png"  width=160 height=160  align="center">
 
-# Seal
+# Seal Plus
 
 ### 只為 Android 而生的視訊/音訊下載程式
 

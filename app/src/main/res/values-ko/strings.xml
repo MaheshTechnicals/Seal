@@ -124,7 +124,7 @@
     <string name="subdirectory_desc">각 필드 이름으로 지정된 폴더에 파일 저장</string>
     <string name="permission_issue">저장소 권한 문제</string>
     <string name="permission_issue_desc">Download/ 및 Documents/ 이외의 외부 디렉토리는 지원되지 않습니다</string>
-    <string name="service_title">Seal 다운로드 중…</string>
+    <string name="service_title">Seal Plus 다운로드 중…</string>
     <string name="translate">번역</string>
     <string name="translate_desc">Hosted Weblate에서 이 앱의 번역을 도울수 있습니다</string>
     <string name="prefix">접두사</string>

@@ -120,7 +120,7 @@
     <string name="share_fail_msg">Impossibile abbinare l\'URL al contenuto condiviso</string>
     <string name="subdirectory">Salva in una sottodirectory</string>
     <string name="battery_configuration">Configurazione della batteria</string>
-    <string name="service_title">Seal sta scaricando…</string>
+    <string name="service_title">Seal Plus sta scaricando…</string>
     <string name="subdirectory_desc">Salva i file in cartelle chiamate come i rispettivi siti web</string>
     <string name="permission_issue">Problema relativo all\'autorizzazione di archiviazione</string>
     <string name="translate_desc">Contribuisci a tradurre questa applicazione su Hosted Weblate</string>
@@ -285,12 +285,12 @@
     <string name="apply">Applica</string>
     <string name="clip_video">Video clip</string>
     <string name="sponsor_desc">Sostieni questa applicazione sponsorizzando su GitHub</string>
-    <string name="sponsor_msg">Seal sarà sempre libero e gratuito per tutti. Se ti piace, considera la possibilità di sponsorizzarmi su GitHub!</string>
+    <string name="sponsor_msg">Seal Plus sarà sempre libero e gratuito per tutti. Se ti piace, considera la possibilità di sponsorizzarmi su GitHub!</string>
     <string name="import_from_preferences">Importa</string>
     <string name="temporary_directory_desc">Salva file temporanei nella directory interna</string>
     <string name="msg_from_developer">Messaggio dello sviluppatore</string>
     <string name="sponsor_msg2">Grazie mille!</string>
-    <string name="auto_update_disabled_msg">L\'aggiornamento automatico non è disponibile per le build %1$s. Se non hai installato %1$s sul dispositivo, o se vorresti provare in anteprima le nuove funzionalità di Seal, considera %2$s.</string>
+    <string name="auto_update_disabled_msg">L\'aggiornamento automatico non è disponibile per le build %1$s. Se non hai installato %1$s sul dispositivo, o se vorresti provare in anteprima le nuove funzionalità di Seal Plus, considera %2$s.</string>
     <string name="okay">Va bene</string>
     <string name="got_it">Ho capito</string>
     <string name="feature_unavailable">Funzione non disponibile</string>

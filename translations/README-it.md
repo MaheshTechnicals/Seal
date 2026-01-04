@@ -2,7 +2,7 @@
 
 <img width="" src="fastlane/metadata/android/en-US/images/icon.png"  width=160 height=160  align="center">
 
-# Seal
+# Seal Plus
 
 ### Video/Audio Downloader per Android
 
@@ -111,7 +111,7 @@ Puoi aiutare a tradurre Seal su [Hosted Weblate](https://hosted.weblate.org/proj
 
 ## 🧱 Crediti
 
-Seal é una semplice GUI per [yt-dlp](https://github.com/yt-dlp/yt-dlp), basata su [youtubedl-android](https://github.com/yausername/youtubedl-android)
+Seal Plus é una semplice GUI per [yt-dlp](https://github.com/yt-dlp/yt-dlp), basata su [youtubedl-android](https://github.com/yausername/youtubedl-android)
 
 Alcune parti del design UI sono prese da [Read You](https://github.com/Ashinch/ReadYou) e [Music You](https://github.com/Kyant0/MusicYou)
 

@@ -63,7 +63,7 @@
     <string name="yt_dlp_up_to_date">Bruker nyeste versjon av yt-dlp</string>
     <string name="release_desc">Se etter endringslogger og nye versjoner</string>
     <string name="display_settings">Mørk drakt, dynamisk farge, språk</string>
-    <string name="service_title">Seal laster ned …</string>
+    <string name="service_title">Seal Plus laster ned …</string>
     <string name="video_format_preference">Foretrukket videoformat</string>
     <string name="preferred_format_desc">Valgt format når flere tilbys</string>
     <string name="paste_desc">Klikk «Lim inn» for å hente videolenken fra utklippstavlen din.</string>

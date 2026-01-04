@@ -79,7 +79,7 @@
     <string name="subdirectory_desc">Sla bestanden op in mappen met de naam van de velden</string>
     <string name="permission_issue">Probleem met opslagmachtiging</string>
     <string name="battery_configuration">Batterijconfiguratie</string>
-    <string name="service_title">Seal is bezig met downloaden…</string>
+    <string name="service_title">Seal Plus is bezig met downloaden…</string>
     <string name="video_directory">Video map</string>
     <string name="settings">Instellingen</string>
     <string name="checked">Gecheckt</string>
