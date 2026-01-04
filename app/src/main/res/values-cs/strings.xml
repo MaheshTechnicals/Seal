@@ -127,7 +127,7 @@
     <string name="concurrent_download_num">Počet vláken pro souběžné stahování DASH/HLS native videí je %d.</string>
     <string name="download_range_desc">Upřesněte rozsah videí ke stažení z playlistu „%3$s“ (od %1$d do %2$d).</string>
     <string name="battery_configuration">Nastavení baterie</string>
-    <string name="service_title">Seal stahuje…</string>
+    <string name="service_title">Seal Plus stahuje…</string>
     <string name="translate">Překlad</string>
     <string name="translate_desc">Pomozte přeložit tuto aplikaci na Hosted Weblate</string>
     <string name="prefix">Předpona</string>
@@ -210,7 +210,7 @@
     <string name="edit_file">Upravit soubor</string>
     <string name="embed_metadata_desc">Vložit metadata a miniaturu videa do zvukového souboru</string>
     <string name="switch_to_github_builds">přechod na sestavení z GitHubu</string>
-    <string name="custom_command_usage_msg">yt-dlp je výkonný nástroj pro příkazový řádek sloužící ke stahování videí. Seal zjednodušuje jeho používání díky intuitivnímu grafickému rozhraní, přednastavením pro časté příkazy a dalším dodatečným funkcím.
+    <string name="custom_command_usage_msg">yt-dlp je výkonný nástroj pro příkazový řádek sloužící ke stahování videí. Seal Plus zjednodušuje jeho používání díky intuitivnímu grafickému rozhraní, přednastavením pro časté příkazy a dalším dodatečným funkcím.
 \n
 \nPokročilým uživatelům nástroje yt-dlp umožňuje Seal vytvářet, ukládat a přímo spouštět vlastní šablony příkazů, stejně jako v terminálu.
 \n
@@ -278,7 +278,7 @@
     <string name="second">sekunda</string>
     <string name="set_directory_desc">Klikněte pro nastavení adresáře</string>
     <string name="update_channel">Kanál aktualizací</string>
-    <string name="sponsor_msg">Seal bude vždy zdarma a open source pro každého. Pokud se vám aplikace líbí, prosím zvažte sponzorování na GitHubu!</string>
+    <string name="sponsor_msg">Seal Plus bude vždy zdarma a open source pro každého. Pokud se vám aplikace líbí, prosím zvažte sponzorování na GitHubu!</string>
     <string name="crop_artwork">Oříznout obrázek</string>
     <string name="subtitle_sponsorblock">Titulky mohou mít špatné časování při odstranění SponsorBlock segmentů.</string>
     <string name="start">Začít</string>
@@ -331,7 +331,7 @@
     <string name="telegram_channel">Kanál na Telegramu</string>
     <string name="feature_unavailable">Funkce není dostupná</string>
     <string name="temporary_directory_desc">Uložit dočasné soubory v interním adresáři</string>
-    <string name="auto_update_disabled_msg">Automatické aktualizace nejsou dostupné pro sestavení ze služby %1$s. Pokud nemáte na zařízení nainstalovanou službu %1$s nebo pokud byste chtěli vidět nadcházející nové funkce v Sealu, zvažte prosím %2$s.</string>
+    <string name="auto_update_disabled_msg">Automatické aktualizace nejsou dostupné pro sestavení ze služby %1$s. Pokud nemáte na zařízení nainstalovanou službu %1$s nebo pokud byste chtěli vidět nadcházející nové funkce v Seal Plus, zvažte prosím %2$s.</string>
     <string name="cookies_usage_msg">Stahování z některých stránek vyžaduje autentifikační informace z účtu. Klepněte na „Vygenerovat nové cookies“, zadejte adresu stránky a poté se přihlaste s vaším účtem v okně prohlížeče, aplikace se postará o vygenerování za vás.</string>
     <string name="proxy_desc">Použít proxy pro připojení k internetu</string>
     <string name="generate_new_cookies">Vygenerovat nové cookies</string>

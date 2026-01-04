@@ -322,9 +322,9 @@
     <string name="legacy">레거시</string>
     <string name="expand">펼치기</string>
     <string name="new_task">새 다운로드 작업</string>
-    <string name="custom_command_usage_msg">yt-dlp는 영상 다운로드를 위한 강력한 명령줄 도구입니다. Seal은 직관적인 GUI와 일반적인 명령어들을 위한 프리셋들, 기타 추가적인 기능들을 제공함으로써 yt-dlp을 쉽게 사용할 수 있습니다.
+    <string name="custom_command_usage_msg">yt-dlp는 영상 다운로드를 위한 강력한 명령줄 도구입니다. Seal Plus은 직관적인 GUI와 일반적인 명령어들을 위한 프리셋들, 기타 추가적인 기능들을 제공함으로써 yt-dlp을 쉽게 사용할 수 있습니다.
 \n
-\nyt-dlp의 고급 사용을 위해 Seal은 커스텀 명령어 템플릿을 제작과 저장, 터미널에서처럼 직접 실행할 수도 있습니다.
+\nyt-dlp의 고급 사용을 위해 Seal Plus은 커스텀 명령어 템플릿을 제작과 저장, 터미널에서처럼 직접 실행할 수도 있습니다.
 \n
 \n커스텀 명령어 사용 시, 대부분의 GUI 옵션과 기능들이 비활성화될 것입니다.</string>
     <string name="clear_download_archive">다운로드 아카이브를 비울까요?</string>

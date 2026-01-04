@@ -162,7 +162,7 @@
     <string name="permission_issue_desc">Els directoris que són fora de «Download» i «Documents» no estan suportats</string>
     <string name="battery_configuration">Configuració de la bateria</string>
     <string name="battery_configuration_desc">Ignora l\'optimització de la bateria perquè aquesta aplicació pugui baixar vídeos en segon pla</string>
-    <string name="service_title">Seal està descarregant…</string>
+    <string name="service_title">Seal Plus està descarregant…</string>
     <string name="translate">Tradueix</string>
     <string name="translate_desc">Ajudeu a traduir aquesta aplicació a Hosted Weblate</string>
     <string name="unknown_error">Error desconegut</string>
@@ -240,7 +240,7 @@
     <string name="clear">Neteja</string>
     <string name="add">Afegeix</string>
     <string name="shortcuts">Dreceres</string>
-    <string name="custom_command_usage_msg">yt-dlp és una potent eina de línia d\'ordres per baixar vídeos. Seal facilita l\'ús de yt-dlp proporcionant una interfície gràfica intuïtiva, ordres predefinides s i altres funcions addicionals.
+    <string name="custom_command_usage_msg">yt-dlp és una potent eina de línia d\'ordres per baixar vídeos. Seal Plus facilita l\'ús de yt-dlp proporcionant una interfície gràfica intuïtiva, ordres predefinides s i altres funcions addicionals.
 \n
 \nPer a un ús avançat de yt-dlp, Seal permet crear, desar i executar plantilles d\'ordres personalitzades directament, com en un terminal.
 \n
@@ -367,7 +367,7 @@
     <string name="force_ipv4_desc">Fes totes les connexions via IPv4</string>
     <string name="merge_audiostream_desc">Permet fusionar múltiples fluxos d\'àudio en un sol fitxer</string>
     <string name="merge_audiostream">Fusiona múltiples fluxos d\'àudio</string>
-    <string name="auto_update_disabled_msg">L\'actualització automàtica no està disponible per a les versions de %1$s. Si no teniu %1$s instal·lat al dispositiu, o voleu previsualitzar les futures funcionalitats del Seal, considereu %2$s.</string>
+    <string name="auto_update_disabled_msg">L\'actualització automàtica no està disponible per a les versions de %1$s. Si no teniu %1$s instal·lat al dispositiu, o voleu previsualitzar les futures funcionalitats del Seal Plus, considereu %2$s.</string>
     <string name="clip_video_dialog_msg">Les baixades que utilitzin aquesta funció es delegaran a FFmpeg per baixar les seccions seleccionades del vídeo. Aquesta funció encara és experimental i el tall no serà completament precís, i no tots els formats suporten aquesta característica. És possible que experimenteu velocitats de baixada més lentes.</string>
     <string name="output_template_desc">Especifiqueu la plantilla per als noms dels fitxers de sortida</string>
     <string name="remove_multiple_templates_msg">Voleu eliminar %1$s de les plantilles d\'ordres per sempre?</string>

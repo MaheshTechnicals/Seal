@@ -191,7 +191,7 @@
     <string name="permission_issue_desc">ਡਾਉਨਲੋਡ/ ਅਤੇ ਦਸਤਾਵੇਜ਼/ ਤੋਂ ਬਾਹਰ ਦੀਆਂ ਡਾਇਰੈਕਟਰੀਆਂ ਸਮਰਥਿਤ ਨਹੀਂ ਹਨ</string>
     <string name="battery_configuration">ਬੈਟਰੀ ਸੰਰਚਨਾ</string>
     <string name="battery_configuration_desc">ਇਸ ਐਪ ਨੂੰ ਬੈਕਗ੍ਰਾਊਂਡ ਵਿੱਚ ਡਾਊਨਲੋਡ ਕਰਨ ਦੇਣ ਲਈ ਬੈਟਰੀ ਔਪਟੀਮਾਈਜੇਸ਼ਨ ਨੂੰ ਅਣਡਿੱਠ ਕਰੋ</string>
-    <string name="service_title">ਸੀਲ ਡਾਊਨਲੋਡ ਕਰ ਰਹੀ ਹੈ…</string>
+    <string name="service_title">ਸੀਲ ਪਲੱਸ ਡਾਊਨਲੋਡ ਕਰ ਰਹੀ ਹੈ…</string>
     <string name="unknown_error">ਅਣਜਾਣ ਤਰੁੱਟੀ</string>
     <string name="translate">ਅਨੁਵਾਦ ਕਰੋ</string>
     <string name="status_downloading">ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</string>
@@ -282,14 +282,14 @@
     <string name="beta_features">ਬੀਟਾ</string>
     <string name="enable_experimental_feature">ਕੀ ਪ੍ਰਯੋਗਾਤਮਕ ਵਿਸ਼ੇਸ਼ਤਾ ਨੂੰ ਸਮਰੱਥ ਬਣਾਉਣਾ ਹੈ\?</string>
     <string name="clip_video_desc">ਫਾਰਮੈਟ ਚੋਣ ਪੰਨੇ ਵਿੱਚ ਵੀਡੀਓ ਕਲਿੱਪ ਬਣਾਓ</string>
-    <string name="sponsor_msg">ਸੀਲ ਹਮੇਸ਼ਾ ਹਰ ਕਿਸੇ ਲਈ ਮੁਫ਼ਤ ਅਤੇ ਓਪਨ ਸੋਰਸ ਹੋਵੇਗੀ। ਜੇ ਤੁਹਾਨੂੰ ਇਹ ਪਸੰਦ ਹੈ, ਤਾਂ ਕਿਰਪਾ ਕਰਕੇ ਮੈਨੂੰ GitHub \'ਤੇ ਸਪਾਂਸਰ ਕਰਨ ਬਾਰੇ ਵਿਚਾਰ ਕਰੋ!</string>
+    <string name="sponsor_msg">ਸੀਲ ਪਲੱਸ ਹਮੇਸ਼ਾ ਹਰ ਕਿਸੇ ਲਈ ਮੁਫ਼ਤ ਅਤੇ ਓਪਨ ਸੋਰਸ ਹੋਵੇਗੀ। ਜੇ ਤੁਹਾਨੂੰ ਇਹ ਪਸੰਦ ਹੈ, ਤਾਂ ਕਿਰਪਾ ਕਰਕੇ ਮੈਨੂੰ GitHub \'ਤੇ ਸਪਾਂਸਰ ਕਰਨ ਬਾਰੇ ਵਿਚਾਰ ਕਰੋ!</string>
     <string name="msg_from_developer">ਡਿਵੈਲਪਰ ਤੋਂ ਸੁਨੇਹਾ</string>
     <string name="okay">ਠੀਕ ਹੈ</string>
     <string name="switch_to_github_builds">GitHub ਬਿਲਡਸ \'ਤੇ ਸਵਿੱਚ ਕਰਨਾ</string>
     <string name="got_it">ਸਮਝ ਗਿਆ</string>
     <string name="sponsor_desc">GitHub \'ਤੇ ਸਪਾਂਸਰ ਕਰਕੇ ਇਸ ਐਪ ਦਾ ਸਮਰਥਨ ਕਰੋ</string>
     <string name="clip_video_dialog_msg">ਵੀਡੀਓ ਦੇ ਚੁਣੇ ਹੋਏ ਭਾਗਾਂ ਨੂੰ ਡਾਊਨਲੋਡ ਕਰਨ ਲਈ ਇਸ ਵਿਸ਼ੇਸ਼ਤਾ ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਹੋਏ ਡਾਊਨਲੋਡਾਂ ਨੂੰ FFmpeg ਨੂੰ ਸੌਂਪਿਆ ਜਾਵੇਗਾ, ਇਹ ਵਿਸ਼ੇਸ਼ਤਾ ਅਜੇ ਵੀ ਪ੍ਰਯੋਗਾਤਮਕ ਹੈ ਅਤੇ ਕੱਟਣਾ ਪੂਰੀ ਤਰ੍ਹਾਂ ਸਹੀ ਨਹੀਂ ਹੋਵੇਗਾ, ਸਾਰੇ ਫਾਰਮੈਟ ਇਸ ਵਿਸ਼ੇਸ਼ਤਾ ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦੇ ਹਨ ਅਤੇ ਤੁਸੀਂ ਹੌਲੀ ਡਾਊਨਲੋਡ ਸਪੀਡ ਦਾ ਅਨੁਭਵ ਕਰ ਸਕਦੇ ਹੋ।</string>
-    <string name="auto_update_disabled_msg">%1$s ਬਿਲਡਾਂ ਲਈ ਸਵੈ-ਅੱਪਡੇਟ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। ਜੇਕਰ ਤੁਸੀਂ ਆਪਣੀ ਡਿਵਾਈਸ \'ਤੇ %1$s ਨੂੰ ਸਥਾਪਿਤ ਨਹੀਂ ਕੀਤਾ ਹੈ, ਜਾਂ ਤੁਸੀਂ ਸੀਲ ਵਿੱਚ ਆਉਣ ਵਾਲੀਆਂ ਨਵੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦਾ ਪੂਰਵਦਰਸ਼ਨ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ, ਤਾਂ ਕਿਰਪਾ ਕਰਕੇ %2$s \'ਤੇ ਵਿਚਾਰ ਕਰੋ।</string>
+    <string name="auto_update_disabled_msg">%1$s ਬਿਲਡਾਂ ਲਈ ਸਵੈ-ਅੱਪਡੇਟ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। ਜੇਕਰ ਤੁਸੀਂ ਆਪਣੀ ਡਿਵਾਈਸ \'ਤੇ %1$s ਨੂੰ ਸਥਾਪਿਤ ਨਹੀਂ ਕੀਤਾ ਹੈ, ਜਾਂ ਤੁਸੀਂ ਸੀਲ ਪਲੱਸ ਵਿੱਚ ਆਉਣ ਵਾਲੀਆਂ ਨਵੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦਾ ਪੂਰਵਦਰਸ਼ਨ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ, ਤਾਂ ਕਿਰਪਾ ਕਰਕੇ %2$s \'ਤੇ ਵਿਚਾਰ ਕਰੋ।</string>
     <string name="feature_unavailable">ਵਿਸ਼ੇਸ਼ਤਾ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
     <string name="sponsor_msg2">ਤੁਹਾਡਾ ਬਹੁਤ ਧੰਨਵਾਦ!</string>
     <string name="no_custom_command_tasks">ਕੋਈ ਕਸਟਮ ਕਮਾਂਡ ਕਾਰਜ ਨਹੀਂ</string>
@@ -337,9 +337,9 @@
         <item quantity="other">%d ਆਈਟਮਾਂ</item>
     </plurals>
     <string name="export_to_file">ਫਾਈਲ ਵਿੱਚ ਐਕਸਪੋਰਟ ਕਰੋ</string>
-    <string name="custom_command_usage_msg">yt-dlp ਵੀਡੀਓ ਡਾਊਨਲੋਡ ਕਰਨ ਲਈ ਇੱਕ ਸ਼ਕਤੀਸ਼ਾਲੀ ਕਮਾਂਡ-ਲਾਈਨ ਟੂਲ ਹੈ। ਸੀਲ ਇੱਕ ਅਨੁਭਵੀ GUI, ਆਮ ਕਮਾਂਡਾਂ ਲਈ ਪ੍ਰੀਸੈਟਸ, ਅਤੇ ਹੋਰ ਵਾਧੂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਪ੍ਰਦਾਨ ਕਰਕੇ yt-dlp ਦੀ ਵਰਤੋਂ ਕਰਨਾ ਆਸਾਨ ਬਣਾਉਂਦਾ ਹੈ।
+    <string name="custom_command_usage_msg">yt-dlp ਵੀਡੀਓ ਡਾਊਨਲੋਡ ਕਰਨ ਲਈ ਇੱਕ ਸ਼ਕਤੀਸ਼ਾਲੀ ਕਮਾਂਡ-ਲਾਈਨ ਟੂਲ ਹੈ। ਸੀਲ ਪਲੱਸ ਇੱਕ ਅਨੁਭਵੀ GUI, ਆਮ ਕਮਾਂਡਾਂ ਲਈ ਪ੍ਰੀਸੈਟਸ, ਅਤੇ ਹੋਰ ਵਾਧੂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਪ੍ਰਦਾਨ ਕਰਕੇ yt-dlp ਦੀ ਵਰਤੋਂ ਕਰਨਾ ਆਸਾਨ ਬਣਾਉਂਦਾ ਹੈ।
 \n
-\nyt-dlp ਦੀ ਉੱਨਤ ਵਰਤੋਂ ਲਈ, ਸੀਲ ਤੁਹਾਨੂੰ ਕਸਟਮ ਕਮਾਂਡ ਟੈਂਪਲੇਟਾਂ ਨੂੰ ਸਿੱਧਾ ਬਣਾਉਣ, ਸੁਰੱਖਿਅਤ ਕਰਨ ਅਤੇ ਚਲਾਉਣ ਦੀ ਆਗਿਆ ਦਿੰਦਾ ਹੈ, ਜਿਵੇਂ ਕਿ ਟਰਮੀਨਲ ਵਿੱਚ।
+\nyt-dlp ਦੀ ਉੱਨਤ ਵਰਤੋਂ ਲਈ, ਸੀਲ ਪਲੱਸ ਤੁਹਾਨੂੰ ਕਸਟਮ ਕਮਾਂਡ ਟੈਂਪਲੇਟਾਂ ਨੂੰ ਸਿੱਧਾ ਬਣਾਉਣ, ਸੁਰੱਖਿਅਤ ਕਰਨ ਅਤੇ ਚਲਾਉਣ ਦੀ ਆਗਿਆ ਦਿੰਦਾ ਹੈ, ਜਿਵੇਂ ਕਿ ਟਰਮੀਨਲ ਵਿੱਚ।
 \n
 \nਕਸਟਮ ਕਮਾਂਡਾਂ ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਸਮੇਂ, ਜ਼ਿਆਦਾਤਰ GUI ਵਿਕਲਪ ਅਤੇ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਅਯੋਗ ਹੋ ਜਾਣਗੀਆਂ।</string>
     <string name="clear_download_archive">ਡਾਊਨਲੋਡ ਆਰਕਾਇਵ ਨੂੰ ਸਾਫ਼ ਕਰੋ\?</string>

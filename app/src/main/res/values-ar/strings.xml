@@ -125,7 +125,7 @@
     <string name="playlist_indicator_text">جارٍ تنزيل قائمة التشغيل (%1$d/%2$d)…</string>
     <string name="download_directory_desc">حدد مكان تخزين ملفات الفيديو والصوت</string>
     <string name="cancel">إلغاء</string>
-    <string name="service_title">Seal يقوم بالتنزيل…</string>
+    <string name="service_title">Seal Plus يقوم بالتنزيل…</string>
     <string name="settings_before_download_desc">اضبط التفضيلات قبل التنزيل</string>
     <string name="error_copied">نُسِخَ تقرير الخطأ إلى الحافظة</string>
     <string name="edit_template_desc">سيضيف التطبيق مسار الإخراج وعنوان الرابط.</string>
@@ -278,7 +278,7 @@
     <string name="temporary_directory_desc">تخزين الملفات المؤقتة في الدليل الداخلي</string>
     <string name="sponsor">الراعي</string>
     <string name="sponsor_desc">ادعم هذا التطبيق من خلال الرعاية على GitHub</string>
-    <string name="sponsor_msg">Seal سيبقى دائمًا مجانيًا ومفتوح المصدر للجميع. إذا أعجبك، يُرجى التفكير في دعمي كراعياً على GitHub!</string>
+    <string name="sponsor_msg">Seal Plus سيبقى دائمًا مجانيًا ومفتوح المصدر للجميع. إذا أعجبك، يُرجى التفكير في دعمي كراعياً على GitHub!</string>
     <string name="feedback">التعليقات</string>
     <string name="sponsors">الرعاة</string>
     <string name="audio_format">صيغة الصوت</string>
@@ -287,7 +287,7 @@
     <string name="enable_experimental_feature">تفعيل الميزة التجريبية؟</string>
     <string name="clip_video_dialog_msg">سيتم تفويض التنزيلات باستخدام هذه الميزة إلى FFmpeg لتنزيل أقسام محددة من الفيديو، لا تزال هذه الميزة تجريبية ولن يكون القطع دقيقًا تمامًا، بالإضافة إلى ان هذه الميزة لا تدعم جميع التنسيقات وقد تواجه سرعات تنزيل أبطأ.</string>
     <string name="clip_video_desc">اصنع مقاطع فيديو في صفحة اختيار التنسيق</string>
-    <string name="auto_update_disabled_msg">التحديث التلقائي غير متاح لنسخة%1$s. إذا لم يكن لديك %1$s مثبت على جهازك، أو ترغب في معاينة الميزات الجديدة القادمة في Seal، يرجى التفكير في%2$s.</string>
+    <string name="auto_update_disabled_msg">التحديث التلقائي غير متاح لنسخة%1$s. إذا لم يكن لديك %1$s مثبت على جهازك، أو ترغب في معاينة الميزات الجديدة القادمة في Seal Plus، يرجى التفكير في%2$s.</string>
     <string name="switch_to_github_builds">التحويل إلى إصدارات GitHub</string>
     <string name="okay">حَسَنًا</string>
     <string name="got_it">فهمت</string>
@@ -340,9 +340,9 @@
         <item quantity="many">%d عنصرًا</item>
         <item quantity="other">%d عنصر</item>
     </plurals>
-    <string name="custom_command_usage_msg">yt-dlp هي أداة سطر أوامر قوية لتنزيل مقاطع الفيديو. يجعل Seal استخدام yt-dlp أسهل من خلال توفير واجهة مستخدم بديهية، وإعدادات مسبقة للأوامر الشائعة، وميزات إضافية أخرى.
+    <string name="custom_command_usage_msg">yt-dlp هي أداة سطر أوامر قوية لتنزيل مقاطع الفيديو. يجعل Seal Plus استخدام yt-dlp أسهل من خلال توفير واجهة مستخدم بديهية، وإعدادات مسبقة للأوامر الشائعة، وميزات إضافية أخرى.
 \n
-\nبالنسبة للاستخدام المتقدم لـ yt-dlp، يسمح لك Seal بإنشاء قوالب أوامر مخصصة وحفظها وتنفيذها مباشرة، تمامًا كما هو الحال في الطرفية.
+\nبالنسبة للاستخدام المتقدم لـ yt-dlp، يسمح لك Seal Plus بإنشاء قوالب أوامر مخصصة وحفظها وتنفيذها مباشرة، تمامًا كما هو الحال في الطرفية.
 \n
 \nعند استخدام الأوامر المخصصة، ستتم تعطيل معظم خيارات واجهة المستخدم والميزات.</string>
     <string name="clear_download_archive">هل تريد مسح أرشيف التحميل؟</string>

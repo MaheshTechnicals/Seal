@@ -43,7 +43,7 @@
     <string name="to">Slut</string>
     <string name="invalid_index_range">Ugyldigt indeksområde</string>
     <string name="playlist_indicator_text">Download spilleliste (%1$d/%2$d), tryk for at stoppe.</string>
-    <string name="service_title">Seal laster ned …</string>
+    <string name="service_title">Seal Plus laster ned …</string>
     <string name="unknown_error">Ukendt feil</string>
     <string name="translate">Overset</string>
     <string name="confirm">Bekræft</string>

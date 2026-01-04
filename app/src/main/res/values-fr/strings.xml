@@ -307,7 +307,7 @@
     <string name="edit_template">Modifier « %1$s »</string>
     <string name="new_task">Nouvelle tâche de téléchargement</string>
     <string name="start">Commencer</string>
-    <string name="custom_command_usage_msg">yt-dlp est un puissant outil en ligne de commande pour le téléchargement de vidéos. Seal facilite l\'utilisation de yt-dlp en fournissant une interface graphique intuitive, des préréglages pour les commandes courantes et d\'autres fonctionnalités supplémentaires.
+    <string name="custom_command_usage_msg">yt-dlp est un puissant outil en ligne de commande pour le téléchargement de vidéos. Seal Plus facilite l\'utilisation de yt-dlp en fournissant une interface graphique intuitive, des préréglages pour les commandes courantes et d\'autres fonctionnalités supplémentaires.
 \n
 \nPour une utilisation avancée de yt-dlp, Seal vous permet de créer, de sauvegarder et d\'exécuter des modèles de commandes personnalisées directement, comme dans un terminal.
 \n

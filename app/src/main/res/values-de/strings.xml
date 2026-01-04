@@ -290,7 +290,7 @@
     <string name="clip_video_desc">Videoclips auf der Formatauswahlseite erstellen</string>
     <string name="okay">Okay</string>
     <string name="feature_unavailable">Funktion nicht verfügbar</string>
-    <string name="auto_update_disabled_msg">Automatische Updates sind für %1$s Builds nicht verfügbar. Wenn du %1$s nicht auf deinem Gerät installiert hast, oder eine Vorschau kommender Funktionen in Seal möchtest, ziehe bitte %2$s in Erwägung.</string>
+    <string name="auto_update_disabled_msg">Automatische Updates sind für %1$s Builds nicht verfügbar. Wenn du %1$s nicht auf deinem Gerät installiert hast, oder eine Vorschau kommender Funktionen in Seal Plus möchtest, ziehe bitte %2$s in Erwägung.</string>
     <string name="msg_from_developer">Nachricht vom Entwickler</string>
     <string name="sponsor_msg2">Vielen Dank!</string>
     <string name="switch_to_github_builds">Wechseln zu GitHub-Builds</string>
@@ -336,7 +336,7 @@
     <string name="refresh_cookies_desc">Tippen, um die Webseite für die Erstellung neuer Cookies zu öffnen:</string>
     <string name="custom">Benutzerdefiniert</string>
     <string name="remove_multiple_templates_msg">\"%1$s\" endgültig aus den Befehlsvorlagen entfernen\?</string>
-    <string name="custom_command_usage_msg">yt-dlp ist ein mächtiges Werkzeug um Videos herunterzuladen. Seal macht es einfacher yt-dlp zu nutzten, indem es eine intuitive Benutzeroberfläche, Voreinstellungen für häufige Befehle und andere Funktionen bereitstellt.
+    <string name="custom_command_usage_msg">yt-dlp ist ein mächtiges Werkzeug um Videos herunterzuladen. Seal Plus macht es einfacher yt-dlp zu nutzten, indem es eine intuitive Benutzeroberfläche, Voreinstellungen für häufige Befehle und andere Funktionen bereitstellt.
 \n
 \nFür erweiterte Nutzung von yt-dlp erlaubt Seal es dir benutzerdefinierte Befehlsvorlagen zu erstellen, speichern und auszuführen, genau wie in einer Befehlszeile.
 \n

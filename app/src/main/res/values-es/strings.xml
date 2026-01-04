@@ -102,7 +102,7 @@
     <string name="options">Opciones</string>
     <string name="additional_settings">Ajustes adicionales</string>
     <string name="share_fail_msg">No se ha podido obtener la URL desde el contenido compartido</string>
-    <string name="share_success_msg">Leyendo información del enlace compartido con Seal…</string>
+    <string name="share_success_msg">Leyendo información del enlace compartido con Seal Plus…</string>
     <string name="show_more_actions">Mostrar más acciones</string>
     <string name="download_notification">Notificación de descarga</string>
     <string name="download_notification_desc">Notificarme el progreso de las descargas y un mensaje de finalización</string>
@@ -149,7 +149,7 @@
     <string name="downloading_indicator_text">Descarga en curso…</string>
     <string name="task_canceled">Tarea de descarga cancelada</string>
     <string name="github_issue">Reportar un problema en GitHub</string>
-    <string name="github_issue_desc">Envía un reporte de un problema que te ha ocurrido o haz una petición de alguna funcionalidad que te gustaría que tuviera Seal</string>
+    <string name="github_issue_desc">Envía un reporte de un problema que te ha ocurrido o haz una petición de alguna funcionalidad que te gustaría que tuviera Seal Plus</string>
     <string name="info_copied">Información copiada al portapapeles</string>
     <string name="copy_link">Copiar enlace</string>
     <string name="copy_error_report">Copiar el informe</string>
@@ -338,9 +338,9 @@
     </plurals>
     <string name="ua_header">Encabezado User-Agent</string>
     <string name="export_to_file">Exportar a un archivo</string>
-    <string name="custom_command_usage_msg">yt-dlp es una potente herramienta de línea de comandos para descargar vídeos. Seal facilita el uso de yt-dlp proporcionando una GUI intuitiva, preajustes para comandos comunes y otras características adicionales.
+    <string name="custom_command_usage_msg">yt-dlp es una potente herramienta de línea de comandos para descargar vídeos. Seal Plus facilita el uso de yt-dlp proporcionando una GUI intuitiva, preajustes para comandos comunes y otras características adicionales.
 \n
-\nPara un uso avanzado de yt-dlp, Seal permite crear, guardar y ejecutar plantillas de comandos personalizadas directamente, como en un terminal.
+\nPara un uso avanzado de yt-dlp, Seal Plus permite crear, guardar y ejecutar plantillas de comandos personalizadas directamente, como en un terminal.
 \n
 \nAl utilizar comandos personalizados, la mayoría de las opciones y características de la GUI estarán desactivadas.</string>
     <string name="clear_download_archive">¿Borrar el archivo de las descargas\?</string>

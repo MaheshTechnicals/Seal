@@ -267,7 +267,7 @@
     <string name="quality">Minőség</string>
     <string name="use_cookies">Sütik használata</string>
     <string name="custom_command_enabled_hint">Néhány opció nem elérhatő testreszabott parancsok mellett</string>
-    <string name="custom_command_usage_msg">A yt-dlp egy hatékony parancssori eszköz videók letöltéséhez. A Seal megkönnyíti a yt-dlp használatát úgy, hogy egy intuitív GUI-t, előbeállításokat gyakran használt parancsokhoz és sok mást kínál.
+    <string name="custom_command_usage_msg">A yt-dlp egy hatékony parancssori eszköz videók letöltéséhez. A Seal Plus megkönnyíti a yt-dlp használatát úgy, hogy egy intuitív GUI-t, előbeállításokat gyakran használt parancsokhoz és sok mást kínál.
 \n
 \nA yt-dlp haladó használatához a Seal lehetővé teszi egyedi parancssablonok létrehozását, elmentését és lefuttatását, akárcsak egy terminálban.
 \n

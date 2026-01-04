@@ -310,7 +310,7 @@
     <string name="ytdlp_update_action">Aggiorna yt-dlp</string>
     <string name="proxy">Proxy</string>
     <string name="quality">Qualità</string>
-    <string name="custom_command_usage_msg">yt-dlp è uno strumento da riga di comando per scaricare i video. Seal permette di usare facilmente yt-dlp provvedendo un\'intuitiva interfaccia grafica e altre funzionalità aggiuntive.
+    <string name="custom_command_usage_msg">yt-dlp è uno strumento da riga di comando per scaricare i video. Seal Plus permette di usare facilmente yt-dlp provvedendo un\'intuitiva interfaccia grafica e altre funzionalità aggiuntive.
 \n
 \nPer un utilizzo avanzato di yt-dlp, Seal permette la creazione, l\'esecuzione e il salvataggio di comandi personalizzati, come fosse un terminale.
 \n

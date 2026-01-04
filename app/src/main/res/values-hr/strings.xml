@@ -338,7 +338,7 @@
     </plurals>
     <string name="export_to_file">Izvezi u datoteku</string>
     <string name="ua_header">Zaglavlje User-Agent</string>
-    <string name="custom_command_usage_msg">Yt-dlp je moćan alat naredbene linije za preuzimanje videozapisa. Seal olakšava korištenje yt-dlp-a pružajući intuitivni GUI, unaprijed postavljene postavke za uobičajene naredbe i druge dodatne značajke.
+    <string name="custom_command_usage_msg">Yt-dlp je moćan alat naredbene linije za preuzimanje videozapisa. Seal Plus olakšava korištenje yt-dlp-a pružajući intuitivni GUI, unaprijed postavljene postavke za uobičajene naredbe i druge dodatne značajke.
 \n
 \nZa napredno korištenje yt-dlp-a, Seal vam omogućuje stvaranje, spremanje i izravno izvršavanje prilagođenih naredbenih predložaka, baš kao u terminalu.
 \n

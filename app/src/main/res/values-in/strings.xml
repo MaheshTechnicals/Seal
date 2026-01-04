@@ -336,7 +336,7 @@
     </plurals>
     <string name="ua_header">Tajuk User-Agent</string>
     <string name="export_to_file">Ekspor ke berkas</string>
-    <string name="custom_command_usage_msg">yt-dlp adalah alat baris perintah yang hebat untuk mengunduh video. Seal membuatnya lebih mudah untuk memakai yt-dlp dengan menyediakan GUI yang intuitif, prasetel untuk perintah umum, dan fitur tambahan lainnya.
+    <string name="custom_command_usage_msg">yt-dlp adalah alat baris perintah yang hebat untuk mengunduh video. Seal Plus membuatnya lebih mudah untuk memakai yt-dlp dengan menyediakan GUI yang intuitif, prasetel untuk perintah umum, dan fitur tambahan lainnya.
 \n
 \nUntuk pengguna yt-dlp tingkat lanjut, Seal memungkinkan Anda untuk membuat, menyimpan, dan menjalankan templat perintah khusus secara langsung, seperti dalam terminal.
 \n

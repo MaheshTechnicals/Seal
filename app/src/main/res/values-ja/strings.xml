@@ -308,7 +308,7 @@
     <string name="proxy_desc">インターネット接続にプロキシを使用する</string>
     <string name="proxy">プロキシ</string>
     <string name="format_preference">形式の設定</string>
-    <string name="custom_command_usage_msg">yt-dlp は動画をダウンロードするための強力なコマンドラインツールです。Seal は、直感的な GUI、通常のコマンドのプリセット、その他の追加機能を提供することで、yt-dlp をより使いやすくします。
+    <string name="custom_command_usage_msg">yt-dlp は動画をダウンロードするための強力なコマンドラインツールです。Seal Plus は、直感的な GUI、通常のコマンドのプリセット、その他の追加機能を提供することで、yt-dlp をより使いやすくします。
 \n
 \nyt-dlp の高度な使用のために、Seal ではカスタムコマンドテンプレートをターミナルと同じように直接作成、保存、実行することができます。
 \n

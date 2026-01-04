@@ -338,7 +338,7 @@
     </plurals>
     <string name="ua_header">Cabeçalho de requisição User-Agent</string>
     <string name="export_to_file">Exportar como arquivo</string>
-    <string name="custom_command_usage_msg">O yt-dlp é uma poderosa ferramenta de linha de comando para fazer download de vídeos. Seal facilita o uso do yt-dlp, fornecendo uma GUI intuitiva, predefinições para comandos comuns e outros recursos adicionais.
+    <string name="custom_command_usage_msg">O yt-dlp é uma poderosa ferramenta de linha de comando para fazer download de vídeos. Seal Plus facilita o uso do yt-dlp, fornecendo uma GUI intuitiva, predefinições para comandos comuns e outros recursos adicionais.
 \n
 \nPara uso avançado do yt-dlp, o Seal permite criar, salvar e executar modelos de comandos personalizados diretamente, como em um terminal.
 \n

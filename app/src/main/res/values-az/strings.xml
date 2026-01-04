@@ -122,7 +122,7 @@
     <string name="download_directory_desc">Video və səs faylların haradasa saxlamaq üçün seç</string>
     <string name="subdirectory">Alt kataloqda saxla</string>
     <string name="permission_issue">Saxlama icazəsi problemi</string>
-    <string name="service_title">Seal yükləyir…</string>
+    <string name="service_title">Seal Plus yükləyir…</string>
     <string name="unknown_error">Naməlum xəta</string>
     <string name="translate">Tərcümə et</string>
     <string name="translate_desc">Hosted Weblate-də bu tətbiqi tərcümə etməyə kömək et</string>
@@ -281,14 +281,14 @@
     <string name="feedback">Əks əlaqə</string>
     <string name="sponsors">Himayədarlar</string>
     <string name="sponsor_desc">GitHub-da himayədarlıq edərək bu tətbiqi dəstəklə</string>
-    <string name="sponsor_msg">Seal həmişə, hamı üçün pulsuz və açıq mənbə olacaqdır. Əgər bəyənirsinizsə, mənə GitHub-da himayədarlıq etməyi düşünün!</string>
+    <string name="sponsor_msg">Seal Plus həmişə, hamı üçün pulsuz və açıq mənbə olacaqdır. Əgər bəyənirsinizszə, mənə GitHub-da himayədarlıq etməyi düşünün!</string>
     <string name="audio_format">Səs formatı</string>
     <string name="no_downloaded_media">Yüklənilən media yoxdur</string>
     <string name="beta_features">Sınaq</string>
     <string name="enable_experimental_feature">Təcrübi xüsusiyyət aktivləşdirilsin\?</string>
     <string name="clip_video_desc">Format seçim səhifəsində video kliplər yarat</string>
     <string name="clip_video_dialog_msg">Bu xüsusiyyəti işlədən yükləmələr, videonun seçilən bölmələrin yükləmək üçün FFmpeg-yə həvalə olunacaq, bu xüsusiyyət hələ təcrübidir və kəsmə tamamilə dəqiq olmayacaq, bütün formatlar bu xüsusiyyəti dəstəkləmir və daha yavaş yükləmə sürəti görə bilərsiniz.</string>
-    <string name="auto_update_disabled_msg">Avtomatik yeniləmə %1$s quruluşlar üçün əlçatan deyil. Cihazınızda quraşdırılmış %1$s yoxdursa və ya Seal-da növbəti yeni xüsusiyyətləri nəzərdən keçirmək istəyirsinizsə, zəhmət olmasa %2$s-ı nəzərdən keçirin.</string>
+    <string name="auto_update_disabled_msg">Avtomatik yeniləmə %1$s quruluşlar üçün əlçatan deyil. Cihazınızda quraşdırılmış %1$s yoxdursa və ya Seal Plus-da növbəti yeni xüsusiyyətləri nəzərdən keçirmək istəyirsinizsə, zəhmət olmasa %2$s-ı nəzərdən keçirin.</string>
     <string name="switch_to_github_builds">GitHub quruluşlarına keçid</string>
     <string name="okay">Oldu</string>
     <string name="got_it">Anladım</string>
@@ -337,9 +337,9 @@
     <string name="learn_more">Daha çox öyrən</string>
     <string name="unknown">Naməlum</string>
     <string name="export_to_file">Fayla ixrac et</string>
-    <string name="custom_command_usage_msg">yt-dlp videoları yükləmək üçün güclü əmr xətti alətidir. Seal intuitiv GUI, ictimai əmrlər üçün qabaqcıl tənzimləmələr və digər əlavə funksiyalar təmin etməklə yt-dlp istifadə etməsini asanlaşdırır.
+    <string name="custom_command_usage_msg">yt-dlp videoları yükləmək üçün güclü əmr xətti alətidir. Seal Plus intuitiv GUI, ictimai əmrlər üçün qabaqcıl tənzimləmələr və digər əlavə funksiyalar təmin etməklə yt-dlp istifadə etməsini asanlaşdırır.
 \n
-\nSeal sizə yt-dlp-nin qabaqcıl istifadəsi üçün terminalda olduğu kimi birbaşa fərdi əmr şablonların yaratmağa, saxlamağa və icra etməyə icazə verir.
+\nSeal Plus sizə yt-dlp-nin qabaqcıl istifadəsi üçün terminalda olduğu kimi birbaşa fərdi əmr şablonların yaratmağa, saxlamağa və icra etməyə icazə verir.
 \n
 \nFərdi əmrlərdən istifadə edərkən, GUI seçimlərinin və xüsusiyyətlərinin əksəriyyəti qeyri-aktiv ediləcək.</string>
     <string name="clear_download_archive">Yükləmə arxivi təmizlənsin?</string>

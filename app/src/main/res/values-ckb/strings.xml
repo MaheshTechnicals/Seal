@@ -126,7 +126,7 @@
     <string name="permission_issue">کێشەی مۆڵەتی هەڵگرتن</string>
     <string name="battery_configuration">ڕێکخستنی پاتری</string>
     <string name="battery_configuration_desc">پشتگوێخستنی باشکردنی پاتری بۆ ئەم ئەپە بۆ ئەوەی لە پاشبنەمادا دایبەزێنیت</string>
-    <string name="service_title">Seal خەریکی دابەزاندنە…</string>
+    <string name="service_title">Seal Plus خەریکی دابەزاندنە…</string>
     <string name="unknown_error">هەلەیەکی نەناسراوە</string>
     <string name="translate">وەرگێڕان</string>
     <string name="translate_desc">یارمەتی وەرگێڕانی ئەم ئەپە بدە لە Hosted Weblate</string>

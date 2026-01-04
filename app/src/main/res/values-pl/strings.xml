@@ -361,7 +361,7 @@
     <string name="proxy_desc">Użyj serwer proxy do połączenia z internetem</string>
     <string name="enable_notifications_desc">Aplikacja potrzebuje Twojej zgody, by wyświetlać powiadomienia o statusie i postępie pobierania.</string>
     <string name="show_all_items">Pokaż wszystkie %1$d elementów</string>
-    <string name="custom_command_usage_msg">yt-dlp to potężne narzędzie wiersza poleceń do pobierania plików wideo. Seal ułatwia korzystanie z yt-dlp, zapewniając intuicyjny graficzny interfejs użytkownika, gotowe presety dla często używanych poleceń i inne dodatkowe funkcje.
+    <string name="custom_command_usage_msg">yt-dlp to potężne narzędzie wiersza poleceń do pobierania plików wideo. Seal Plus ułatwia korzystanie z yt-dlp, zapewniając intuicyjny graficzny interfejs użytkownika, gotowe presety dla często używanych poleceń i inne dodatkowe funkcje.
 \n
 \nW celu zaawansowanego korzystania z yt-dlp Seal umożliwia tworzenie, zapisywanie i wykonywanie niestandardowych szablonów poleceń tak jak w terminalu.
 \n

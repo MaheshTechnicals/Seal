@@ -133,7 +133,7 @@
     <string name="subdirectory_desc">Захоўвайце файлы ў папках з адпаведнымі назвамі</string>
     <string name="permission_issue">Каталог не падтрымліваецца</string>
     <string name="battery_configuration_desc">Ігнаруйце аптымізацыю акумулятара, каб спампоўваць у фоне</string>
-    <string name="service_title">Seal спампоўвае…</string>
+    <string name="service_title">Seal Plus спампоўвае…</string>
     <string name="unknown_error">Невядомая памылка</string>
     <string name="translate">Пераклад</string>
     <string name="translate_desc">Дапамажыце з перакладам на Hosted Weblate</string>
@@ -260,7 +260,7 @@
     <string name="update_channel">Абнавіць канал</string>
     <string name="auto_update">Аўтаматычнае абнаўленне</string>
     <string name="logs">Журнал</string>
-    <string name="auto_update_disabled_msg">Аўтаматычнае абнаўленне недаступна для зборак %1$s. Калі ў вас на прыладзе не ўсталявана %1$s, або вы хочаце папярэдне прагледзець будучыя новыя функцыі ў Seal, звярніце ўвагу на %2$s.</string>
+    <string name="auto_update_disabled_msg">Аўтаматычнае абнаўленне недаступна для зборак %1$s. Калі ў вас на прыладзе не ўсталявана %1$s, або вы хочаце папярэдне прагледзець будучыя новыя функцыі ў Seal Plus, звярніце ўвагу на %2$s.</string>
     <string name="switch_to_github_builds">пераход на зборкі GitHub</string>
     <string name="okay">ОК</string>
     <string name="got_it">Зразумела</string>
@@ -289,7 +289,7 @@
     <string name="clear_all_cookies_desc">Назаўсёды выдаліць усе файлы cookie, якія захоўваюцца ў праграме\?</string>
     <string name="sponsor">Спонсар</string>
     <string name="sponsor_desc">Падтрымайце гэтую праграму, спансіруючы яго на GitHub</string>
-    <string name="sponsor_msg">Seal заўсёды будзе бясплатным і адкрытым для ўсіх. Калі вам гэта падабаецца, калі ласка, падумайце аб тым, каб стаць спонсарам мяне на GitHub!</string>
+    <string name="sponsor_msg">Seal Plus заўсёды будзе бясплатным і адкрытым для ўсіх. Калі вам гэта падабаецца, калі ласка, падумайце аб тым, каб стаць спонсарам мяне на GitHub!</string>
     <string name="feedback">Зваротная сувязь</string>
     <string name="sponsors">Спонсары</string>
     <string name="temporary_directory_desc">Захоўвайце часовыя файлы ва ўнутраным каталогу</string>
@@ -339,9 +339,9 @@
     </plurals>
     <string name="ua_header">Загаловак User-Agent</string>
     <string name="export_to_file">Экспарт у файл</string>
-    <string name="custom_command_usage_msg">yt-dlp - гэта магутны інструмент каманднага радка для спампоўкі відэа. Seal палягчае выкарыстанне yt-dlp, забяспечваючы інтуітыўна зразумелы графічны інтэрфейс, прадусталяваныя налады для агульных каманд і іншыя дадатковыя функцыі.
+    <string name="custom_command_usage_msg">yt-dlp - гэта магутны інструмент каманднага радка для спампоўкі відэа. Seal Plus палягчае выкарыстанне yt-dlp, забяспечваючы інтуітыўна зразумелы графічны інтэрфейс, прадусталяваныя налады для агульных каманд і іншыя дадатковыя функцыі.
 \n
-\nДля прасунутага выкарыстання yt-dlp Seal дазваляе ствараць, захоўваць і выконваць карыстальніцкія шаблоны каманд непасрэдна, як у тэрмінале.
+\nДля прасунутага выкарыстання yt-dlp Seal Plus дазваляе ствараць, захоўваць і выконваць карыстальніцкія шаблоны каманд непасрэдна, як у тэрмінале.
 \n
 \nПры выкарыстанні карыстальніцкіх каманд большасць опцый і функцый графічнага інтэрфейсу будуць адключаны.</string>
     <string name="presets">Прасэты</string>

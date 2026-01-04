@@ -365,7 +365,7 @@
     <string name="export_to_file">I-export sa file</string>
     <string name="export_download_history_msg">Ini-export ang %1$s mula sa kasaysayan ng download. Hindi maba-back up ang mga na-download na file at ang kagustuhan mo.</string>
     <string name="download_type">Uri ng pag-download</string>
-    <string name="custom_command_usage_msg">Ang yt-dlp ay isang mahusay na command-line tool para sa pag-download ng mga video. Pinapadali ng Seal ang paggamit ng yt-dlp sa pamamagitan ng pagbibigay ng intuitive na GUI, mga preset para sa mga karaniwang command, at iba pang karagdagang features.
+    <string name="custom_command_usage_msg">Ang yt-dlp ay isang mahusay na command-line tool para sa pag-download ng mga video. Pinapadali ng Seal Plus ang paggamit ng yt-dlp sa pamamagitan ng pagbibigay ng intuitive na GUI, mga preset para sa mga karaniwang command, at iba pang karagdagang features.
 \n
 \nPara sa advanced na paggamit ng yt-dlp, pinapayagan ka ng Seal na lumikha, mag-save at magsagawa ng mga custom na template ng command nang direkta, tulad ng sa isang terminal.
 \n
