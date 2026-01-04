@@ -46,13 +46,12 @@ jobs:
         echo "Version: ${VERSION}"
 
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ steps.version.outputs.VERSION }}
-        release_name: Seal Plus v${{ steps.version.outputs.VERSION }}
+        name: Seal Plus v${{ steps.version.outputs.VERSION }}
         body: |
           ## Seal Plus v${{ steps.version.outputs.VERSION }}
           
@@ -75,32 +74,8 @@ jobs:
           Commit: ${{ github.sha }}
         draft: false
         prerelease: false
-
-    - name: Upload Signed APKs to Release
-      if: steps.sign_app.outcome == 'success'
-      run: |
-        for file in app/build/outputs/apk/**/*-signed.apk; do
-          if [ -f "$file" ]; then
-            filename=$(basename "$file")
-            echo "Uploading $filename"
-            gh release upload v${{ steps.version.outputs.VERSION }} "$file" --clobber
-          fi
-        done
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload Unsigned APKs to Release
-      if: steps.sign_app.outcome != 'success'
-      run: |
-        for file in app/build/outputs/apk/fdroid/release/*.apk app/build/outputs/apk/generic/release/*.apk app/build/outputs/apk/githubPreview/release/*.apk; do
-          if [ -f "$file" ]; then
-            filename=$(basename "$file")
-            echo "Uploading $filename"
-            gh release upload v${{ steps.version.outputs.VERSION }} "$file" --clobber
-          fi
-        done
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        files: |
+          app/build/outputs/apk/generic/release/*.apk
 
     - name: Upload Artifacts (Backup)
       uses: actions/upload-artifact@v4

@@ -121,17 +121,6 @@ android {
             dimension = "publishChannel"
             isDefault = true
         }
-
-        create("githubPreview") {
-            dimension = "publishChannel"
-            applicationIdSuffix = ".preview"
-            resValue("string", "app_name", "Seal Plus Preview")
-        }
-
-        create("fdroid") {
-            dimension = "publishChannel"
-            versionName = "$baseVersionName-(F-Droid)"
-        }
     }
 
     lint { disable.addAll(listOf("MissingTranslation", "ExtraTranslation", "MissingQuantity")) }
