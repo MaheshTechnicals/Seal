@@ -27,7 +27,7 @@ datetime = "0.6.1"
 serialization = "1.7.3"
 okhttp = "5.0.0-alpha.14"
 
-room = "2.8.4"
+room = "2.6.1"
 ksp = "2.0.21-1.0.28"
 
 youtubedlAndroid = "0.17.3"
