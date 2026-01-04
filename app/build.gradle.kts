@@ -47,7 +47,7 @@ android {
         applicationId = "com.junkfood.seal"
         minSdk = 24
         targetSdk = 36
-        versionCode = 200_001_110
+        versionCode = 201_010_400
         check(versionCode == currentVersionCode)
 
         versionName = baseVersionName
@@ -143,7 +143,10 @@ android {
         }
     }
 
-    kotlinOptions { freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn" }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
 
     packaging {
         resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
@@ -156,7 +159,13 @@ android {
 
 ktfmt { kotlinLangStyle() }
 
-kotlin { jvmToolchain(21) }
+kotlin { 
+    jvmToolchain(21)
+    
+    compilerOptions {
+        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+    }
+}
 
 dependencies {
     implementation(project(":color"))

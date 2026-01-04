@@ -13,8 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * **Platform & Build Tools**
   * Updated Android Gradle Plugin to 8.8.0
-  * Updated Gradle to 8.12
+  * Updated Gradle to 9.2.1 (with Windows ARM support and improved publishing APIs)
   * Updated Kotlin to 2.1.0 with enhanced compiler optimizations
+  * Migrated from deprecated kotlinOptions to modern compilerOptions
   * Updated target SDK to 36 (Android 16)
   * Updated compile SDK to 36
   * Updated KSP to 2.1.0-1.0.29 for better annotation processing
