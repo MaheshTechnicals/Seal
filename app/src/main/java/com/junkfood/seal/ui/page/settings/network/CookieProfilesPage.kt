@@ -343,7 +343,7 @@ fun CookieGeneratorDialog(
                     onValueChange = { cookiesViewModel.updateUrl(it) },
                     trailingIcon = {
                         PasteFromClipBoardButton {
-                            cookiesViewModel.updateUrl(matchUrlFromClipboard(it))
+                            cookiesViewModel.updateUrl(context.matchUrlFromClipboard(it))
                         }
                     },
                     maxLines = 1,

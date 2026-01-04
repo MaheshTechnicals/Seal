@@ -268,7 +268,7 @@ fun DownloadPage(
             showOutput = showOutput,
             showDownloadProgress = taskState.taskId.isNotEmpty(),
             pasteCallback = {
-                matchUrlFromClipboard(
+                context.matchUrlFromClipboard(
                         string = clipboardManager.getText().toString(),
                         isMatchingMultiLink = CUSTOM_COMMAND.getBoolean(),
                     )

@@ -78,7 +78,7 @@ import com.junkfood.seal.ui.page.settings.command.CommandTemplateDialog
 import com.junkfood.seal.util.PreferenceUtil
 import com.junkfood.seal.util.PreferenceUtil.updateInt
 import com.junkfood.seal.util.TEMPLATE_ID
-import com.junkfood.seal.util.matchUrlFromString
+import com.junkfood.seal.util.findURLsFromString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -186,7 +186,7 @@ fun TaskListPage(onNavigateBack: () -> Unit, onNavigateToDetail: (Int) -> Unit) 
 
                 LaunchedEffect(sheetState.targetValue) {
                     if (sheetState.targetValue == ModalBottomSheetValue.Expanded)
-                        url = matchUrlFromString(clipboardManager.getText()?.text.toString(), true)
+                        url = findURLsFromString(clipboardManager.getText()?.text.toString(), true).joinToString("\n")
                 }
 
                 Column(Modifier.fillMaxWidth()) {
