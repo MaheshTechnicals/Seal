@@ -188,7 +188,7 @@ fun animatedCardAppearance(): State<Float> {
     val alpha = remember { Animatable(0f) }
     
     LaunchedEffect(Unit) {
-        launch {
+        kotlinx.coroutines.launch {
             scale.animateTo(
                 targetValue = 1f,
                 animationSpec = tween(
@@ -197,7 +197,7 @@ fun animatedCardAppearance(): State<Float> {
                 )
             )
         }
-        launch {
+        kotlinx.coroutines.launch {
             alpha.animateTo(
                 targetValue = 1f,
                 animationSpec = tween(
