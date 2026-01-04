@@ -41,7 +41,7 @@ jobs:
     - name: Get version name
       id: version
       run: |
-        VERSION=$(grep -oP 'versionName = "\K[^"]+' buildSrc/src/main/kotlin/Version.kt | head -1 || echo "$(grep -oP 'versionMajor = \K\d+' buildSrc/src/main/kotlin/Version.kt).$(grep -oP 'versionMinor = \K\d+' buildSrc/src/main/kotlin/Version.kt).$(grep -oP 'versionPatch = \K\d+' buildSrc/src/main/kotlin/Version.kt)")
+        VERSION=$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionMajor = \K\d+' | head -1).$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionMinor = \K\d+' | head -1).$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionPatch = \K\d+' | head -1)
         echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
         echo "Version: ${VERSION}"
 
