@@ -27,6 +27,7 @@ jobs:
 
     - name: Sign app APK
       id: sign_app
+      if: ${{ secrets.SIGNING_KEY != '' }}
       uses: ilharp/sign-android-release@nightly
       with:
         releaseDir: app/build/outputs/apk/release
@@ -35,10 +36,20 @@ jobs:
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-    - name: Upload Artifact
+    - name: Upload Signed Artifact
+      if: ${{ secrets.SIGNING_KEY != '' }}
       uses: actions/upload-artifact@v4
       with:
         name: signed-apks
         path: app/build/outputs/apk/release/*-arm64-v8a-release-signed.apk
+        if-no-files-found: error
+        retention-days: 20
+
+    - name: Upload Unsigned Artifact
+      if: ${{ secrets.SIGNING_KEY == '' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: unsigned-apks
+        path: app/build/outputs/apk/release/*.apk
         if-no-files-found: error
         retention-days: 20
