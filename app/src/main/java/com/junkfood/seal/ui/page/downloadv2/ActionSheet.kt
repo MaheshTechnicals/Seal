@@ -204,7 +204,7 @@ private fun OpenThumbnailURLButton(modifier: Modifier = Modifier, onClick: () ->
 fun Title(imageModel: Any?, title: String, author: String, downloadState: DownloadState) {
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         /*        AsyncImageImpl(
@@ -218,16 +218,16 @@ fun Title(imageModel: Any?, title: String, author: String, downloadState: Downlo
 
         Column(modifier = Modifier.height(IntrinsicSize.Min)) {
             Column(Modifier) {
-                Text(text = title, style = MaterialTheme.typography.titleSmall)
-                Spacer(Modifier.height(2.dp))
+                Text(text = title, style = MaterialTheme.typography.titleMedium)
+                Spacer(Modifier.height(4.dp))
                 Text(
                     text = author,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(12.dp))
 
             ListItemStateText(downloadState = downloadState)
         }

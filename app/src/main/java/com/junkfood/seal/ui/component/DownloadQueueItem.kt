@@ -186,24 +186,11 @@ fun CustomCommandTaskItem(
         val containerColor =
             MaterialTheme.colorScheme
                 .run {
-                    /*            when (status) {
-                        TaskStatus.FINISHED -> greenScheme.primaryContainer
-                        TaskStatus.CANCELED -> surfaceVariant.copy(alpha = alpha)
-                        TaskStatus.RUNNING -> tertiaryContainer.copy(alpha = alpha)
-                        TaskStatus.ERROR -> errorContainer.copy(alpha = alpha)
-                    }*/
-                    surfaceContainerLow.harmonizeWith(other = accentColor)
+                    surfaceContainerHigh.harmonizeWith(other = accentColor)
                 }
-                .copy(alpha = 0.9f)
         val contentColor =
             MaterialTheme.colorScheme.run {
-                //            when (status) {
-                //                TaskStatus.FINISHED -> greenScheme.onPrimaryContainer
-                //                TaskStatus.CANCELED -> onSurfaceVariant
-                //                TaskStatus.RUNNING -> onTertiaryContainer
-                //                TaskStatus.ERROR -> onErrorContainer
-                //            }
-                onSurfaceVariant.harmonizeWith(other = accentColor)
+                onSurface.harmonizeWith(other = accentColor)
             }
 
         val labelText =
@@ -216,8 +203,8 @@ fun CustomCommandTaskItem(
                         TaskStatus.ERROR -> R.string.status_error
                     }
             )
-        Surface(color = containerColor, shape = CardDefaults.shape) {
-            Column(modifier = Modifier.padding(16.dp)) {
+        Surface(color = containerColor, shape = MaterialTheme.shapes.large) {
+            Column(modifier = Modifier.padding(20.dp)) {
                 Row(
                     modifier = Modifier.semantics(mergeDescendants = true) {},
                     verticalAlignment = Alignment.CenterVertically,
@@ -272,10 +259,10 @@ fun CustomCommandTaskItem(
                         }
                     }
 
-                    Column(Modifier.padding(horizontal = 8.dp).weight(1f)) {
+                    Column(Modifier.padding(horizontal = 12.dp).weight(1f)) {
                         Text(
                             text = templateName,
-                            style = MaterialTheme.typography.titleSmall,
+                            style = MaterialTheme.typography.titleMedium,
                             color = contentColor,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -284,7 +271,7 @@ fun CustomCommandTaskItem(
                             text = url,
                             style = MaterialTheme.typography.bodyMedium,
                             maxLines = 1,
-                            color = contentColor,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             overflow = TextOverflow.Ellipsis,
                         )
                     }

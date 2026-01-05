@@ -44,6 +44,7 @@ fun SealModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
         properties = properties,
+        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
     ) {
         Column(modifier = Modifier.padding(paddingValues = contentPadding)) {
             content()

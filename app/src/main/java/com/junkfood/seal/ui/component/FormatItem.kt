@@ -107,16 +107,16 @@ fun FormatVideoPreview(
                 Text(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                     text = title,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
                 if (author != "playlist" && author != "null")
                     Text(
-                        modifier = Modifier.padding(horizontal = 12.dp).padding(top = 3.dp),
+                        modifier = Modifier.padding(horizontal = 12.dp).padding(top = 4.dp),
                         text = author,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -346,7 +346,7 @@ fun FormatItem(
     Box(
         modifier =
             modifier
-                .clip(MaterialTheme.shapes.medium)
+                .clip(MaterialTheme.shapes.large)
                 .selectable(selected = selected) { onClick() }
                 .combinedClickable(
                     onClick = { onClick() },
@@ -354,16 +354,16 @@ fun FormatItem(
                     onLongClickLabel = stringResource(R.string.copy_link),
                 )
                 .border(
-                    width = 1.dp,
+                    width = 1.5.dp,
                     color = animatedOutlineColor,
-                    shape = MaterialTheme.shapes.medium,
+                    shape = MaterialTheme.shapes.large,
                 )
                 .background(animatedContainerColor)
     ) {
-        Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.Start) {
+        Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.Start) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.titleMedium,
                 minLines = 2,
                 maxLines = 2,
                 color = animatedTitleColor,
@@ -372,27 +372,27 @@ fun FormatItem(
 
             Text(
                 text = firstLineText,
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.padding(top = 6.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 8.dp),
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2,
             )
 
             Text(
                 text = secondLineText,
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.padding(top = 2.dp),
-                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 4.dp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
             )
         }
-        Row(modifier = Modifier.padding(bottom = 6.dp, end = 6.dp).align(Alignment.BottomEnd)) {
+        Row(modifier = Modifier.padding(bottom = 8.dp, end = 8.dp).align(Alignment.BottomEnd)) {
             if (containsVideo)
                 Icon(
                     imageVector = Icons.Rounded.Videocam,
                     tint = outlineColor,
                     contentDescription = stringResource(id = R.string.video),
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(18.dp),
                 )
             if (containsAudio)
                 Icon(

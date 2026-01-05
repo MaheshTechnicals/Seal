@@ -47,13 +47,13 @@ fun OutlinedButtonWithIcon(
     contentColor: Color = MaterialTheme.colorScheme.primary,
 ) {
     OutlinedButton(
-        modifier = modifier,
+        modifier = modifier.defaultMinSize(minHeight = 48.dp),
         onClick = onClick,
-        contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
         colors = ButtonDefaults.outlinedButtonColors(contentColor = contentColor),
     ) {
         Icon(
-            modifier = Modifier.size(ButtonDefaults.IconSize),
+            modifier = Modifier.size(18.dp),
             imageVector = icon,
             contentDescription = null,
         )
@@ -110,13 +110,13 @@ fun FilledButtonWithIcon(
     onClick: () -> Unit,
 ) {
     Button(
-        modifier = modifier,
+        modifier = modifier.defaultMinSize(minHeight = 48.dp),
         onClick = onClick,
-        contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
         enabled = enabled,
     ) {
         Icon(modifier = Modifier.size(18.dp), imageVector = icon, contentDescription = null)
-        Text(modifier = Modifier.padding(start = 6.dp), text = text)
+        Text(modifier = Modifier.padding(start = 8.dp), text = text)
     }
 }
 

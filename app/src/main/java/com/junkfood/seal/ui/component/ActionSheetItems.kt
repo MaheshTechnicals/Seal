@@ -64,13 +64,13 @@ fun ActionSheetPrimaryButton(
             modifier =
                 Modifier.width(80.dp)
                     .height(64.dp)
-                    .clip(CircleShape)
+                    .clip(MaterialTheme.shapes.large)
                     .then(
                         if (outlineColor.isSpecified)
                             Modifier.border(
-                                width = 1.dp,
+                                width = 1.5.dp,
                                 outlineColor.takeOrElse { Color.Transparent },
-                                shape = CircleShape,
+                                shape = MaterialTheme.shapes.large,
                             )
                         else Modifier
                     )
@@ -84,8 +84,8 @@ fun ActionSheetPrimaryButton(
                 tint = contentColor,
             )
         }
-        Spacer(Modifier.height(8.dp))
-        ProvideTextStyle(LocalTextStyle.current.merge(MaterialTheme.typography.labelMedium)) {
+        Spacer(Modifier.height(12.dp))
+        ProvideTextStyle(LocalTextStyle.current.merge(MaterialTheme.typography.labelLarge)) {
             Text(text)
         }
     }
@@ -120,7 +120,7 @@ fun ActionSheetItem(
                         )
                     }
                 )
-                .padding(vertical = 16.dp, horizontal = 20.dp),
+                .padding(vertical = 20.dp, horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         leadingIcon?.invoke()

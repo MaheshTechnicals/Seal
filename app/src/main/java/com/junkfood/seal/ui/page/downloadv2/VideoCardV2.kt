@@ -233,12 +233,13 @@ fun VideoCardV2(
 ) {
     val containerColor =
         MaterialTheme.colorScheme.run {
-            if (LocalDarkTheme.current.isDarkTheme()) surfaceContainer else surfaceContainerLowest
+            if (LocalDarkTheme.current.isDarkTheme()) surfaceContainerHigh else surfaceContainerLowest
         }
 
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = containerColor),
+        shape = MaterialTheme.shapes.large,
     ) {
         Column {
             Box(Modifier.fillMaxWidth()) {
@@ -346,14 +347,14 @@ private fun TitleText(
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.titleMedium,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
         Text(
-            modifier = Modifier.padding(top = 3.dp),
+            modifier = Modifier.padding(top = 4.dp),
             text = uploader,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

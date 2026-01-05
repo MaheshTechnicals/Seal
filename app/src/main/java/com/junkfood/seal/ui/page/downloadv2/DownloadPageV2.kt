@@ -350,7 +350,7 @@ fun DownloadPageImplV2(
 
     Scaffold(
         modifier = modifier.fillMaxSize().statusBarsPadding(),
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = { FABs(modifier = Modifier, downloadCallback = downloadCallback) },
     ) { windowInsetsPadding ->
         val lazyListState = rememberLazyGridState()
@@ -387,7 +387,7 @@ fun DownloadPageImplV2(
                     SelectionGroupRow(
                         modifier =
                             Modifier.horizontalScroll(rememberScrollState())
-                                .padding(horizontal = 20.dp)
+                                .padding(horizontal = 20.dp, vertical = 4.dp)
                     ) {
                         Filter.entries.forEach { filter ->
                             SelectionGroupItem(
@@ -550,7 +550,7 @@ fun Header(modifier: Modifier = Modifier, onMenuOpen: () -> Unit = {}) {
 @Composable
 private fun HeaderCompact(modifier: Modifier = Modifier, onMenuOpen: () -> Unit) {
 
-    Row(modifier = modifier.height(64.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = modifier.height(72.dp).padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = onMenuOpen, modifier = Modifier) {
             Icon(
                 imageVector = Icons.Outlined.Menu,
@@ -572,14 +572,14 @@ private fun HeaderCompact(modifier: Modifier = Modifier, onMenuOpen: () -> Unit)
 
 @Composable
 private fun HeaderExpanded(modifier: Modifier = Modifier) {
-    Row(modifier = modifier.height(64.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = modifier.height(72.dp).padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             stringResource(R.string.download_queue),
             style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Medium),
         )
     }
-    Spacer(Modifier.height(4.dp))
+    Spacer(Modifier.height(8.dp))
 }
 
 @Composable
