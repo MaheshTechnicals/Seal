@@ -397,7 +397,7 @@ object PreferenceUtil {
                     kv.decodeBool(DYNAMIC_COLOR, DynamicColors.isDynamicColorAvailable()),
                 seedColor = kv.decodeInt(THEME_COLOR, DEFAULT_SEED_COLOR),
                 paletteStyleIndex = kv.decodeInt(PALETTE_STYLE, 0),
-                isGradientDarkModeEnabled = kv.decodeBool(GRADIENT_DARK_MODE, false),
+                isGradientDarkModeEnabled = kv.decodeBool(GRADIENT_DARK_MODE, true),
             )
         )
     val AppSettingsStateFlow = mutableAppSettingsStateFlow.asStateFlow()

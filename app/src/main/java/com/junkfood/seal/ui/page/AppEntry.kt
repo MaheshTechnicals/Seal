@@ -129,14 +129,6 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
                     }
                 }
             },
-            footer = {
-                Text(
-                    appName + "\n" + versionReport + "\n" + currentRoute,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(start = 12.dp),
-                )
-            },
         ) {
             NavHost(
                 modifier = Modifier.align(Alignment.Center),

@@ -79,7 +79,6 @@ fun NavigationDrawer(
     onNavigateToRoute: (String) -> Unit,
     onDismissRequest: suspend () -> Unit,
     gesturesEnabled: Boolean = true,
-    footer: @Composable (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -98,7 +97,6 @@ fun NavigationDrawer(
                             showQuickSettings = showQuickSettings,
                             onNavigateToRoute = onNavigateToRoute,
                             onDismissRequest = onDismissRequest,
-                            footer = footer,
                         )
                     }
                 },
@@ -117,7 +115,6 @@ fun NavigationDrawer(
                             showQuickSettings = showQuickSettings,
                             onNavigateToRoute = onNavigateToRoute,
                             onDismissRequest = onDismissRequest,
-                            footer = footer,
                         )
                     }
                 },
@@ -162,7 +159,6 @@ fun NavigationDrawerSheetContent(
     showQuickSettings: Boolean = true,
     onNavigateToRoute: (String) -> Unit,
     onDismissRequest: suspend () -> Unit,
-    footer: @Composable (() -> Unit)? = null,
 ) {
     val scope = rememberCoroutineScope()
     Column(
@@ -301,7 +297,6 @@ fun NavigationDrawerSheetContent(
             }
         }
         Spacer(Modifier.weight(1f))
-        footer?.invoke()
     }
 }
 
