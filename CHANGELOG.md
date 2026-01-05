@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 🔄 Auto-Update System Overhaul
+
+* **Repository Migration**
+  * **Updated auto-update system** to point to new repository: `https://github.com/MaheshTechnicals/Seal`
+  * Changed release URL from `JunkFood02/Seal Plus` to `MaheshTechnicals/Seal`
+  * All version checks now fetch from `https://github.com/MaheshTechnicals/Seal/releases`
+  * In-app update notifications correctly display new repository releases
+  * APK download URLs properly match new release structure
+
+* **Auto-Update Enabled by Default**
+  * **Auto-update is now ON by default** for all new installations
+  * Users can still manually disable in Settings → About → Auto update
+  * Seamless in-app updates without manual APK downloads
+  * Automatic version checking and changelog display
+
+* **GitHub Actions Release Workflow Improvements**
+  * **Fixed release publication status** - releases now properly marked as "published"
+  * Added `make_latest: true` to ensure releases appear as latest on GitHub
+  * Improved release notes with Gradient Dark theme mention
+  * Auto-update feature now highlighted in release descriptions
+  * Proper release tagging and asset upload synchronization
+
 ### 🎨 UI/UX Improvements
 
 * **Navigation Drawer & Theming Consistency**

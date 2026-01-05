@@ -219,6 +219,7 @@ private val BooleanPreferenceDefaults =
         NOTIFICATION to true,
         EMBED_METADATA to true,
         USE_CUSTOM_AUDIO_PRESET to false,
+        AUTO_UPDATE to true,
     )
 
 private val IntPreferenceDefaults =

@@ -72,15 +72,17 @@ jobs:
           
           ### 🌐 Features
           - Video/audio downloader with yt-dlp support
-          - Material Design 3 UI
+          - Material Design 3 UI with Gradient Dark theme
           - 50+ language translations
           - Custom command templates
           - Format selection and quality options
+          - Auto-update enabled by default
           
           Built on: ${{ github.event.head_commit.timestamp }}
           Commit: ${{ github.sha }}
         draft: false
         prerelease: false
+        make_latest: true
         files: |
           app/build/outputs/apk/generic/release/*-signed.apk
 
