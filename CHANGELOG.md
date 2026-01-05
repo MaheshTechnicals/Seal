@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 🎨 UI/UX Improvements
+
+* **Comprehensive UI/UX Overhaul**
+  * Fixed Download Queue page gradient dark theme integration
+  * Improved tab visibility with better color contrast (primaryContainer vs fixed color roles)
+  * Standardized card elevations using surfaceContainerHigh across all components
+  * Normalized button styles: 48dp height, consistent padding (24dp horizontal, 12dp vertical)
+  * Enhanced text hierarchy: upgraded to titleMedium for headings, bodyMedium for content
+  * Standardized spacing: 16-20dp card padding, 24dp button padding
+  * Improved corner radius consistency: 24dp (shapes.large) across all cards
+  * Increased format selection card padding for better readability
+  * Enhanced action sheet button styling with better spacing and typography
+
+* **Format Selection Page - Major Improvements**
+  * **Fixed critical text contrast bug**: Selected cards now use proper onPrimaryContainer/onSecondaryContainer colors instead of low-contrast accent colors
+  * **Reordered sections** for better UX: Video → Audio → Video (no audio) instead of Audio → Video only → Video
+  * **Enhanced section headers**: Upgraded to titleMedium (16sp), added subtle dividers (30% opacity) for clear visual grouping
+  * **Improved card layout**: 18dp padding (up from 16dp), 2dp borders when selected (up from 1.5dp), 12dp grid spacing (up from 8dp)
+  * **Better icon visibility**: All icons standardized to 18dp with 4dp spacing, animated colors for selected/unselected states
+  * **Smooth animations**: 150ms color transitions (up from 100ms) for polished feel
+  * **Applied gradient dark theme**: surfaceContainerHigh backgrounds, proper containerColor on Scaffold
+  * **Reduced visual clutter**: 50% opacity borders when unselected, softer shadows, balanced accent usage
+
+### 🐛 Bug Fixes
+
+* **Build Configuration**
+  * Fixed AndroidManifest.xml warning about extractNativeLibs attribute placement
+  * Removed android:extractNativeLibs from manifest (now managed automatically by AGP via useLegacyPackaging)
+  * Resolved AGP warning: "android:extractNativeLibs should not be specified in this source AndroidManifest.xml file"
+
+### 🎨 Component Updates
+
+* **DownloadPageV2.kt**: Applied background color to Scaffold, improved tab padding
+* **SelectionGroup.kt**: Better tab colors and corner radius (20dp/16dp), increased min height (40dp)
+* **DownloadQueueItem.kt**: surfaceContainerHigh surface, titleMedium typography, 20dp padding, shapes.large
+* **Buttons.kt**: 48dp defaultMinSize, standardized padding (24dp horizontal, 12dp vertical)
+* **ModalBottomSheetM3.kt**: Added surfaceContainerHigh containerColor
+* **VideoCardV2.kt**: surfaceContainerHigh in dark mode, titleMedium typography, shapes.large
+* **FormatItem.kt**: Complete visual overhaul - proper selected/unselected colors, improved spacing, animated states
+* **FormatPage.kt**: Reordered sections, improved headers with dividers, better grid spacing (12dp), gradient dark theme
+* **ActionSheetItems.kt**: Improved button styling with shapes.large, 12dp text spacing, labelLarge typography
+
 ## [v1.1.0][1.1.0] - 2026-01-04
 
 ### ✨ New Features
