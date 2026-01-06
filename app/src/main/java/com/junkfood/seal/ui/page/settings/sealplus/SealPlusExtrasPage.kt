@@ -26,7 +26,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.junkfood.seal.R
-import com.junkfood.seal.ui.common.intState
 import com.junkfood.seal.ui.component.BackButton
 import com.junkfood.seal.ui.component.PreferenceItem
 import com.junkfood.seal.ui.component.PreferenceSubtitle
@@ -35,13 +34,14 @@ import com.junkfood.seal.util.NETWORK_ANY
 import com.junkfood.seal.util.NETWORK_MOBILE_ONLY
 import com.junkfood.seal.util.NETWORK_TYPE_RESTRICTION
 import com.junkfood.seal.util.NETWORK_WIFI_ONLY
+import com.junkfood.seal.util.PreferenceUtil.getInt
 import com.junkfood.seal.util.PreferenceUtil.updateInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SealPlusExtrasPage(onNavigateBack: () -> Unit) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    val networkTypeRestriction by NETWORK_TYPE_RESTRICTION.intState
+    var networkTypeRestriction by remember { mutableStateOf(NETWORK_TYPE_RESTRICTION.getInt()) }
     var showNetworkDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -89,6 +89,7 @@ fun SealPlusExtrasPage(onNavigateBack: () -> Unit) {
                 onDismissRequest = { showNetworkDialog = false },
                 onConfirm = { selectedType ->
                     NETWORK_TYPE_RESTRICTION.updateInt(selectedType)
+                    networkTypeRestriction = selectedType
                     showNetworkDialog = false
                 }
             )
