@@ -5,6 +5,18 @@ All notable changes (starting from v1.7.3) to stable releases will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2026-01-06
+
+### 🎨 Branding Updates
+
+* **New App Logo**
+  * **Updated app launcher icon** with new Seal Plus branding
+  * New adaptive icons with foreground, background, and monochrome layers
+  * Updated all density folders (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi)
+  * Modern Material You themed icon support for Android 13+
+  * Properly configured round launcher icons for all devices
+  * Enhanced visual identity across all Android launchers
+
 ## [1.2.0] - 2026-01-05
 
 ### 🔄 Auto-Update System Overhaul
