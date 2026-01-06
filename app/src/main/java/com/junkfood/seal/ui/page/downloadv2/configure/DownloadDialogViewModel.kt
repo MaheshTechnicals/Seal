@@ -117,11 +117,24 @@ class DownloadDialogViewModel(private val downloader: DownloaderV2) : ViewModel(
     }
 
     private fun proceedWithUrls(action: Action.ProceedWithURLs) {
+        // Check network availability before proceeding
+        if (!PreferenceUtil.isNetworkAvailableForDownload()) {
+            val message = PreferenceUtil.getNetworkErrorMessage()
+            App.context.makeToast(message)
+            return
+        }
         mSheetStateFlow.update { SheetState.Configure(action.urlList) }
     }
 
     private fun fetchPlaylist(action: Action.FetchPlaylist) {
         val (url, preferences) = action
+
+        // Check network availability before fetching
+        if (!PreferenceUtil.isNetworkAvailableForDownload()) {
+            val message = PreferenceUtil.getNetworkErrorMessage()
+            App.context.makeToast(message)
+            return
+        }
 
         val job =
             viewModelScope.launch(Dispatchers.IO) {
@@ -157,6 +170,13 @@ class DownloadDialogViewModel(private val downloader: DownloaderV2) : ViewModel(
     private fun fetchFormat(action: Action.FetchFormats) {
         val (url, audioOnly, preferences) = action
 
+        // Check network availability before fetching
+        if (!PreferenceUtil.isNetworkAvailableForDownload()) {
+            val message = PreferenceUtil.getNetworkErrorMessage()
+            App.context.makeToast(message)
+            return
+        }
+
         val job =
             viewModelScope.launch(Dispatchers.IO) {
                 DownloadUtil.fetchVideoInfoFromUrl(
@@ -188,19 +208,7 @@ class DownloadDialogViewModel(private val downloader: DownloaderV2) : ViewModel(
     ) {
         // Check network availability based on user's network type restriction
         if (!PreferenceUtil.isNetworkAvailableForDownload()) {
-            val networkRestriction = NETWORK_TYPE_RESTRICTION.getInt()
-            val isMetered = App.connectivityManager.isActiveNetworkMetered
-            
-            val message = when (networkRestriction) {
-                NETWORK_WIFI_ONLY -> 
-                    if (isMetered) R.string.wifi_only_restriction_message
-                    else R.string.network_unavailable
-                NETWORK_MOBILE_ONLY -> 
-                    if (!isMetered) R.string.mobile_only_restriction_message
-                    else R.string.network_unavailable
-                else -> R.string.cellular_data_warning
-            }
-            
+            val message = PreferenceUtil.getNetworkErrorMessage()
             App.context.makeToast(message)
             return
         }
@@ -216,19 +224,7 @@ class DownloadDialogViewModel(private val downloader: DownloaderV2) : ViewModel(
     ) {
         // Check network availability for custom commands too
         if (!PreferenceUtil.isNetworkAvailableForDownload()) {
-            val networkRestriction = NETWORK_TYPE_RESTRICTION.getInt()
-            val isMetered = App.connectivityManager.isActiveNetworkMetered
-            
-            val message = when (networkRestriction) {
-                NETWORK_WIFI_ONLY -> 
-                    if (isMetered) R.string.wifi_only_restriction_message
-                    else R.string.network_unavailable
-                NETWORK_MOBILE_ONLY -> 
-                    if (!isMetered) R.string.mobile_only_restriction_message
-                    else R.string.network_unavailable
-                else -> R.string.cellular_data_warning
-            }
-            
+            val message = PreferenceUtil.getNetworkErrorMessage()
             App.context.makeToast(message)
             return
         }

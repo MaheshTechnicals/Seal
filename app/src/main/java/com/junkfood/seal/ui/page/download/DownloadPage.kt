@@ -173,7 +173,6 @@ fun DownloadPage(
             showMeteredNetworkDialog = true
         } else {
             dialogViewModel.postAction(Action.ShowSheet(listOf(viewState.url)))
-            //            downloadViewModel.startDownloadVideo()
         }
     }
 
@@ -219,17 +218,8 @@ fun DownloadPage(
     }
 
     if (showMeteredNetworkDialog) {
-        MeteredNetworkDialog(
-            onDismissRequest = { showMeteredNetworkDialog = false },
-            onAllowOnceConfirm = {
-                homePageViewModel.startDownloadVideo()
-                showMeteredNetworkDialog = false
-            },
-            onAllowAlwaysConfirm = {
-                homePageViewModel.startDownloadVideo()
-                CELLULAR_DOWNLOAD.updateBoolean(true)
-                showMeteredNetworkDialog = false
-            },
+        NetworkRestrictionDialog(
+            onDismissRequest = { showMeteredNetworkDialog = false }
         )
     }
 

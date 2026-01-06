@@ -314,7 +314,19 @@ object PreferenceUtil {
 
     fun updateDownloadType(type: DownloadType) = DOWNLOAD_TYPE.updateInt(type.ordinal)
 
+    fun isNetworkAvailable(): Boolean {
+        val connectivityManager = App.connectivityManager
+        val activeNetwork = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+        return capabilities.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
     fun isNetworkAvailableForDownload(): Boolean {
+        // First check if network is available at all
+        if (!isNetworkAvailable()) {
+            return false
+        }
+        
         val networkRestriction = NETWORK_TYPE_RESTRICTION.getInt()
         val isMetered = App.connectivityManager.isActiveNetworkMetered
         
@@ -323,6 +335,25 @@ object PreferenceUtil {
             NETWORK_MOBILE_ONLY -> isMetered  // Only allow Mobile (metered)
             NETWORK_ANY -> CELLULAR_DOWNLOAD.getBoolean() || !isMetered  // Any network (respect legacy setting)
             else -> CELLULAR_DOWNLOAD.getBoolean() || !isMetered
+        }
+    }
+
+    fun getNetworkErrorMessage(): Int {
+        if (!isNetworkAvailable()) {
+            return R.string.network_unavailable
+        }
+        
+        val networkRestriction = NETWORK_TYPE_RESTRICTION.getInt()
+        val isMetered = App.connectivityManager.isActiveNetworkMetered
+        
+        return when (networkRestriction) {
+            NETWORK_WIFI_ONLY -> 
+                if (isMetered) R.string.wifi_only_restriction_message
+                else R.string.network_unavailable
+            NETWORK_MOBILE_ONLY -> 
+                if (!isMetered) R.string.mobile_only_restriction_message
+                else R.string.network_unavailable
+            else -> R.string.cellular_data_warning
         }
     }
 
