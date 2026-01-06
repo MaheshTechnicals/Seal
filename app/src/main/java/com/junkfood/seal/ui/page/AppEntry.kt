@@ -64,6 +64,7 @@ import com.junkfood.seal.ui.page.settings.network.CookieProfilePage
 import com.junkfood.seal.ui.page.settings.network.CookiesViewModel
 import com.junkfood.seal.ui.page.settings.network.NetworkPreferences
 import com.junkfood.seal.ui.page.settings.network.WebViewPage
+import com.junkfood.seal.ui.page.settings.sealplus.SealPlusExtrasPage
 import com.junkfood.seal.ui.page.settings.troubleshooting.TroubleShootingPage
 import com.junkfood.seal.ui.page.videolist.VideoListPage
 import kotlinx.coroutines.launch
@@ -250,6 +251,9 @@ fun NavGraphBuilder.settingsGraph(
                 onNavigateBack()
                 CookieManager.getInstance().flush()
             }
+        }
+        animatedComposable(Route.SEALPLUS_EXTRAS) {
+            SealPlusExtrasPage(onNavigateBack = onNavigateBack)
         }
         animatedComposable(Route.TROUBLESHOOTING) {
             TroubleShootingPage(onNavigateTo = onNavigateTo, onBack = onNavigateBack)

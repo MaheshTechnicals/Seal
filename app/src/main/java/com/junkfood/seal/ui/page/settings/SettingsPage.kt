@@ -25,6 +25,7 @@ import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.SettingsApplications
 import androidx.compose.material.icons.rounded.SignalCellular4Bar
 import androidx.compose.material.icons.rounded.SignalWifi4Bar
+import androidx.compose.material.icons.rounded.Stars
 import androidx.compose.material.icons.rounded.Terminal
 import androidx.compose.material.icons.rounded.VideoFile
 import androidx.compose.material.icons.rounded.ViewComfy
@@ -220,6 +221,15 @@ fun SettingsPage(onNavigateBack: () -> Unit, onNavigateTo: (String) -> Unit) {
                     icon = Icons.Rounded.ViewComfy,
                 ) {
                     onNavigateTo(Route.INTERACTION)
+                }
+            }
+            item {
+                SettingItem(
+                    title = stringResource(id = R.string.sealplus_extras),
+                    description = stringResource(id = R.string.sealplus_extras_desc),
+                    icon = Icons.Rounded.Stars,
+                ) {
+                    onNavigateTo(Route.SEALPLUS_EXTRAS)
                 }
             }
             item {

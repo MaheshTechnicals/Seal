@@ -2,12 +2,20 @@ package com.junkfood.seal.ui.page.downloadv2.configure
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.junkfood.seal.App
+import com.junkfood.seal.R
 import com.junkfood.seal.database.objects.CommandTemplate
 import com.junkfood.seal.download.DownloaderV2
 import com.junkfood.seal.download.Task
 import com.junkfood.seal.util.DownloadUtil
+import com.junkfood.seal.util.NETWORK_MOBILE_ONLY
+import com.junkfood.seal.util.NETWORK_TYPE_RESTRICTION
+import com.junkfood.seal.util.NETWORK_WIFI_ONLY
 import com.junkfood.seal.util.PlaylistResult
+import com.junkfood.seal.util.PreferenceUtil
+import com.junkfood.seal.util.PreferenceUtil.getInt
 import com.junkfood.seal.util.VideoInfo
+import com.junkfood.seal.util.makeToast
 import com.yausername.youtubedl_android.YoutubeDL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -178,6 +186,25 @@ class DownloadDialogViewModel(private val downloader: DownloaderV2) : ViewModel(
         urlList: List<String>,
         preferences: DownloadUtil.DownloadPreferences,
     ) {
+        // Check network availability based on user's network type restriction
+        if (!PreferenceUtil.isNetworkAvailableForDownload()) {
+            val networkRestriction = NETWORK_TYPE_RESTRICTION.getInt()
+            val isMetered = App.connectivityManager.isActiveNetworkMetered
+            
+            val message = when (networkRestriction) {
+                NETWORK_WIFI_ONLY -> 
+                    if (isMetered) R.string.wifi_only_restriction_message
+                    else R.string.network_unavailable
+                NETWORK_MOBILE_ONLY -> 
+                    if (!isMetered) R.string.mobile_only_restriction_message
+                    else R.string.network_unavailable
+                else -> R.string.cellular_data_warning
+            }
+            
+            App.context.makeToast(message)
+            return
+        }
+        
         urlList.forEach { downloader.enqueue(Task(url = it, preferences = preferences)) }
         hideDialog()
     }
@@ -187,6 +214,25 @@ class DownloadDialogViewModel(private val downloader: DownloaderV2) : ViewModel(
         template: CommandTemplate,
         preferences: DownloadUtil.DownloadPreferences,
     ) {
+        // Check network availability for custom commands too
+        if (!PreferenceUtil.isNetworkAvailableForDownload()) {
+            val networkRestriction = NETWORK_TYPE_RESTRICTION.getInt()
+            val isMetered = App.connectivityManager.isActiveNetworkMetered
+            
+            val message = when (networkRestriction) {
+                NETWORK_WIFI_ONLY -> 
+                    if (isMetered) R.string.wifi_only_restriction_message
+                    else R.string.network_unavailable
+                NETWORK_MOBILE_ONLY -> 
+                    if (!isMetered) R.string.mobile_only_restriction_message
+                    else R.string.network_unavailable
+                else -> R.string.cellular_data_warning
+            }
+            
+            App.context.makeToast(message)
+            return
+        }
+        
         val task =
             Task(
                 url = url,

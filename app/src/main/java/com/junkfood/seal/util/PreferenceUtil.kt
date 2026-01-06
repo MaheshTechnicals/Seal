@@ -113,6 +113,9 @@ const val MERGE_MULTI_AUDIO_STREAM = "multi_audio_stream"
 const val DOWNLOAD_TYPE_INITIALIZATION = "download_type_init"
 private const val DOWNLOAD_TYPE = "download_type"
 
+// Network Type Restriction
+const val NETWORK_TYPE_RESTRICTION = "network_type_restriction"
+
 const val YT_DLP_UPDATE_CHANNEL = "yt-dlp_update_channel"
 const val YT_DLP_UPDATE_TIME = "yt-dlp_last_update"
 const val YT_DLP_UPDATE_INTERVAL = "yt-dlp_update_interval"
@@ -201,6 +204,11 @@ const val STYLE_FRUIT_SALAD = 2
 const val STYLE_VIBRANT = 3
 const val STYLE_MONOCHROME = 4
 
+// Network Type Restriction Options
+const val NETWORK_ANY = 0
+const val NETWORK_WIFI_ONLY = 1
+const val NETWORK_MOBILE_ONLY = 2
+
 private val StringPreferenceDefaults =
     mapOf(
         SPONSORBLOCK_CATEGORIES to "default",
@@ -239,6 +247,7 @@ private val IntPreferenceDefaults =
         DOWNLOAD_TYPE_INITIALIZATION to USE_PREVIOUS_SELECTION,
         YT_DLP_UPDATE_CHANNEL to YT_DLP_NIGHTLY,
         DOWNLOAD_TYPE to DownloadType.Video.ordinal,
+        NETWORK_TYPE_RESTRICTION to NETWORK_ANY,
     )
 
 private val LongPreferenceDefaults = mapOf(YT_DLP_UPDATE_INTERVAL to DEFAULT_INTERVAL)
@@ -305,8 +314,17 @@ object PreferenceUtil {
 
     fun updateDownloadType(type: DownloadType) = DOWNLOAD_TYPE.updateInt(type.ordinal)
 
-    fun isNetworkAvailableForDownload() =
-        CELLULAR_DOWNLOAD.getBoolean() || !App.connectivityManager.isActiveNetworkMetered
+    fun isNetworkAvailableForDownload(): Boolean {
+        val networkRestriction = NETWORK_TYPE_RESTRICTION.getInt()
+        val isMetered = App.connectivityManager.isActiveNetworkMetered
+        
+        return when (networkRestriction) {
+            NETWORK_WIFI_ONLY -> !isMetered  // Only allow WiFi (non-metered)
+            NETWORK_MOBILE_ONLY -> isMetered  // Only allow Mobile (metered)
+            NETWORK_ANY -> CELLULAR_DOWNLOAD.getBoolean() || !isMetered  // Any network (respect legacy setting)
+            else -> CELLULAR_DOWNLOAD.getBoolean() || !isMetered
+        }
+    }
 
     fun isAutoUpdateEnabled(): Boolean {
         return when {

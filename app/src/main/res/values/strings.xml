@@ -436,6 +436,19 @@
     <string name="issue_tracker">Issue tracker</string>
     <string name="trouble_shooting_desc">Fix common errors and check for known issues</string>
     <string name="issue_tracker_hint">Encountered an error? Before reporting a new issue, please search our issue tracker. Many common problems have already been addressed and documented there.</string>
+    
+    <!-- Sealplus Extras -->
+    <string name="sealplus_extras">Sealplus Extras</string>
+    <string name="sealplus_extras_desc">Premium features and advanced settings</string>
+    <string name="network_type_restriction">Network type restriction</string>
+    <string name="network_type_restriction_desc">Control which network types are allowed for downloads. Choose between WiFi only, mobile data only, or any network type.</string>
+    <string name="any_network">Any network</string>
+    <string name="wifi_only">WiFi only</string>
+    <string name="mobile_only">Mobile data only</string>
+    <string name="wifi_only_restriction_message">Downloads are restricted to WiFi only. Please connect to WiFi to download.</string>
+    <string name="mobile_only_restriction_message">Downloads are restricted to mobile data only. Please disconnect from WiFi to download.</string>
+    <string name="network_unavailable">Network unavailable. Please check your connection.</string>
+    
     <string name="saved_urls">Saved links</string>
     <string name="add_new_url">Add new link</string>
     <string name="add_to">Add to %1$s</string>
