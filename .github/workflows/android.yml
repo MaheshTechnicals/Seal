@@ -22,6 +22,10 @@ jobs:
       uses: android-actions/setup-android@v3.2.1
 
     - uses: gradle/actions/setup-gradle@v4
+      with:
+        build-scan-publish: true
+        build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
+        build-scan-terms-of-use-agree: "yes"
 
     - run: gradle assembleRelease
 
@@ -60,7 +64,19 @@ jobs:
         tag_name: v${{ steps.version.outputs.VERSION }}
         name: Seal Plus v${{ steps.version.outputs.VERSION }}
         body: |
-          ## Seal Plus v${{ steps.version.outputs.VERSION }}
+          ## Seal Plus v1.2.1
+          
+          ### 🎨 Branding Updates
+          
+          * **New App Logo**
+            * **Updated app launcher icon** with new Seal Plus branding
+            * New adaptive icons with foreground, background, and monochrome layers
+            * Updated all density folders (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi)
+            * Modern Material You themed icon support for Android 13+
+            * Properly configured round launcher icons for all devices
+            * Enhanced visual identity across all Android launchers
+          
+          ---
           
           ### 📦 Installation
           Download the appropriate APK for your device:
@@ -70,13 +86,15 @@ jobs:
           - **x86_64**: For 64-bit x86 devices
           - **x86**: For 32-bit x86 devices
           
-          ### 🌐 Features
+          ### 🌐 Key Features
           - Video/audio downloader with yt-dlp support
-          - Material Design 3 UI with Gradient Dark theme
+          - Material Design 3 UI with Gradient Dark theme enabled by default
+          - New premium Seal Plus branding and icon
           - 50+ language translations
           - Custom command templates
           - Format selection and quality options
           - Auto-update enabled by default
+          - Gradle Build Scans for performance insights
           
           Built on: ${{ github.event.head_commit.timestamp }}
           Commit: ${{ github.sha }}
