@@ -508,7 +508,6 @@
     <string name="security_info_message">App lock protects your privacy by requiring authentication to access Seal Plus. Your PIN is securely stored on your device.</string>
     <string name="disable_security">Disable Security</string>
     <string name="disable_security_warning">Are you sure you want to disable app lock? This will remove all security restrictions.</string>
-    <string name="disable">Disable</string>
     <string name="security_enabled">Security enabled</string>
     <string name="security_disabled">Security disabled</string>
     <string name="timeout_updated">Timeout updated</string>
