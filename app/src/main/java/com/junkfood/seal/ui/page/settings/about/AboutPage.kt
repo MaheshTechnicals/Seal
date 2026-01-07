@@ -54,11 +54,11 @@ import com.junkfood.seal.util.AUTO_UPDATE
 import com.junkfood.seal.util.PreferenceUtil
 import com.junkfood.seal.util.makeToast
 
-private const val releaseURL = "https://github.com/MaheshTechnicals/Seal/releases"
-private const val repoUrl = "https://github.com/MaheshTechnicals/Seal/blob/main/README.md"
+private const val releaseURL = "https://github.com/MaheshTechnicals/Sealplus/releases"
+private const val repoUrl = "https://github.com/MaheshTechnicals/Sealplus/blob/main/README.md"
 const val weblate = "https://hosted.weblate.org/engage/seal/"
 const val YtdlpRepository = "https://github.com/yt-dlp/yt-dlp"
-private const val githubIssueUrl = "https://github.com/MaheshTechnicals/Seal/issues"
+private const val githubIssueUrl = "https://github.com/MaheshTechnicals/Sealplus/issues"
 private const val telegramChannelUrl = "https://t.me/maheshtechnicals"
 private const val youtubeChannelUrl = "https://youtube.com/@maheshtechnicals"
 private const val githubSponsor = "https://github.com/sponsors/JunkFood02"
@@ -223,7 +223,7 @@ fun AutoUpdateUnavailableDialog(onDismissRequest: () -> Unit = {}) {
         val startIndex = text.indexOf(hyperLinkText)
         val endIndex = startIndex + hyperLinkText.length
         addUrlAnnotation(
-            UrlAnnotation("https://github.com/MaheshTechnicals/Seal/releases/latest"),
+            UrlAnnotation("https://github.com/MaheshTechnicals/Sealplus/releases/latest"),
             start = startIndex,
             end = endIndex,
         )

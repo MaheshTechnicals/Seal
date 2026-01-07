@@ -60,9 +60,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🔄 Auto-Update System Overhaul
 
 * **Repository Migration**
-  * **Updated auto-update system** to point to new repository: `https://github.com/MaheshTechnicals/Seal`
-  * Changed release URL from `JunkFood02/Seal Plus` to `MaheshTechnicals/Seal`
-  * All version checks now fetch from `https://github.com/MaheshTechnicals/Seal/releases`
+  * **Updated auto-update system** to point to new repository: `https://github.com/MaheshTechnicals/Sealplus`
+  * Changed release URL from `JunkFood02/Seal Plus` to `MaheshTechnicals/Sealplus`
+  * All version checks now fetch from `https://github.com/MaheshTechnicals/Sealplus/releases`
   * In-app update notifications correctly display new repository releases
   * APK download URLs properly match new release structure
 
@@ -80,8 +80,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Proper release tagging and asset upload synchronization
 
 * **About Page Updates - Seal Plus Branding**
-  * **Updated README link** to open `https://github.com/MaheshTechnicals/Seal/blob/main/README.md`
-  * **Updated Latest release** to fetch from `https://github.com/MaheshTechnicals/Seal/releases`
+  * **Updated README link** to open `https://github.com/MaheshTechnicals/Sealplus/blob/main/README.md`
+  * **Updated Latest release** to fetch from `https://github.com/MaheshTechnicals/Sealplus/releases`
   * **Changed Telegram channel** to `https://t.me/maheshtechnicals`
   * **Removed Matrix space** option from About screen
   * **Added YouTube channel** at `https://youtube.com/@maheshtechnicals` with custom icon

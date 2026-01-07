@@ -6,11 +6,11 @@
 
 ### 🎬 Advanced Video/Audio Downloader for Android
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/MaheshTechnicals/Seal?color=black&label=Latest%20Release&logo=github)](https://github.com/MaheshTechnicals/Seal/releases/latest/)
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/MaheshTechnicals/Seal?include_prereleases&label=Preview&logo=Github)](https://github.com/MaheshTechnicals/Seal/releases/)
-[![Keep a Changelog](https://img.shields.io/badge/Changelog-lightgray?style=flat&color=gray&logo=keep-a-changelog)](https://github.com/MaheshTechnicals/Seal/blob/main/CHANGELOG.md)
-[![GitHub all releases](https://img.shields.io/github/downloads/MaheshTechnicals/Seal/total?label=Downloads&logo=github)](https://github.com/MaheshTechnicals/Seal/releases/)
-[![GitHub Repo stars](https://img.shields.io/github/stars/MaheshTechnicals/Seal?style=flat&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIC05NjAgOTYwIDk2MCIgd2lkdGg9IjI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoIGQ9Im0zNTQtMjQ3IDEyNi03NiAxMjYgNzctMzMtMTQ0IDExMS05Ni0xNDYtMTMtNTgtMTM2LTU4IDEzNS0xNDYgMTMgMTExIDk3LTMzIDE0M1pNMjMzLTgwbDY1LTI4MUw4MC01NTBsMjg4LTI1IDExMi0yNjUgMTEyIDI2NSAyODggMjUtMjE4IDE4OSA2NSAyODEtMjQ3LTE0OUwyMzMtODBabTI0Ny0zNTBaIiBzdHlsZT0iZmlsbDogcmdiKDI0NSwgMjI3LCA2Nik7Ii8%2BCjwvc3ZnPg%3D%3D&color=%23f8e444)](https://github.com/MaheshTechnicals/Seal/stargazers)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/MaheshTechnicals/Sealplus?color=black&label=Latest%20Release&logo=github)](https://github.com/MaheshTechnicals/Sealplus/releases/latest/)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/MaheshTechnicals/Sealplus?include_prereleases&label=Preview&logo=Github)](https://github.com/MaheshTechnicals/Sealplus/releases/)
+[![Keep a Changelog](https://img.shields.io/badge/Changelog-lightgray?style=flat&color=gray&logo=keep-a-changelog)](https://github.com/MaheshTechnicals/Sealplus/blob/main/CHANGELOG.md)
+[![GitHub all releases](https://img.shields.io/github/downloads/MaheshTechnicals/Sealplus/total?label=Downloads&logo=github)](https://github.com/MaheshTechnicals/Sealplus/releases/)
+[![GitHub Repo stars](https://img.shields.io/github/stars/MaheshTechnicals/Sealplus?style=flat&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIC05NjAgOTYwIDk2MCIgd2lkdGg9IjI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoIGQ9Im0zNTQtMjQ3IDEyNi03NiAxMjYgNzctMzMtMTQ0IDExMS05Ni0xNDYtMTMtNTgtMTM2LTU4IDEzNS0xNDYgMTMgMTExIDk3LTMzIDE0M1pNMjMzLTgwbDY1LTI4MUw4MC01NTBsMjg4LTI1IDExMi0yNjUgMTEyIDI2NSAyODggMjUtMjE4IDE4OSA2NSAyODEtMjQ3LTE0OUwyMzMtODBabTI0Ny0zNTBaIiBzdHlsZT0iZmlsbDogcmdiKDI0NSwgMjI3LCA2Nik7Ii8%2BCjwvc3ZnPg%3D%3D&color=%23f8e444)](https://github.com/MaheshTechnicals/Sealplus/stargazers)
 [![Supported-Sites](https://img.shields.io/badge/1000%2B%20Sites-9cf?style=flat&logo=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0cHgiIGZpbGw9IiNGRkZGRkYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+CiAgPHBhdGggZD0iTTExLjk5IDJDNi40NyAyIDIgNi40OCAyIDEyczQuNDcgMTAgOS45OSAxMEMxNy41MiAyMiAyMiAxNy41MiAyMiAxMlMxNy41MiAyIDExLjk5IDJ6bTYuOTMgNmgtMi45NWMtLjMyLTEuMjUtLjc4LTIuNDUtMS4zOC0zLjU2IDEuODQuNjMgMy4zNyAxLjkxIDQuMzMgMy41NnpNMTIgNC4wNGMuODMgMS4yIDEuNDggMi41MyAxLjkxIDMuOTZoLTMuODJjLjQzLTEuNDMgMS4wOC0yLjc2IDEuOTEtMy45NnpNNC4yNiAxNEM0LjEgMTMuMzYgNCAxMi42OSA0IDEycy4xLTEuMzYuMjYtMmgzLjM4Yy0uMDguNjYtLjE0IDEuMzItLjE0IDJzLjA2IDEuMzQuMTQgMkg0LjI2em0uODIgMmgyLjk1Yy4zMiAxLjI1Ljc4IDIuNDUgMS4zOCAzLjU2LTEuODQtLjYzLTMuMzctMS45LTQuMzMtMy41NnptMi45NS04SDUuMDhjLjk2LTEuNjYgMi40OS0yLjkzIDQuMzMtMy41NkM4LjgxIDUuNTUgOC4zNSA2Ljc1IDguMDMgOHpNMTIgMTkuOTZjLS44My0xLjItMS40OC0yLjUzLTEuOTEtMy45NmgzLjgyYy0uNDMgMS40My0xLjA4IDIuNzYtMS45MSAzLjk2ek0xNC4zNCAxNEg5LjY2Yy0uMDktLjY2LS4xNi0xLjMyLS4xNi0ycy4wNy0xLjM1LjE2LTJoNC42OGMuMDkuNjUuMTYgMS4zMi4xNiAycy0uMDcgMS4zNC0uMTYgMnptLjI1IDUuNTZjLjYtMS4xMSAxLjA2LTIuMzEgMS4zOC0zLjU2aDIuOTVjLS45NiAxLjY1LTIuNDkgMi45My00LjMzIDMuNTZ6TTE2LjM2IDE0Yy4wOC0uNjYuMTQtMS4zMi4xNC0ycy0uMDYtMS4zNC0uMTQtMmgzLjM4Yy4xNi42NC4yNiAxLjMxLjI2IDJzLS4xIDEuMzYtLjI2IDJoLTMuMzh6IiBzdHlsZT0iZmlsbDogcmdiKDE2MiwgMTk4LCAyMzQpOyIvPgo8L3N2Zz4=&label=Supported)](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
 [![Android API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
 [![License](https://img.shields.io/github/license/JunkFood02/Seal?style=flat&color=blue)](https://github.com/JunkFood02/Seal/blob/main/LICENSE)
@@ -195,10 +195,10 @@ English
 - ✨ **New App Logo** - Refreshed icon with modern Seal Plus branding
 - 🚀 **Auto-Update System** - Seamless in-app updates enabled by default
 - 🎨 **Gradient Dark Theme** - Premium glassmorphism UI
-- 🎯 **Repository Migration** - All updates from MaheshTechnicals/Seal
+- 🎯 **Repository Migration** - All updates from MaheshTechnicals/Sealplus
 - 💬 **Community Links** - YouTube and Telegram channels integrated
 
-[View Full Changelog →](https://github.com/MaheshTechnicals/Seal/blob/main/CHANGELOG.md)
+[View Full Changelog →](https://github.com/MaheshTechnicals/Sealplus/blob/main/CHANGELOG.md)
 </details>
 
 ### 📦 Recommended Installation
@@ -207,14 +207,14 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 
 ### 🚀 Latest Releases
 
-- **Latest Stable**: [Download from GitHub Releases](https://github.com/MaheshTechnicals/Seal/releases/latest)
+- **Latest Stable**: [Download from GitHub Releases](https://github.com/MaheshTechnicals/Sealplus/releases/latest)
   - ✅ **Current Version**: v1.2.3 (January 2026)
   - ✅ Network type restrictions (WiFi/Mobile/Any)
   - ✅ Smart notifications with customization
   - ✅ Gradient Dark theme with glassmorphism
   - ✅ Auto-update system enabled by default
 
-- **Preview Builds**: [Download Pre-release Versions](https://github.com/MaheshTechnicals/Seal/releases) 
+- **Preview Builds**: [Download Pre-release Versions](https://github.com/MaheshTechnicals/Sealplus/releases) 
   - 🧪 Test cutting-edge features
   - 🐛 Help us identify and fix bugs
   - 📢 Early access to new functionality
@@ -237,7 +237,7 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 
 ### 📋 Installation Instructions
 
-1. **Download** the appropriate APK for your device architecture from [Releases](https://github.com/MaheshTechnicals/Seal/releases/latest)
+1. **Download** the appropriate APK for your device architecture from [Releases](https://github.com/MaheshTechnicals/Sealplus/releases/latest)
 2. **Enable** "Install from unknown sources" in Settings → Security
 3. **Open** the downloaded APK file
 4. **Follow** the installation prompts
@@ -248,7 +248,7 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 > **Auto-Update Feature**: Once installed, Seal Plus will automatically check for updates. You'll be notified when new versions are available and can update with one click!
 
 > [!WARNING]
-> **Security Notice**: Always download Seal Plus exclusively from our [official GitHub releases page](https://github.com/MaheshTechnicals/Seal/releases). Never download from third-party sources to ensure you're getting the authentic, safe version.
+> **Security Notice**: Always download Seal Plus exclusively from our [official GitHub releases page](https://github.com/MaheshTechnicals/Sealplus/releases). Never download from third-party sources to ensure you're getting the authentic, safe version.
 
 ---
 
@@ -348,7 +348,7 @@ Choose based on your comfort level!
 - ✅ All processing done locally on your device
 - ✅ Licensed under GPL-3.0
 
-You can verify everything in the [source code](https://github.com/MaheshTechnicals/Seal).
+You can verify everything in the [source code](https://github.com/MaheshTechnicals/Sealplus).
 </details>
 
 <details>
@@ -374,7 +374,7 @@ Try these solutions:
 3. **Clear cache**: Settings → Storage → Clear cache
 4. **Try custom command**: Some sites need specific parameters
 5. **Check site support**: Visit [supported sites list](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
-6. **Report issue**: [GitHub Issues](https://github.com/MaheshTechnicals/Seal/issues) with details
+6. **Report issue**: [GitHub Issues](https://github.com/MaheshTechnicals/Sealplus/issues) with details
 
 Most issues are resolved by updating yt-dlp!
 </details>
@@ -402,9 +402,9 @@ Stay connected with the Seal Plus community and get support:
 
 We value your feedback! Help us improve Seal Plus:
 
-1. **Check First**: Browse [existing issues](https://github.com/MaheshTechnicals/Seal/issues) to avoid duplicates
-2. **Read Guidelines**: Review our [Contributing Guidelines](https://github.com/MaheshTechnicals/Seal/blob/main/CONTRIBUTING.md)
-3. **Report Issues**: Open a [new issue](https://github.com/MaheshTechnicals/Seal/issues/new) with:
+1. **Check First**: Browse [existing issues](https://github.com/MaheshTechnicals/Sealplus/issues) to avoid duplicates
+2. **Read Guidelines**: Review our [Contributing Guidelines](https://github.com/MaheshTechnicals/Sealplus/blob/main/CONTRIBUTING.md)
+3. **Report Issues**: Open a [new issue](https://github.com/MaheshTechnicals/Sealplus/issues/new) with:
    - Clear description of the problem/feature
    - Steps to reproduce (for bugs)
    - Your device model and Android version
@@ -413,10 +413,10 @@ We value your feedback! Help us improve Seal Plus:
 
 ### 📖 Documentation & Resources
 
-- **📋 Changelog**: [View all changes and updates](https://github.com/MaheshTechnicals/Seal/blob/main/CHANGELOG.md)
+- **📋 Changelog**: [View all changes and updates](https://github.com/MaheshTechnicals/Sealplus/blob/main/CHANGELOG.md)
 - **🌍 Supported Sites**: [Full list of 1000+ supported platforms](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
-- **🎨 Gradient Dark Theme**: [Complete documentation](https://github.com/MaheshTechnicals/Seal/blob/main/GRADIENT_DARK_README.md)
-- **📖 Contributing Guide**: [How to contribute](https://github.com/MaheshTechnicals/Seal/blob/main/CONTRIBUTING.md)
+- **🎨 Gradient Dark Theme**: [Complete documentation](https://github.com/MaheshTechnicals/Sealplus/blob/main/GRADIENT_DARK_README.md)
+- **📖 Contributing Guide**: [How to contribute](https://github.com/MaheshTechnicals/Sealplus/blob/main/CONTRIBUTING.md)
 
 ## 💖 Support Seal Plus
 
@@ -488,7 +488,7 @@ Help make Seal Plus accessible to users worldwide:
 ### 📋 Contribution Guidelines
 
 > [!IMPORTANT]
-> Before contributing, please read our [Contributing Guidelines](https://github.com/MaheshTechnicals/Seal/blob/main/CONTRIBUTING.md) for:
+> Before contributing, please read our [Contributing Guidelines](https://github.com/MaheshTechnicals/Sealplus/blob/main/CONTRIBUTING.md) for:
 > - Code style standards
 > - Commit message conventions
 > - Pull request requirements
@@ -515,7 +515,7 @@ Help make Seal Plus accessible to users worldwide:
 
 Watch how our community has grown over time!
 
-[![Star History Chart](https://api.star-history.com/svg?repos=MaheshTechnicals/Seal&type=Timeline)](https://star-history.com/#MaheshTechnicals/Seal&Timeline)
+[![Star History Chart](https://api.star-history.com/svg?repos=MaheshTechnicals/Sealplus&type=Timeline)](https://star-history.com/#MaheshTechnicals/Sealplus&Timeline)
 
 ---
 
@@ -555,7 +555,7 @@ Seal Plus stands on the shoulders of giants. We're grateful to these amazing ope
 - Designed and implemented by [Mahesh Technicals](https://github.com/MaheshTechnicals)
 - 21 new resource files and components
 - 2,200+ lines of documentation
-- [View Implementation Guide](https://github.com/MaheshTechnicals/Seal/blob/main/GRADIENT_DARK_IMPLEMENTATION_GUIDE.md)
+- [View Implementation Guide](https://github.com/MaheshTechnicals/Sealplus/blob/main/GRADIENT_DARK_IMPLEMENTATION_GUIDE.md)
 
 ### 🌟 Original Creator
 
@@ -570,7 +570,7 @@ Seal Plus stands on the shoulders of giants. We're grateful to these amazing ope
 - **Beta Testers** - Helping us catch bugs early
 - **Issue Reporters** - Providing valuable feedback
 - **Feature Suggesters** - Shaping the roadmap
-- **All Contributors** to [Seal Plus](https://github.com/MaheshTechnicals/Seal/graphs/contributors)
+- **All Contributors** to [Seal Plus](https://github.com/MaheshTechnicals/Sealplus/graphs/contributors)
 
 ### 💝 Special Recognition
 
@@ -578,7 +578,7 @@ This project wouldn't be possible without the collective efforts of the open-sou
 
 ## 📃 License
 
-[![GitHub](https://img.shields.io/github/license/MaheshTechnicals/Seal?style=for-the-badge)](https://github.com/MaheshTechnicals/Seal/blob/main/LICENSE)
+[![GitHub](https://img.shields.io/github/license/MaheshTechnicals/Sealplus?style=for-the-badge)](https://github.com/MaheshTechnicals/Sealplus/blob/main/LICENSE)
 
 >[!Warning]
 >

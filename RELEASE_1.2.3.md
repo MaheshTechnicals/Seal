@@ -58,7 +58,7 @@ Customizable notification system that adapts to your needs:
 
 ## 📥 Download
 
-Download the latest APK from the [Releases Page](https://github.com/MaheshTechnicals/Seal/releases/tag/v1.2.3)
+Download the latest APK from the [Releases Page](https://github.com/MaheshTechnicals/Sealplus/releases/tag/v1.2.3)
 
 **Available Variants:**
 - Universal APK (works on all devices)
@@ -77,7 +77,7 @@ If you have **auto-update enabled** (Settings → About → Auto update), you'll
 
 ## 📝 Full Changelog
 
-See [CHANGELOG.md](https://github.com/MaheshTechnicals/Seal/blob/main/CHANGELOG.md) for complete version history.
+See [CHANGELOG.md](https://github.com/MaheshTechnicals/Sealplus/blob/main/CHANGELOG.md) for complete version history.
 
 ---
 
@@ -103,7 +103,7 @@ Seal Plus supports downloads from YouTube, Instagram, TikTok, Twitter, Facebook,
 
 - 📱 **Telegram**: [@maheshtechnicals](https://t.me/maheshtechnicals)
 - 🎥 **YouTube**: [@maheshtechnicals](https://youtube.com/@maheshtechnicals)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/MaheshTechnicals/Seal/issues)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/MaheshTechnicals/Sealplus/issues)
 
 ---
 
