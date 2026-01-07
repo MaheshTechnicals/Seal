@@ -64,17 +64,28 @@ jobs:
         tag_name: v${{ steps.version.outputs.VERSION }}
         name: Seal Plus v${{ steps.version.outputs.VERSION }}
         body: |
-          ## Seal Plus v1.2.1
+          ## 🚀 Seal Plus v1.2.3 - Network Control & Smart Notifications
           
-          ### 🎨 Branding Updates
+          ### 🌐 Network Type Restrictions
           
-          * **New App Logo**
-            * **Updated app launcher icon** with new Seal Plus branding
-            * New adaptive icons with foreground, background, and monochrome layers
-            * Updated all density folders (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi)
-            * Modern Material You themed icon support for Android 13+
-            * Properly configured round launcher icons for all devices
-            * Enhanced visual identity across all Android launchers
+          * **Smart Network Control**
+            * **Download only on WiFi, Mobile Data, or Any network** - Full control over network usage
+            * Automatic pause when network type changes
+            * Resume downloads when preferred network becomes available
+            * Battery-friendly and data-conscious downloading
+            * Prevents unwanted mobile data usage for large files
+            * Configure per-download or globally in settings
+          
+          ### 🔔 Smart Notifications
+          
+          * **Customizable Notification System**
+            * **Customizable notifications** with sound, vibration, and LED settings per task status
+            * Different notification profiles for started, in progress, completed, failed, and paused states
+            * Per-task status customization: Choose notification sound, enable/disable vibration, set LED color
+            * Rich notification controls: Priority levels, channel management
+            * Actionable notifications (Pause, Cancel, Retry)
+            * Grouped notifications for multiple downloads
+            * Silent mode support with visual-only indicators
           
           ---
           
@@ -86,15 +97,21 @@ jobs:
           - **x86_64**: For 64-bit x86 devices
           - **x86**: For 32-bit x86 devices
           
-          ### 🌐 Key Features
-          - Video/audio downloader with yt-dlp support
-          - Material Design 3 UI with Gradient Dark theme enabled by default
-          - New premium Seal Plus branding and icon
-          - 50+ language translations
-          - Custom command templates
-          - Format selection and quality options
-          - Auto-update enabled by default
-          - Gradle Build Scans for performance insights
+          ### 💎 Key Features
+          - 🌐 Network type restrictions (WiFi/Mobile/Any)
+          - 🔔 Smart customizable notifications
+          - 🎨 Gradient Dark theme with glassmorphism
+          - 🔄 Auto-update system enabled by default
+          - 📥 Download from 1000+ sites via yt-dlp
+          - 🎨 Material Design 3 with premium UI
+          - 🌍 50+ language translations
+          - ⚙️ Custom command templates
+          - 📊 Format selection and quality options
+          
+          ### 📝 Full Changelog
+          See [CHANGELOG.md](https://github.com/MaheshTechnicals/Seal/blob/main/CHANGELOG.md) for complete version history.
+          
+          ---
           
           Built on: ${{ github.event.head_commit.timestamp }}
           Commit: ${{ github.sha }}

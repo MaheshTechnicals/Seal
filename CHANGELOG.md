@@ -5,6 +5,44 @@ All notable changes (starting from v1.7.3) to stable releases will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.3] - 2026-01-07
+
+### 🌐 Network Type Restrictions
+
+* **Smart Network Control**
+  * **Download only on WiFi, Mobile Data, or Any network** - Full control over network usage
+  * Network type selector in download settings
+  * Automatic pause when network type changes
+  * Resume downloads when preferred network becomes available
+  * Battery-friendly and data-conscious downloading
+  * Prevents unwanted mobile data usage for large files
+  * Configure per-download or globally in settings
+
+### 🔔 Smart Notifications
+
+* **Customizable Notification System**
+  * **Customizable notifications** with sound, vibration, and LED settings per task status
+  * Different notification profiles for:
+    - Download started
+    - Download in progress
+    - Download completed (success)
+    - Download failed (error)
+    - Download paused/queued
+  * **Per-task status customization**: Choose notification sound, enable/disable vibration, set LED color
+  * Rich notification controls: Priority levels, channel management
+  * Battery-efficient notification updates
+  * Persistent notifications for active downloads
+  * Actionable notifications (Pause, Cancel, Retry)
+  * Grouped notifications for multiple downloads
+  * Silent mode support with visual-only indicators
+
+### 🧹 Codebase Cleanup
+
+* **Documentation Improvements**
+  * Removed redundant GRADIENT_DARK documentation files (7 files)
+  * Streamlined project structure for better maintainability
+  * Consolidated theme documentation in main README
+
 ## [1.2.1] - 2026-01-06
 
 ### 🎨 Branding Updates

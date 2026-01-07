@@ -171,23 +171,32 @@ English
 
 ## ⬇️ Download & Installation
 
-### 🎉 What's New in v1.2.1?
+### 🎉 What's New in v1.2.3?
 
 <details>
-<summary><b>📱 Click to see latest updates (January 6, 2026)</b></summary>
+<summary><b>📱 Click to see latest updates (January 7, 2026)</b></summary>
 
-#### 🎨 Branding Updates
+#### 🌐 Network Type Restrictions
+- 📶 **Smart Network Control** - Download only on WiFi, Mobile Data, or Any network
+- ⏸️ **Automatic Pause** - Downloads pause when network type changes
+- ▶️ **Smart Resume** - Auto-resume when preferred network is available
+- 💰 **Data Savings** - Prevent unwanted mobile data usage
+- 🔋 **Battery Friendly** - Optimize based on network preference
+
+#### 🔔 Smart Notifications
+- 🎵 **Custom Sounds** - Different notification sounds per task status
+- 📳 **Vibration Control** - Enable/disable vibration per notification type
+- 💡 **LED Indicators** - Custom LED colors for different download states
+- ⚡ **Quick Actions** - Pause, Cancel, or Retry from notifications
+- 📦 **Smart Grouping** - Multiple downloads in expandable groups
+- 🔕 **Silent Mode** - Visual-only indicators when needed
+
+#### Previous Updates (v1.2.1 & v1.2.0)
 - ✨ **New App Logo** - Refreshed icon with modern Seal Plus branding
-- 🎯 **Adaptive Icons** - Proper foreground, background, and monochrome layers
-- 📱 **Material You Support** - Themed icons for Android 13+
-- 🔄 **All Density Support** - Optimized for all screen resolutions
-
-#### Previous Updates (v1.2.0)
 - 🚀 **Auto-Update System** - Seamless in-app updates enabled by default
-- 🎨 **Gradient Dark Theme** - Now enabled by default for premium experience
+- 🎨 **Gradient Dark Theme** - Premium glassmorphism UI
 - 🎯 **Repository Migration** - All updates from MaheshTechnicals/Seal
 - 💬 **Community Links** - YouTube and Telegram channels integrated
-- 🎨 **UI Improvements** - Enhanced navigation, better tab colors, cleaner interface
 
 [View Full Changelog →](https://github.com/MaheshTechnicals/Seal/blob/main/CHANGELOG.md)
 </details>
@@ -199,10 +208,11 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 ### 🚀 Latest Releases
 
 - **Latest Stable**: [Download from GitHub Releases](https://github.com/MaheshTechnicals/Seal/releases/latest)
-  - ✅ **Current Version**: v1.2.1 (January 2026)
-  - ✅ New app logo with enhanced branding
-  - ✅ Gradient Dark theme enabled by default
-  - ✅ Auto-update system configured
+  - ✅ **Current Version**: v1.2.3 (January 2026)
+  - ✅ Network type restrictions (WiFi/Mobile/Any)
+  - ✅ Smart notifications with customization
+  - ✅ Gradient Dark theme with glassmorphism
+  - ✅ Auto-update system enabled by default
 
 - **Preview Builds**: [Download Pre-release Versions](https://github.com/MaheshTechnicals/Seal/releases) 
   - 🧪 Test cutting-edge features
@@ -215,8 +225,8 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 |------------|---------------|
 | **Minimum Android** | Android 7.0 (API 24) |
 | **Target Android** | Android 14 (API 36) |
-| **Current Version** | 1.2.1 |
-| **Release Date** | January 6, 2026 |
+| **Current Version** | 1.2.3 |
+| **Release Date** | January 7, 2026 |
 
 ### 🏗️ Architecture Support
 
