@@ -547,3 +547,4 @@
     <string name="biometric_unsupported">Biometric authentication is not supported on this device</string>
     <string name="biometric_status_unknown">Biometric status unknown</string>
     <string name="biometric_unavailable">Biometric authentication is unavailable</string>
+</resources>
