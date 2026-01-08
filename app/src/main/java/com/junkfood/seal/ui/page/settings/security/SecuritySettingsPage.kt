@@ -171,7 +171,11 @@ fun SecuritySettingsPage(
                 item {
                     PreferenceItem(
                         title = stringResource(R.string.authentication_timeout),
-                        description = stringResource(R.string.auth_timeout_description, authTimeout),
+                        description = if (authTimeout == 0) {
+                            stringResource(R.string.auth_timeout_immediately)
+                        } else {
+                            stringResource(R.string.auth_timeout_description, authTimeout)
+                        },
                         icon = Icons.Default.Timer,
                         onClick = { showTimeoutDialog = true }
                     )
@@ -503,7 +507,7 @@ private fun AuthTimeoutDialog(
     onConfirm: (Int) -> Unit
 ) {
     var selectedTimeout by remember { mutableIntStateOf(currentTimeout) }
-    val timeoutOptions = listOf(1, 2, 5, 10, 15, 30, 60)
+    val timeoutOptions = listOf(0, 1, 2, 5, 10, 15, 30, 60)
     
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -529,7 +533,11 @@ private fun AuthTimeoutDialog(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = stringResource(R.string.timeout_minutes, timeout),
+                            text = if (timeout == 0) {
+                                stringResource(R.string.immediately)
+                            } else {
+                                stringResource(R.string.timeout_minutes, timeout)
+                            },
                             modifier = Modifier
                                 .align(androidx.compose.ui.Alignment.CenterVertically)
                                 .weight(1f)

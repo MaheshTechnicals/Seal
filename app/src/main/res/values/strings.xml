@@ -505,6 +505,8 @@
     <string name="always_require_authentication_when_opening">Always require authentication when opening app</string>
     <string name="authentication_timeout">Authentication Timeout</string>
     <string name="auth_timeout_description">Require authentication after %d minutes of inactivity</string>
+    <string name="auth_timeout_immediately">Require authentication every time app is opened</string>
+    <string name="immediately">Immediately</string>
     <string name="security_info_message">App lock protects your privacy by requiring authentication to access Seal Plus. Your PIN is securely stored on your device.</string>
     <string name="disable_security">Disable Security</string>
     <string name="disable_security_warning">Are you sure you want to disable app lock? This will remove all security restrictions.</string>

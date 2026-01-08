@@ -299,10 +299,13 @@ object AuthenticationManager {
         val lastAuthTime = getLastAuthTime()
         if (lastAuthTime == 0L) return true // First time or after reset
         
-        val timeout = getAuthTimeout() * 60 * 1000L // Convert to milliseconds
+        val timeout = getAuthTimeout()
+        if (timeout == 0) return true // Immediately option - always require auth
+        
+        val timeoutMillis = timeout * 60 * 1000L // Convert to milliseconds
         val currentTime = System.currentTimeMillis()
         
-        return (currentTime - lastAuthTime) > timeout
+        return (currentTime - lastAuthTime) > timeoutMillis
     }
     
     /**
