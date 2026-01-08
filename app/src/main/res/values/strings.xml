@@ -555,5 +555,4 @@
     <string name="reset_app_lock_desc">Remove all PIN data and turn off App Lock completely</string>
     <string name="reset_app_lock_warning">Are you sure you want to reset App Lock? This will:\n\n• Remove your PIN\n• Turn off App Lock\n• Reset all security settings\n\nYou can set up App Lock again from scratch afterward.</string>
     <string name="app_lock_reset_success">App Lock has been reset successfully</string>
-    <string name="reset">Reset</string>
 </resources>
