@@ -1,7 +1,9 @@
 package com.junkfood.seal.ui.page.downloadv2
 
+import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.animateTo
 import androidx.compose.animation.rememberSplineBasedDecay
@@ -34,6 +36,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.List
+import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Menu
@@ -102,6 +105,9 @@ import com.junkfood.seal.ui.common.HapticFeedback.slightHapticFeedback
 import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.common.LocalFixedColorRoles
 import com.junkfood.seal.ui.common.LocalWindowWidthState
+import com.junkfood.seal.ui.component.ConfirmButton
+import com.junkfood.seal.ui.component.DismissButton
+import com.junkfood.seal.ui.component.SealDialog
 import com.junkfood.seal.ui.component.SealModalBottomSheet
 import com.junkfood.seal.ui.component.SelectionGroupDefaults
 import com.junkfood.seal.ui.component.SelectionGroupItem
@@ -205,6 +211,24 @@ fun DownloadPageV2(
     val scope = rememberCoroutineScope()
     val clipboardManager = LocalClipboardManager.current
     val uriHandler = LocalUriHandler.current
+    val activity = context as? Activity
+    var showExitDialog by remember { mutableStateOf(false) }
+
+    // Handle back press to show exit confirmation
+    BackHandler {
+        showExitDialog = true
+    }
+
+    // Exit confirmation dialog
+    if (showExitDialog) {
+        ExitConfirmationDialog(
+            onDismiss = { showExitDialog = false },
+            onConfirm = {
+                showExitDialog = false
+                activity?.finish()
+            }
+        )
+    }
 
     DownloadPageImplV2(
         modifier = modifier,
@@ -724,7 +748,51 @@ fun SubHeader(
         }
     }
 }
-
+@Composable
+private fun ExitConfirmationDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    SealDialog(
+        onDismissRequest = onDismiss,
+        icon = {
+            Icon(
+                imageVector = Icons.Outlined.ExitToApp,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
+            )
+        },
+        title = {
+            Text(
+                text = stringResource(R.string.exit_app_title),
+                style = MaterialTheme.typography.headlineSmall
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier.padding(horizontal = 24.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.exit_app_message),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        },
+        confirmButton = {
+            ConfirmButton(
+                text = stringResource(R.string.exit),
+                onClick = onConfirm
+            )
+        },
+        dismissButton = {
+            DismissButton(
+                text = stringResource(R.string.cancel),
+                onClick = onDismiss
+            )
+        }
+    )
+}
 internal class DownloadPageV2Test {
     private val mockDownloader =
         object : DownloaderV2 {
