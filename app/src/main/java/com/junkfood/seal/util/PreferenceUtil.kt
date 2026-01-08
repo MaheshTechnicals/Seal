@@ -123,6 +123,9 @@ const val NOTIFICATION_LED = "notification_led"
 const val NOTIFICATION_SUCCESS_SOUND = "notification_success_sound"
 const val NOTIFICATION_ERROR_SOUND = "notification_error_sound"
 
+// Torrent Support
+const val TORRENT_SUPPORT = "torrent_support"
+
 const val YT_DLP_UPDATE_CHANNEL = "yt-dlp_update_channel"
 const val YT_DLP_UPDATE_TIME = "yt-dlp_last_update"
 const val YT_DLP_UPDATE_INTERVAL = "yt-dlp_update_interval"

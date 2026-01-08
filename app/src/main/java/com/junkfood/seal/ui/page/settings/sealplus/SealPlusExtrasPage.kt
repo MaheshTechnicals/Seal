@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.NetworkCell
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.SignalCellular4Bar
 import androidx.compose.material.icons.outlined.SignalWifi4Bar
+import androidx.compose.material.icons.outlined.CloudDownload
 import androidx.compose.material.icons.rounded.NetworkCheck
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,6 +37,7 @@ import com.junkfood.seal.ui.component.PreferenceSubtitle
 import com.junkfood.seal.ui.component.PreferenceSingleChoiceItem
 import com.junkfood.seal.ui.component.PreferenceSwitch
 import com.junkfood.seal.ui.page.security.LockScreen
+import com.junkfood.seal.util.makeToast
 import com.junkfood.seal.util.AuthenticationManager
 import com.junkfood.seal.util.NETWORK_ANY
 import com.junkfood.seal.util.NETWORK_MOBILE_ONLY
@@ -46,6 +48,7 @@ import com.junkfood.seal.util.NOTIFICATION_LED
 import com.junkfood.seal.util.NOTIFICATION_SOUND
 import com.junkfood.seal.util.NOTIFICATION_SUCCESS_SOUND
 import com.junkfood.seal.util.NOTIFICATION_VIBRATE
+import com.junkfood.seal.util.TORRENT_SUPPORT
 import com.junkfood.seal.util.PreferenceUtil.getBoolean
 import com.junkfood.seal.util.PreferenceUtil.getInt
 import com.junkfood.seal.util.PreferenceUtil.updateBoolean
@@ -55,7 +58,8 @@ import com.junkfood.seal.util.PreferenceUtil.updateInt
 @Composable
 fun SealPlusExtrasPage(
     onNavigateBack: () -> Unit,
-    onNavigateToSecurity: () -> Unit = {}
+    onNavigateToSecurity: () -> Unit = {},
+    onNavigateToTorrent: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -67,6 +71,7 @@ fun SealPlusExtrasPage(
     var notificationLed by remember { mutableStateOf(NOTIFICATION_LED.getBoolean()) }
     var notificationSuccessSound by remember { mutableStateOf(NOTIFICATION_SUCCESS_SOUND.getBoolean()) }
     var notificationErrorSound by remember { mutableStateOf(NOTIFICATION_ERROR_SOUND.getBoolean()) }
+    var torrentSupport by remember { mutableStateOf(TORRENT_SUPPORT.getBoolean()) }
     
     // Authentication state for AppLock settings
     var showAuthScreen by remember { mutableStateOf(false) }
@@ -102,6 +107,36 @@ fun SealPlusExtrasPage(
         LazyColumn(
             modifier = Modifier.padding(paddingValues)
         ) {
+            item {
+                PreferenceSubtitle(text = stringResource(R.string.advanced_features))
+            }
+            
+            item {
+                PreferenceSwitch(
+                    title = "Torrent Support",
+                    description = "Download via BitTorrent protocol (magnet links & .torrent files)",
+                    icon = Icons.Outlined.CloudDownload,
+                    isChecked = torrentSupport,
+                    onClick = { 
+                        TORRENT_SUPPORT.updateBoolean(!torrentSupport)
+                        torrentSupport = !torrentSupport
+                        if (torrentSupport) {
+                            context.makeToast("Torrent support enabled")
+                        }
+                    }
+                )
+            }
+            
+            item {
+                PreferenceItem(
+                    title = "Torrent Downloads",
+                    description = "Manage active torrent downloads",
+                    icon = Icons.Outlined.CloudDownload,
+                    enabled = torrentSupport,
+                    onClick = { onNavigateToTorrent() }
+                )
+            }
+            
             item {
                 PreferenceSubtitle(text = stringResource(R.string.security_and_privacy))
             }

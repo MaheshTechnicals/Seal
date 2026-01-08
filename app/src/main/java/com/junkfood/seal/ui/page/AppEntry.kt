@@ -67,6 +67,7 @@ import com.junkfood.seal.ui.page.settings.network.WebViewPage
 import com.junkfood.seal.ui.page.settings.sealplus.SealPlusExtrasPage
 import com.junkfood.seal.ui.page.settings.security.SecuritySettingsPage
 import com.junkfood.seal.ui.page.settings.troubleshooting.TroubleShootingPage
+import com.junkfood.seal.ui.page.torrent.TorrentDownloadPage
 import com.junkfood.seal.ui.page.videolist.VideoListPage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -256,11 +257,15 @@ fun NavGraphBuilder.settingsGraph(
         animatedComposable(Route.SEALPLUS_EXTRAS) {
             SealPlusExtrasPage(
                 onNavigateBack = onNavigateBack,
-                onNavigateToSecurity = { onNavigateTo(Route.SECURITY_SETTINGS) }
+                onNavigateToSecurity = { onNavigateTo(Route.SECURITY_SETTINGS) },
+                onNavigateToTorrent = { onNavigateTo(Route.TORRENT_DOWNLOAD) }
             )
         }
         animatedComposable(Route.SECURITY_SETTINGS) {
             SecuritySettingsPage(onBackPressed = onNavigateBack)
+        }
+        animatedComposable(Route.TORRENT_DOWNLOAD) {
+            TorrentDownloadPage(onNavigateBack = onNavigateBack)
         }
         animatedComposable(Route.TROUBLESHOOTING) {
             TroubleShootingPage(onNavigateTo = onNavigateTo, onBack = onNavigateBack)

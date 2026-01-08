@@ -21,6 +21,7 @@ import com.junkfood.seal.ui.page.security.LockScreen
 import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.util.AuthenticationManager
 import com.junkfood.seal.util.PreferenceUtil
+import com.junkfood.seal.util.TorrentUtil
 import com.junkfood.seal.util.matchUrlFromSharedText
 import com.junkfood.seal.util.setLanguage
 import kotlinx.coroutines.runBlocking
@@ -30,6 +31,7 @@ import org.koin.compose.KoinContext
 class MainActivity : AppCompatActivity() {
     private val dialogViewModel: DownloadDialogViewModel by viewModel()
     private var isAppInBackground = false
+    private var sharedTorrentUrl: String? = null
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,9 +94,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent) // Important for torrent handling
         val url = intent.getSharedURL()
         if (url != null) {
-            dialogViewModel.postAction(DownloadDialogViewModel.Action.ShowSheet(listOf(url)))
+            // Check if it's a torrent/magnet link
+            if (TorrentUtil.isMagnetLink(url) || TorrentUtil.isTorrentUrl(url)) {
+                if (TorrentUtil.isTorrentSupportEnabled()) {
+                    // Store for navigation after UI loads
+                    sharedTorrentUrl = url
+                } else {
+                    dialogViewModel.postAction(DownloadDialogViewModel.Action.ShowSheet(listOf(url)))
+                }
+            } else {
+                dialogViewModel.postAction(DownloadDialogViewModel.Action.ShowSheet(listOf(url)))
+            }
         }
     }
 
@@ -126,5 +139,11 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MainActivity"
         private var sharedUrlCached = ""
+    }
+    
+    fun getSharedTorrentUrl(): String? {
+        val url = sharedTorrentUrl
+        sharedTorrentUrl = null // Clear after reading
+        return url
     }
 }
