@@ -171,27 +171,31 @@ English
 
 ## ⬇️ Download & Installation
 
-### 🎉 What's New in v1.2.3?
+### 🎉 What's New in v1.2.4?
 
 <details>
-<summary><b>📱 Click to see latest updates (January 7, 2026)</b></summary>
+<summary><b>📱 Click to see latest updates (January 8, 2026)</b></summary>
 
-#### 🌐 Network Type Restrictions
-- 📶 **Smart Network Control** - Download only on WiFi, Mobile Data, or Any network
-- ⏸️ **Automatic Pause** - Downloads pause when network type changes
-- ▶️ **Smart Resume** - Auto-resume when preferred network is available
-- 💰 **Data Savings** - Prevent unwanted mobile data usage
-- 🔋 **Battery Friendly** - Optimize based on network preference
+#### 🔒 App Lock System (Security & Privacy)
+- 🔐 **4-digit PIN Protection** - Fast and secure PIN authentication
+- 👆 **Biometric Authentication** - Unlock with fingerprint or face recognition
+- ⏱️ **Smart Timeouts** - Immediately to 60 minutes of inactivity
+- 🔄 **Secure PIN Change** - Requires old PIN verification
+- 🔒 **Background Protection** - Auto-lock when app goes to background
+- 🔑 **SHA-256 Encryption** - PIN never stored in plain text
+- 🛡️ **Brute Force Protection** - Maximum 5 attempts with auto-dismiss
+- 📱 **Local Storage Only** - All data stays on your device
 
-#### 🔔 Smart Notifications
-- 🎵 **Custom Sounds** - Different notification sounds per task status
-- 📳 **Vibration Control** - Enable/disable vibration per notification type
-- 💡 **LED Indicators** - Custom LED colors for different download states
-- ⚡ **Quick Actions** - Pause, Cancel, or Retry from notifications
-- 📦 **Smart Grouping** - Multiple downloads in expandable groups
-- 🔕 **Silent Mode** - Visual-only indicators when needed
+#### 🎨 UI/UX Enhancements
+- 🚪 **Exit Confirmation Dialog** - Prevents accidental app closure from Download Queue
+- 🎭 **Animated Lock Screen** - Smooth number pad with PIN dots indicator
+- 🎨 **Theme-Aware Design** - Matches all themes including Gradient Dark
+- 📳 **Haptic Feedback** - Enhanced touch feedback for better UX
+- ✨ **Material Design 3** - Beautiful confirmation dialogs
 
-#### Previous Updates (v1.2.1 & v1.2.0)
+#### Previous Updates (v1.2.3, v1.2.1 & v1.2.0)
+- 🌐 **Network Type Restrictions** - Download on WiFi/Mobile/Any network
+- 🔔 **Smart Notifications** - Customizable sounds, vibration, and LED
 - ✨ **New App Logo** - Refreshed icon with modern Seal Plus branding
 - 🚀 **Auto-Update System** - Seamless in-app updates enabled by default
 - 🎨 **Gradient Dark Theme** - Premium glassmorphism UI
@@ -208,7 +212,9 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 ### 🚀 Latest Releases
 
 - **Latest Stable**: [Download from GitHub Releases](https://github.com/MaheshTechnicals/Sealplus/releases/latest)
-  - ✅ **Current Version**: v1.2.3 (January 2026)
+  - ✅ **Current Version**: v1.2.4 (January 2026)
+  - ✅ App Lock with PIN & Biometric authentication
+  - ✅ Exit confirmation dialog
   - ✅ Network type restrictions (WiFi/Mobile/Any)
   - ✅ Smart notifications with customization
   - ✅ Gradient Dark theme with glassmorphism
@@ -225,8 +231,8 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 |------------|---------------|
 | **Minimum Android** | Android 7.0 (API 24) |
 | **Target Android** | Android 14 (API 36) |
-| **Current Version** | 1.2.3 |
-| **Release Date** | January 7, 2026 |
+| **Current Version** | 1.2.4 |
+| **Release Date** | January 8, 2026 |
 
 ### 🏗️ Architecture Support
 
