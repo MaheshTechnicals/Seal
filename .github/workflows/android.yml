@@ -89,42 +89,40 @@ jobs:
         tag_name: v${{ steps.version.outputs.VERSION }}
         name: Seal Plus v${{ steps.version.outputs.VERSION }}
         body: |
-          ## 🚀 Seal Plus v1.2.4 - App Lock & Enhanced Security
+          ## 🚀 Seal Plus v1.2.5 - Onboarding & Splash Screen
           
-          ### 🔒 App Lock System (Security & Privacy)
+          ### ✨ New Features
           
-          * **Multi-Factor Authentication**
-            * **4-digit PIN protection** - Fast and secure PIN authentication
-            * **Biometric authentication** - Unlock with fingerprint or face recognition
-            * **Old PIN verification** - Secure PIN change requires current PIN
-            * **Complete reset option** - Reset all AppLock settings if needed
+          * **Professional Onboarding Screens**
+            * **4 beautifully designed pages** - Welcome, Downloads, Customizable, and Security
+            * **Smooth animations** - Spring bounce, fade transitions, morphing page indicators
+            * **Swipe navigation** - Intuitive HorizontalPager with gesture support
+            * **Skip/Back/Next controls** - Flexible navigation through onboarding
+            * **Theme integration** - Matches Gradient Dark with floating gradient blobs
+            * **Glow effects** - Beautiful icon animations with blur effects
+            * **First-time detection** - Shows on first launch, skips thereafter
+            * **Settings access** - "View Onboarding" option in About page
           
-          * **Smart Timeout Management**
-            * **Immediately** - Always require authentication when app opens
-            * **Flexible timeouts** - 1, 2, 5, 10, 15, 30, or 60 minutes of inactivity
-            * **Background protection** - Auto-lock when app goes to background
-            * **Persistent settings** - Timeout settings survive app restarts
+          * **Elegant Splash Screen**
+            * **Animated logo** - Spring bounce animation with smooth scaling
+            * **Gradient branding** - Pulsing glow effect with app theme colors
+            * **Theme-aware** - Adapts to Gradient Dark and light themes
+            * **Professional timing** - 2.4s optimal display duration
+            * **Custom branding** - Powered by Mahesh Technicals
           
-          * **Secure Implementation**
-            * **SHA-256 PIN hashing** - PIN never stored in plain text
-            * **MMKV encrypted storage** - All data securely stored locally
-            * **Brute force protection** - Maximum 5 attempts with auto-dismiss
-            * **No cloud sync** - All data stays on your device
+          ### 🐛 Bug Fixes
           
-          ### 🎨 UI/UX Enhancements
+          * **Network Download Fix**
+            * Fixed "Any Network" option not allowing mobile data downloads
+            * Downloads now work on both WiFi and mobile data when "Any Network" selected
+            * Improved network availability detection
           
-          * **Exit Confirmation Dialog**
-            * Prevents accidental app closure from Download Queue page
-            * Stylish Material Design 3 styled dialog
-            * Theme-aware colors matching all themes including Gradient Dark
-            * Clear messaging about ongoing downloads
-            * Smooth animations with proper haptic feedback
+          ### 🎨 UI/UX Improvements
           
-          * **Animated Lock Screen**
-            * Beautiful number pad with smooth transitions
-            * PIN dots indicator with visual feedback
-            * Error shake animations on incorrect PIN
-            * Haptic feedback for better user experience
+          * Enhanced first-time user experience with guided onboarding
+          * Smooth app launch with professional splash screen
+          * Better app branding and visual identity
+          * Improved visual feedback during initialization
           
           ---
           
@@ -137,6 +135,8 @@ jobs:
           - **x86**: For 32-bit x86 devices
           
           ### 💎 Key Features
+          - ✨ Professional onboarding screens with smooth animations
+          - 🎨 Elegant splash screen with gradient branding
           - 🔒 App Lock with PIN & Biometric authentication
           - 🚪 Exit confirmation dialog for Download Queue
           - 🌐 Network type restrictions (WiFi/Mobile/Any)

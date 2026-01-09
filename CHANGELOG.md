@@ -5,6 +5,42 @@ All notable changes (starting from v1.7.3) to stable releases will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.5] - 2026-01-09
+
+### ✨ New Features
+
+* **Professional Onboarding Screens**
+  * **4 beautifully designed pages** - Welcome, Downloads, Customizable, and Security
+  * **Smooth animations** - Spring bounce, fade transitions, and morphing page indicators
+  * **Swipe navigation** - HorizontalPager with intuitive swipe gestures
+  * **Skip/Back/Next controls** - Flexible navigation through onboarding flow
+  * **Theme integration** - Matches Gradient Dark theme with floating gradient blobs
+  * **Glow effects** - Beautiful icon animations with blur effects
+  * **First-time detection** - Automatically shows on first launch, then skips
+  * **Settings access** - "View Onboarding" option in About page for easy review
+  * **Material Design 3** - Professional UI following latest design guidelines
+
+* **Elegant Splash Screen**
+  * **Animated logo** - Spring bounce animation with smooth scaling
+  * **Gradient branding** - Pulsing glow effect with app theme colors
+  * **Theme-aware** - Adapts to Gradient Dark mode and light themes
+  * **Professional timing** - 2.4s optimal display duration
+  * **Powered by Mahesh Technicals** - Custom branding with copyright notice
+
+### 🐛 Bug Fixes
+
+* **Network Download Fix**
+  * Fixed "Any Network" option not allowing mobile data downloads
+  * Downloads now work correctly on both WiFi and mobile data when "Any Network" is selected
+  * Improved network availability detection in PreferenceUtil
+
+### 🎨 UI/UX Improvements
+
+* Enhanced first-time user experience with guided onboarding
+* Smooth app launch with professional splash screen
+* Better app branding and identity
+* Improved visual feedback during app initialization
+
 ## [1.2.4] - 2026-01-08
 
 ### 🔒 New Feature: App Lock (Security & Privacy)
