@@ -52,9 +52,13 @@ jobs:
     - name: Clean up temp and unsigned APKs
       run: |
         rm -f app/build/outputs/apk/generic/release/*-temp.apk
-        find app/build/outputs/apk/generic/release/ -name "*.apk" ! -name "*-signed.apk" -delete
-        echo "Remaining APKs:"
-        ls -lh app/build/outputs/apk/generic/release/*.apk
+        echo "All APKs before cleanup:"
+        ls -lh app/build/outputs/apk/generic/release/*.apk || echo "No APKs found"
+        find app/build/outputs/apk/generic/release/ -name "*.apk" ! -name "*-signed.apk" -delete || true
+        echo "Remaining signed APKs:"
+        ls -lh app/build/outputs/apk/generic/release/*.apk || echo "No signed APKs found"
+        echo "Checking all possible locations:"
+        find app/build/outputs/apk -name "*.apk" -type f
 
     - name: Read release configuration
       id: release_config
@@ -67,6 +71,14 @@ jobs:
         else
           echo "⚠️ Release publishing is disabled - APKs will be uploaded as artifacts only"
         fi
+
+    - name: List all APK files for debugging
+      run: |
+        echo "📦 All APK files in output directory:"
+        find app/build/outputs/apk -name "*.apk" -type f -exec ls -lh {} \;
+        echo ""
+        echo "📁 Directory structure:"
+        ls -R app/build/outputs/apk/
 
     - name: Create Release
       if: steps.release_config.outputs.SHOULD_RELEASE == 'true'
@@ -149,13 +161,16 @@ jobs:
         make_latest: true
         files: |
           app/build/outputs/apk/generic/release/*-signed.apk
+          app/build/outputs/apk/generic/release/SealPlus-*.apk
 
     - name: Upload Universal APK as Artifact
       if: steps.release_config.outputs.SHOULD_RELEASE == 'false'
       uses: actions/upload-artifact@v4
       with:
         name: SealPlus-${{ steps.version.outputs.VERSION }}-universal
-        path: app/build/outputs/apk/generic/release/*-universal-signed.apk
+        path: |
+          app/build/outputs/apk/generic/release/*universal*-signed.apk
+          app/build/outputs/apk/generic/release/SealPlus-*-genericRelease-universal.apk
         if-no-files-found: warn
         retention-days: 30
 
@@ -164,7 +179,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: SealPlus-${{ steps.version.outputs.VERSION }}-arm64-v8a
-        path: app/build/outputs/apk/generic/release/*-arm64-v8a-signed.apk
+        path: |
+          app/build/outputs/apk/generic/release/*arm64-v8a*-signed.apk
+          app/build/outputs/apk/generic/release/SealPlus-*-genericRelease-arm64-v8a.apk
         if-no-files-found: warn
         retention-days: 30
 
@@ -173,7 +190,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: SealPlus-${{ steps.version.outputs.VERSION }}-armeabi-v7a
-        path: app/build/outputs/apk/generic/release/*-armeabi-v7a-signed.apk
+        path: |
+          app/build/outputs/apk/generic/release/*armeabi-v7a*-signed.apk
+          app/build/outputs/apk/generic/release/SealPlus-*-genericRelease-armeabi-v7a.apk
         if-no-files-found: warn
         retention-days: 30
 
@@ -182,7 +201,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: SealPlus-${{ steps.version.outputs.VERSION }}-x86_64
-        path: app/build/outputs/apk/generic/release/*-x86_64-signed.apk
+        path: |
+          app/build/outputs/apk/generic/release/*x86_64*-signed.apk
+          app/build/outputs/apk/generic/release/SealPlus-*-genericRelease-x86_64.apk
         if-no-files-found: warn
         retention-days: 30
 
@@ -191,7 +212,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: SealPlus-${{ steps.version.outputs.VERSION }}-x86
-        path: app/build/outputs/apk/generic/release/*-x86-signed.apk
+        path: |
+          app/build/outputs/apk/generic/release/*x86*-signed.apk
+          app/build/outputs/apk/generic/release/SealPlus-*-genericRelease-x86.apk
         if-no-files-found: warn
         retention-days: 30
 
@@ -200,6 +223,8 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: signed-apks-backup
-        path: app/build/outputs/apk/generic/release/*-signed.apk
+        path: |
+          app/build/outputs/apk/generic/release/*-signed.apk
+          app/build/outputs/apk/generic/release/SealPlus-*.apk
         if-no-files-found: error
         retention-days: 20
