@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
                     darkTheme = LocalDarkTheme.current.isDarkTheme(),
                     isHighContrastModeEnabled = LocalDarkTheme.current.isHighContrastModeEnabled,
                     isDynamicColorEnabled = LocalDynamicColorSwitch.current,
+                    isGradientDarkEnabled = LocalDarkTheme.current.isGradientDarkEnabled,
                 ) {
                     HomeEntry(
                         downloadViewModel = downloadViewModel,

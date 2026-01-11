@@ -38,6 +38,7 @@ const val YT_DLP_AUTO_UPDATE = "yt-dlp_update"
 const val DEBUG = "debug"
 const val CONFIGURE = "configure"
 const val DARK_THEME_VALUE = "dark_theme_value"
+const val GRADIENT_DARK_THEME = "gradient_dark_theme"
 const val AUDIO_CONVERT = "audio_convert"
 const val AUDIO_CONVERSION_FORMAT = "audio_convert_format"
 const val AUDIO_FORMAT = "audio_format_preferred"
@@ -85,6 +86,7 @@ const val CELLULAR_DOWNLOAD = "cellular_download"
 const val RATE_LIMIT = "rate_limit"
 const val MAX_RATE = "max_rate"
 private const val HIGH_CONTRAST = "high_contrast"
+const val GRADIENT_DARK = "gradient_dark_enabled"
 const val DISABLE_PREVIEW = "disable_preview"
 const val PRIVATE_DIRECTORY = "private_directory"
 const val CROP_ARTWORK = "crop_artwork"
@@ -334,7 +336,9 @@ object PreferenceUtil {
             DarkThemePreference(
                 darkThemeValue = kv.decodeInt(
                     DARK_THEME_VALUE, DarkThemePreference.FOLLOW_SYSTEM
-                ), isHighContrastModeEnabled = kv.decodeBool(HIGH_CONTRAST, false)
+                ), 
+                isHighContrastModeEnabled = kv.decodeBool(HIGH_CONTRAST, false),
+                isGradientDarkEnabled = kv.decodeBool(GRADIENT_DARK, false)
             ),
             isDynamicColorEnabled = kv.decodeBool(
                 DYNAMIC_COLOR, DynamicColors.isDynamicColorAvailable()
@@ -347,19 +351,29 @@ object PreferenceUtil {
 
     fun modifyDarkThemePreference(
         darkThemeValue: Int = AppSettingsStateFlow.value.darkTheme.darkThemeValue,
-        isHighContrastModeEnabled: Boolean = AppSettingsStateFlow.value.darkTheme.isHighContrastModeEnabled
+        isHighContrastModeEnabled: Boolean = AppSettingsStateFlow.value.darkTheme.isHighContrastModeEnabled,
+        isGradientDarkEnabled: Boolean = AppSettingsStateFlow.value.darkTheme.isGradientDarkEnabled
     ) {
         applicationScope.launch(Dispatchers.IO) {
+            // Auto-disable Gradient Dark if Dark Theme is turned OFF
+            val finalGradientDarkEnabled = if (darkThemeValue == DarkThemePreference.OFF) {
+                false
+            } else {
+                isGradientDarkEnabled
+            }
+            
             mutableAppSettingsStateFlow.update {
                 it.copy(
                     darkTheme = AppSettingsStateFlow.value.darkTheme.copy(
                         darkThemeValue = darkThemeValue,
-                        isHighContrastModeEnabled = isHighContrastModeEnabled
+                        isHighContrastModeEnabled = isHighContrastModeEnabled,
+                        isGradientDarkEnabled = finalGradientDarkEnabled
                     )
                 )
             }
             kv.encode(DARK_THEME_VALUE, darkThemeValue)
             kv.encode(HIGH_CONTRAST, isHighContrastModeEnabled)
+            kv.encode(GRADIENT_DARK, finalGradientDarkEnabled)
         }
     }
 
@@ -387,7 +401,9 @@ object PreferenceUtil {
 }
 
 data class DarkThemePreference(
-    val darkThemeValue: Int = FOLLOW_SYSTEM, val isHighContrastModeEnabled: Boolean = false
+    val darkThemeValue: Int = FOLLOW_SYSTEM, 
+    val isHighContrastModeEnabled: Boolean = false,
+    val isGradientDarkEnabled: Boolean = false
 ) {
     companion object {
         const val FOLLOW_SYSTEM = 1

@@ -42,10 +42,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RangeSliderState
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import com.junkfood.seal.ui.component.GradientScaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -369,7 +369,7 @@ fun FormatPageImpl(
     val selectedLanguageList =
         remember { mutableStateListOf<String>().apply { addAll(selectedSubtitleCodes) } }
 
-    Scaffold(modifier = Modifier
+    GradientScaffold(modifier = Modifier
         .fillMaxSize()
         .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {

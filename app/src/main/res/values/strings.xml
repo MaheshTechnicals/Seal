@@ -243,6 +243,9 @@
     <string name="rate_limit_desc">Limit the maximum download speed</string>
     <string name="max_rate">Maximum rate</string>
     <string name="high_contrast">High contrast dark theme</string>
+    <string name="gradient_dark">Gradient Dark</string>
+    <string name="gradient_dark_desc">Premium glassmorphism theme with gradient backgrounds and frosted UI</string>
+    <string name="gradient_dark_disabled_hint">Gradient Dark requires Dark Theme to be enabled</string>
     <string name="invalid_input">Invalid input</string>
     <string name="lowest_quality">Lowest quality</string>
     <string name="download_queue" translatable="false">Download queue</string>
