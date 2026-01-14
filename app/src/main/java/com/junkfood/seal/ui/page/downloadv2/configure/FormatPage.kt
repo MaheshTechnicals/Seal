@@ -653,7 +653,6 @@ private fun FormatPageImpl(
                     }
                 }
             }
-            }
 
             // SECTION 1: Video (with audio)
             if (videoAudioFormats.isNotEmpty()) {
@@ -804,6 +803,7 @@ private fun FormatPageImpl(
                 }
             item { Spacer(modifier = Modifier.height(64.dp)) }
         }
+    }
     if (showVideoClipDialog)
         VideoClipDialog(
             onDismissRequest = { showVideoClipDialog = false },
