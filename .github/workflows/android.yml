@@ -89,40 +89,34 @@ jobs:
         tag_name: v${{ steps.version.outputs.VERSION }}
         name: Seal Plus v${{ steps.version.outputs.VERSION }}
         body: |
-          ## 🚀 Seal Plus v1.2.5 - Onboarding & Splash Screen
+          ## 🚀 Seal Plus v1.2.6 - Enhanced Video Quality & Performance
           
           ### ✨ New Features
           
-          * **Professional Onboarding Screens**
-            * **4 beautifully designed pages** - Welcome, Downloads, Customizable, and Security
-            * **Smooth animations** - Spring bounce, fade transitions, morphing page indicators
-            * **Swipe navigation** - Intuitive HorizontalPager with gesture support
-            * **Skip/Back/Next controls** - Flexible navigation through onboarding
-            * **Theme integration** - Matches Gradient Dark with floating gradient blobs
-            * **Glow effects** - Beautiful icon animations with blur effects
-            * **First-time detection** - Shows on first launch, skips thereafter
-            * **Settings access** - "View Onboarding" option in About page
+          * **Enhanced Video Download Quality**
+            * **Highest Resolution MP4 Selection** - Automatically select the best available MP4 format for video downloads
+            * Smart format selection prioritizes quality while maintaining compatibility
+            * Optimized for maximum video quality with MP4 container support
           
-          * **Elegant Splash Screen**
-            * **Animated logo** - Spring bounce animation with smooth scaling
-            * **Gradient branding** - Pulsing glow effect with app theme colors
-            * **Theme-aware** - Adapts to Gradient Dark and light themes
-            * **Professional timing** - 2.4s optimal display duration
-            * **Custom branding** - Powered by Mahesh Technicals
+          * **Advanced Download Configuration**
+            * **External Downloader Arguments** - Added aria2c external downloader arguments support
+            * Enables advanced aria2c configurations for multi-threaded downloads
+            * Better control over download behavior and performance tuning
           
-          ### 🐛 Bug Fixes
+          ### 📦 Dependencies
           
-          * **Network Download Fix**
-            * Fixed "Any Network" option not allowing mobile data downloads
-            * Downloads now work on both WiFi and mobile data when "Any Network" selected
-            * Improved network availability detection
+          * **Updated yt-dlp Engine**
+            * Updated youtubedl-android library to 0.18.1
+            * Includes yt-dlp 2025.12.08 with latest site support and bug fixes
+            * Improved download reliability and compatibility across platforms
+            * Enhanced format detection and extraction capabilities
           
-          ### 🎨 UI/UX Improvements
+          ### 🎯 Improvements
           
-          * Enhanced first-time user experience with guided onboarding
-          * Smooth app launch with professional splash screen
-          * Better app branding and visual identity
-          * Improved visual feedback during initialization
+          * Better video format selection algorithm for optimal quality
+          * Enhanced aria2c integration for faster multi-segment downloads
+          * Improved download stability with latest yt-dlp improvements
+          * More reliable format detection and extraction
           
           ---
           

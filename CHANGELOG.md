@@ -5,6 +5,36 @@ All notable changes (starting from v1.7.3) to stable releases will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.6] - 2026-01-14
+
+### ✨ New Features
+
+* **Enhanced Video Download Quality**
+  * **Highest Resolution MP4 Selection** - Automatically select the best available MP4 format for video downloads
+  * Smart format selection prioritizes quality while maintaining compatibility
+  * Optimized for maximum video quality with MP4 container support
+
+* **Advanced Download Configuration**
+  * **External Downloader Arguments** - Added aria2c external downloader arguments support
+  * Enables advanced aria2c configurations for multi-threaded downloads
+  * Better control over download behavior and performance tuning
+
+### 📦 Dependencies
+
+* **Updated yt-dlp Engine**
+  * Updated youtubedl-android library to 0.18.1
+  * Includes yt-dlp 2025.12.08 with latest site support and bug fixes
+  * Improved download reliability and compatibility across platforms
+  * Enhanced format detection and extraction capabilities
+
+### 🎯 Improvements
+
+* Better video format selection algorithm for optimal quality
+* Enhanced aria2c integration for faster multi-segment downloads
+* Improved download stability with latest yt-dlp improvements
+
+---
+
 ## [1.2.5] - 2026-01-09
 
 ### ✨ New Features

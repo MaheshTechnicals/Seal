@@ -22,8 +22,8 @@
 - **🎨 Exclusive Gradient Dark Theme**: Premium glassmorphism UI with vibrant gradients
 - **⚡ Auto-Update System**: Seamless in-app updates from our release page
 - **🎯 Enhanced Repository**: Active maintenance and improvements by [Mahesh Technicals](https://github.com/MaheshTechnicals)
-- **💎 Modern Architecture**: Latest Android SDK 36, Kotlin 2.0, Jetpack Compose
-- **🚀 Performance Optimized**: Hardware-accelerated animations, efficient downloads
+- **💎 Modern Architecture**: Latest Android SDK 36, Kotlin 2.0, Jetpack Compose, yt-dlp 2025.12.08
+- **🚀 Performance Optimized**: Hardware-accelerated animations, efficient downloads, advanced aria2c support
 
 ---
 
