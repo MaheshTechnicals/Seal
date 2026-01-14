@@ -804,7 +804,6 @@ private fun FormatPageImpl(
                 }
             item { Spacer(modifier = Modifier.height(64.dp)) }
         }
-    }
     if (showVideoClipDialog)
         VideoClipDialog(
             onDismissRequest = { showVideoClipDialog = false },
