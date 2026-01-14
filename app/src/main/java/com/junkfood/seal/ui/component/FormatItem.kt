@@ -205,10 +205,12 @@ fun VideoInfoPreview() {
 fun SuggestedFormatItem(
     modifier: Modifier = Modifier,
     videoInfo: VideoInfo,
+    overrideFormats: List<Format>? = null,
     selected: Boolean = false,
     onClick: () -> Unit = {},
 ) {
     val requestedFormats =
+        overrideFormats ?:
         videoInfo.requestedFormats
             ?: videoInfo.requestedDownloads?.map { it.toFormat() }
             ?: emptyList()
@@ -236,13 +238,17 @@ fun SuggestedFormatItem(
 
     val firstLineText = connectWithDelimiter(fileSizeText, tbrText, delimiter = " ")
 
-    val vcodecText = videoInfo.vcodec?.substringBefore(delimiter = ".") ?: ""
-    val acodecText = videoInfo.acodec?.substringBefore(delimiter = ".") ?: ""
+    val vcodecText = (overrideFormats?.firstOrNull()?.vcodec ?: videoInfo.vcodec)?.substringBefore(delimiter = ".") ?: ""
+    val acodecText = (overrideFormats?.lastOrNull()?.acodec ?: videoInfo.acodec)?.substringBefore(delimiter = ".") ?: ""
 
     val codecText =
         connectWithBlank(vcodecText, acodecText).run { if (isNotBlank()) "($this)" else this }
 
-    val secondLineText = connectWithDelimiter(videoInfo.ext, codecText, delimiter = " ").uppercase()
+    val secondLineText = connectWithDelimiter(
+        (overrideFormats?.firstOrNull()?.ext ?: videoInfo.ext), 
+        codecText, 
+        delimiter = " "
+    ).uppercase()
 
     FormatItem(
         modifier = modifier,
