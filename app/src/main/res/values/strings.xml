@@ -154,9 +154,11 @@
 
     <string name="status_enqueued">Enqueued</string>
     <string name="status_completed">Finished</string>
+    <string name="completed">Completed</string>
     <string name="status_downloading">Downloading</string>
     <string name="status_canceled">Canceled</string>
     <string name="status_fetching_video_info">Fetching info</string>
+    <string name="download_error">Download error</string>
     <string name="open_file">Open file</string>
     <string name="restart">Restart</string>
     <string name="status_error">Error</string>
@@ -562,4 +564,10 @@
     <string name="exit_app_title">Exit Seal Plus?</string>
     <string name="exit_app_message">Are you sure you want to exit the app? Any ongoing downloads will continue in the background.</string>
     <string name="exit">Exit</string>
+    
+    <!-- New Home Page strings -->
+    <string name="home">Home</string>
+    <string name="recent_downloads">Recent downloads</string>
+    <string name="enter_url_to_download">Enter URL to download</string>
+    <string name="view_all_downloads">View all downloads</string>
 </resources>

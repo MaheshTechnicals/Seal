@@ -172,7 +172,7 @@ fun NavigationDrawerSheetContent(
         Spacer(Modifier.height(72.dp))
         ProvideTextStyle(MaterialTheme.typography.labelLarge) {
             NavigationDrawerItem(
-                label = { Text(stringResource(R.string.download_queue)) },
+                label = { Text(stringResource(R.string.home)) },
                 icon = { Icon(Icons.Filled.Download, null) },
                 onClick = {
                     scope
@@ -346,7 +346,7 @@ fun NavigationRailContent(
                 Icon(
                     if (currentTopDestination == Route.HOME) Icons.Filled.Download
                     else Icons.Outlined.Download,
-                    stringResource(R.string.download_queue),
+                    stringResource(R.string.home),
                 )
             },
             modifier = Modifier,

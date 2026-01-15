@@ -45,6 +45,7 @@ import com.junkfood.seal.ui.page.command.TaskListPage
 import com.junkfood.seal.ui.page.command.TaskLogPage
 import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialogViewModel
 import com.junkfood.seal.ui.page.downloadv2.DownloadPageV2
+import com.junkfood.seal.ui.page.home.NewHomePage
 import com.junkfood.seal.ui.page.onboarding.OnboardingScreen
 import com.junkfood.seal.ui.page.settings.SettingsPage
 import com.junkfood.seal.ui.page.settings.about.AboutPage
@@ -139,12 +140,18 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
                 startDestination = Route.HOME,
             ) {
                 animatedComposable(Route.HOME) {
-                    DownloadPageV2(
+                    NewHomePage(
                         dialogViewModel = dialogViewModel,
                         onMenuOpen = {
                             view.slightHapticFeedback()
                             scope.launch { drawerState.open() }
                         },
+                        onNavigateToDownloads = {
+                            view.slightHapticFeedback()
+                            navController.navigate(Route.DOWNLOADS) {
+                                launchSingleTop = true
+                            }
+                        }
                     )
                 }
                 animatedComposable(Route.DOWNLOADS) { VideoListPage { onNavigateBack() } }
