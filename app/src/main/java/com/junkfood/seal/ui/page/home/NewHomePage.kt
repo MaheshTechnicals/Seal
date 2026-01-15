@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,15 +24,22 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.ContentPaste
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.FileDownload
+import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.VideoLibrary
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
@@ -312,8 +320,24 @@ fun NewHomePage(
                                 context.makeToast(R.string.file_unavailable)
                             }
                         },
-                        onMoreClick = {
-                            // TODO: Show options menu
+                        onShare = {
+                            view.slightHapticFeedback()
+                            val shareTitle = context.getString(R.string.share)
+                            FileUtil.createIntentForSharingFile(downloadInfo.videoPath)?.let {
+                                context.startActivity(Intent.createChooser(it, shareTitle))
+                            }
+                        },
+                        onCopyLink = {
+                            view.slightHapticFeedback()
+                            clipboardManager.setText(AnnotatedString(downloadInfo.videoUrl))
+                            context.makeToast(R.string.link_copied)
+                        },
+                        onDelete = {
+                            view.slightHapticFeedback()
+                            scope.launch {
+                                DatabaseUtil.deleteInfoList(listOf(downloadInfo), deleteFile = false)
+                                context.makeToast(R.string.removed)
+                            }
                         }
                     )
                 }
@@ -452,11 +476,14 @@ fun URLInputField(
 fun RecentDownloadCard(
     downloadInfo: DownloadedVideoInfo,
     onClick: () -> Unit,
-    onMoreClick: () -> Unit,
+    onShare: () -> Unit,
+    onCopyLink: () -> Unit,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
     val isGradientDark = LocalGradientDarkMode.current
+    var showMenu by remember { mutableStateOf(false) }
     
     Card(
         modifier = modifier
@@ -524,12 +551,59 @@ fun RecentDownloadCard(
                 }
             }
             
-            // More button
-            IconButton(onClick = onMoreClick) {
-                Icon(
-                    imageVector = Icons.Outlined.MoreVert,
-                    contentDescription = "More options"
-                )
+            // More button with dropdown menu
+            Box(modifier = Modifier.wrapContentSize(Alignment.TopEnd)) {
+                IconButton(onClick = { showMenu = true }) {
+                    Icon(
+                        imageVector = Icons.Outlined.MoreVert,
+                        contentDescription = "More options"
+                    )
+                }
+                
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.share)) },
+                        onClick = {
+                            onShare()
+                            showMenu = false
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Share,
+                                contentDescription = null
+                            )
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.copy_link)) },
+                        onClick = {
+                            onCopyLink()
+                            showMenu = false
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Link,
+                                contentDescription = null
+                            )
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.delete)) },
+                        onClick = {
+                            onDelete()
+                            showMenu = false
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = null
+                            )
+                        }
+                    )
+                }
             }
         }
     }
@@ -544,6 +618,7 @@ fun ActiveDownloadCard(
 ) {
     val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
     val isGradientDark = LocalGradientDarkMode.current
+    var showMenu by remember { mutableStateOf(false) }
     
     val downloadState = state.downloadState
     val progress = when (downloadState) {
@@ -641,12 +716,70 @@ fun ActiveDownloadCard(
                     )
                 }
                 
-                // More button
-                IconButton(onClick = { /* Show options */ }) {
-                    Icon(
-                        imageVector = Icons.Outlined.MoreVert,
-                        contentDescription = "More options"
-                    )
+                // More button with dropdown menu
+                Box(modifier = Modifier.wrapContentSize(Alignment.TopEnd)) {
+                    IconButton(onClick = { showMenu = true }) {
+                        Icon(
+                            imageVector = Icons.Outlined.MoreVert,
+                            contentDescription = "More options"
+                        )
+                    }
+                    
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false }
+                    ) {
+                        val downloadState = state.downloadState
+                        
+                        // Cancel option for running downloads
+                        if (downloadState is Task.DownloadState.Running || downloadState is Task.DownloadState.FetchingInfo) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.cancel)) },
+                                onClick = {
+                                    onAction(UiAction.Cancel)
+                                    showMenu = false
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Cancel,
+                                        contentDescription = null
+                                    )
+                                }
+                            )
+                        }
+                        
+                        // Copy link option
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.copy_link)) },
+                            onClick = {
+                                onAction(UiAction.CopyVideoURL)
+                                showMenu = false
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Outlined.Link,
+                                    contentDescription = null
+                                )
+                            }
+                        )
+                        
+                        // Delete option
+                        if (downloadState is Task.DownloadState.Completed || downloadState is Task.DownloadState.Error || downloadState is Task.DownloadState.Canceled) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.delete)) },
+                                onClick = {
+                                    onAction(UiAction.Delete)
+                                    showMenu = false
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Delete,
+                                        contentDescription = null
+                                    )
+                                }
+                            )
+                        }
+                    }
                 }
             }
             
