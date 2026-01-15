@@ -232,7 +232,7 @@ fun NewHomePage(
                     onPasteClick = {
                         val clipText = clipboardManager.getText()?.text
                         if (clipText != null) {
-                            matchUrlFromClipboard(clipText)?.let { url ->
+                            context.matchUrlFromClipboard(clipText)?.let { url ->
                                 urlText = url
                                 context.makeToast(R.string.paste_msg)
                             } ?: context.makeToast(R.string.paste_fail_msg)
