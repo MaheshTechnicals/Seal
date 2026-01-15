@@ -120,9 +120,12 @@ fun NewHomePage(
     val recentDownloads by DatabaseUtil.getDownloadHistoryFlow()
         .collectAsStateWithLifecycle(initialValue = emptyList())
     
-    // Get recent 5 downloads
+    // Get recent 5 downloads (remove duplicates by video ID)
     val recentFiveDownloads = remember(recentDownloads) {
-        recentDownloads.takeLast(5).reversed()
+        recentDownloads
+            .distinctBy { it.videoUrl }
+            .takeLast(5)
+            .reversed()
     }
     
     // Get active downloads
@@ -415,7 +418,9 @@ fun URLInputField(
                 
                 FilledIconButton(
                     onClick = onDownloadClick,
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier
+                        .size(48.dp)
+                        .padding(end = 4.dp),
                     colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = if (isGradientDark && isDarkTheme) {
                             GradientDarkColors.GradientPrimaryStart
