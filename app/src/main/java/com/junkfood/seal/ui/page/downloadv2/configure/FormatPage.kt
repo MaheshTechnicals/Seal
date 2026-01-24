@@ -122,7 +122,12 @@ private const val TAG = "FormatPage"
  * Returns a Pair of (width, height) or null if no resolution found.
  */
 private fun extractResolution(format: Format): Pair<Int, Int>? {
-    // Try to extract from format string first (e.g., "1920x1080")
+    // 1. Try explicit width/height from metadata first
+    if (format.width != null && format.height != null && format.width > 0 && format.height > 0) {
+        return Pair(format.width.toInt(), format.height.toInt())
+    }
+
+    // 2. Try to extract from format string
     val formatString = format.format ?: ""
     val resolutionRegex = """(\d{3,4})x(\d{3,4})""".toRegex()
     val resolutionMatch = resolutionRegex.find(formatString)
