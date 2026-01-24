@@ -146,9 +146,7 @@ fun NewHomePage(
     }
     
     // Get active downloads with proper state observation for real-time updates
-    val taskStateMap by downloader.getTaskStateMap().collectAsStateWithLifecycle(
-        initialValue = emptyMap()
-    )
+    val taskStateMap = downloader.getTaskStateMap()
     
     // Create a set of URLs that are already in recent downloads to avoid duplicates
     val recentDownloadUrls = remember(recentFiveDownloads) {
