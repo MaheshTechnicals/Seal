@@ -34,6 +34,7 @@ import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.SwipeLeft
 import androidx.compose.material.icons.outlined.VideoLibrary
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -105,6 +106,8 @@ import com.junkfood.seal.ui.theme.GradientDarkColors
 import com.junkfood.seal.util.DatabaseUtil
 import com.junkfood.seal.util.DownloadUtil
 import com.junkfood.seal.util.FileUtil
+import com.junkfood.seal.util.SWIPE_TO_DELETE_SHOWN
+import com.junkfood.seal.util.PreferenceUtil
 import com.junkfood.seal.util.getErrorReport
 import com.junkfood.seal.util.makeToast
 import com.junkfood.seal.util.matchUrlFromClipboard
@@ -135,6 +138,19 @@ fun NewHomePage(
     var showDeleteDialog by remember { mutableStateOf(false) }
     var itemToDelete by remember { mutableStateOf<DownloadedVideoInfo?>(null) }
     var deleteFileWithRecord by remember { mutableStateOf(false) }
+    
+    // Swipe-to-delete onboarding dialog state
+    var showSwipeOnboarding by remember { mutableStateOf(!SWIPE_TO_DELETE_SHOWN.getBoolean()) }
+    
+    // Show onboarding only when there are recent downloads to swipe
+    LaunchedEffect(recentFiveDownloads, showSwipeOnboarding) {
+        if (showSwipeOnboarding && recentFiveDownloads.isNotEmpty()) {
+            // Onboarding will be shown
+        } else if (showSwipeOnboarding && recentFiveDownloads.isEmpty()) {
+            // Don't show until there are items to demonstrate swipe on
+            showSwipeOnboarding = false
+        }
+    }
     
     // Get recent downloads from database - using Flow directly to sync with deletions from downloads page
     val recentDownloads by DatabaseUtil.getDownloadHistoryFlow()
@@ -214,6 +230,82 @@ fun NewHomePage(
             dismissButton = {
                 TextButton(onClick = { showExitDialog = false }) {
                     Text(stringResource(R.string.dismiss))
+                }
+            }
+        )
+    }
+    
+    // Swipe-to-delete onboarding dialog (shown once when user has downloads)
+    if (showSwipeOnboarding && recentFiveDownloads.isNotEmpty()) {
+        AlertDialog(
+            onDismissRequest = {
+                PreferenceUtil.encodeBoolean(SWIPE_TO_DELETE_SHOWN, true)
+                showSwipeOnboarding = false
+            },
+            icon = { 
+                Icon(
+                    imageVector = Icons.Outlined.SwipeLeft,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                ) 
+            },
+            title = { 
+                Text(
+                    text = "Swipe to Delete",
+                    style = MaterialTheme.typography.headlineSmall
+                ) 
+            },
+            text = {
+                Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                    Text(
+                        text = "You can now delete download cards by swiping left on them.",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.errorContainer,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Swipe Left",
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Icon(
+                            imageVector = Icons.Outlined.SwipeLeft,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onErrorContainer
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onErrorContainer
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "A confirmation dialog will appear before deletion.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        PreferenceUtil.encodeBoolean(SWIPE_TO_DELETE_SHOWN, true)
+                        showSwipeOnboarding = false
+                    }
+                ) {
+                    Text("Got it!")
                 }
             }
         )
