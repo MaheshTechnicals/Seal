@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -109,6 +110,7 @@ import com.junkfood.seal.util.FileUtil
 import com.junkfood.seal.util.SWIPE_TO_DELETE_SHOWN
 import com.junkfood.seal.util.PreferenceUtil
 import com.junkfood.seal.util.PreferenceUtil.getBoolean
+import com.junkfood.seal.util.PreferenceUtil.updateBoolean
 import com.junkfood.seal.util.getErrorReport
 import com.junkfood.seal.util.makeToast
 import com.junkfood.seal.util.matchUrlFromClipboard
@@ -240,7 +242,7 @@ fun NewHomePage(
     if (showSwipeOnboarding && recentFiveDownloads.isNotEmpty()) {
         AlertDialog(
             onDismissRequest = {
-                PreferenceUtil.encodeBoolean(SWIPE_TO_DELETE_SHOWN, true)
+                SWIPE_TO_DELETE_SHOWN.updateBoolean(true)
                 showSwipeOnboarding = false
             },
             icon = { 
@@ -302,7 +304,7 @@ fun NewHomePage(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        PreferenceUtil.encodeBoolean(SWIPE_TO_DELETE_SHOWN, true)
+                        SWIPE_TO_DELETE_SHOWN.updateBoolean(true)
                         showSwipeOnboarding = false
                     }
                 ) {
