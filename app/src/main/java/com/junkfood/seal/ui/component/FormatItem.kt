@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCut
 import androidx.compose.material.icons.outlined.Edit
@@ -382,7 +381,6 @@ fun FormatItem(
         modifier =
             modifier
                 .clip(MaterialTheme.shapes.large)
-                .selectable(selected = selected) { onClick() }
                 .combinedClickable(
                     onClick = { onClick() },
                     onLongClick = onLongClick,

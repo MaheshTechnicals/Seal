@@ -610,7 +610,11 @@ private fun FormatPageImpl(
             )
         },
         floatingActionButton = {
-            val isFormatSelected = isSuggestedFormatSelected || formatList.isNotEmpty()
+            // Check selection states directly instead of relying on formatList
+            val isFormatSelected = isSuggestedFormatSelected || 
+                selectedVideoAudioFormat != NOT_SELECTED || 
+                selectedVideoOnlyFormat != NOT_SELECTED || 
+                selectedAudioOnlyFormats.isNotEmpty()
             val isNetworkAvailable = FormatValidator.isNetworkAvailable()
             val canDownload = isFormatSelected && isNetworkAvailable && !isValidatingFormats
             
@@ -1006,6 +1010,9 @@ private fun FormatPageImpl(
                             if (!mergeAudioStream) {
                                 selectedAudioOnlyFormats.clear()
                             }
+                            // Clear video selections when audio is selected
+                            selectedVideoAudioFormat = NOT_SELECTED
+                            selectedVideoOnlyFormat = NOT_SELECTED
                             isSuggestedFormatSelected = false
                             selectedAudioOnlyFormats.add(index)
                         }
@@ -1052,7 +1059,9 @@ private fun FormatPageImpl(
                         selectedVideoOnlyFormat =
                             if (selectedVideoOnlyFormat == index) NOT_SELECTED
                             else {
+                                // Clear all other selections
                                 selectedVideoAudioFormat = NOT_SELECTED
+                                selectedAudioOnlyFormats.clear()
                                 isSuggestedFormatSelected = false
                                 index
                             }
