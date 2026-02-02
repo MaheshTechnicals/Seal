@@ -135,7 +135,98 @@ fun ProxySettingsPage(
         proxyConfig = newConfig
     }
 
-    // Fetch free proxies
+    // Auto-fetch and auto-test proxies - finds first working proxy automatically
+    fun autoFetchAndTestProxies() {
+        scope.launch {
+            isLoadingProxies = true
+            isTesting = true
+            connectionStatus = ProxyValidator.ValidationResult.Testing
+            try {
+                withContext(Dispatchers.Main) {
+                    context.makeToast("Fetching proxies for ${selectedCountry.displayName}...")
+                }
+                
+                val result = ProxyManager.fetchFreeProxies(selectedCountry)
+                result.onSuccess { proxies ->
+                    if (proxies.isEmpty()) {
+                        withContext(Dispatchers.Main) {
+                            context.makeToast("No proxies available for ${selectedCountry.displayName}")
+                        }
+                        connectionStatus = ProxyValidator.ValidationResult.Failed("No proxies available")
+                        return@launch
+                    }
+                    
+                    freeProxyList = proxies
+                    withContext(Dispatchers.Main) {
+                        context.makeToast("Testing ${proxies.size} proxies...")
+                    }
+                    
+                    // Test each proxy until we find a working one
+                    var foundWorking = false
+                    for ((index, proxyAddress) in proxies.withIndex()) {
+                        if (!proxyEnabled) break // Stop if user disabled proxy
+                        
+                        val testConfig = proxyConfig.copy(
+                            enabled = true,
+                            useFreeProxy = true,
+                            freeProxyCountry = selectedCountry.code,
+                            freeProxyAddress = proxyAddress,
+                            customProxyHost = "",
+                            customProxyPort = 0,
+                            customProxyType = ProxyManager.ProxyType.HTTP.name
+                        )
+                        
+                        val proxy = testConfig.toJavaProxy()
+                        val validationResult = ProxyValidator.validateProxyConnection(proxy)
+                        
+                        if (validationResult is ProxyValidator.ValidationResult.Success) {
+                            // Found a working proxy!
+                            selectedFreeProxy = proxyAddress
+                            connectionStatus = validationResult
+                            foundWorking = true
+                            
+                            // Save the working configuration
+                            val newConfig = proxyConfig.copy(
+                                enabled = proxyEnabled,
+                                useFreeProxy = true,
+                                freeProxyCountry = selectedCountry.code,
+                                freeProxyAddress = proxyAddress,
+                                customProxyHost = "",
+                                customProxyPort = 0,
+                                customProxyType = ProxyManager.ProxyType.HTTP.name,
+                                lastValidated = System.currentTimeMillis(),
+                                isWorking = true
+                            )
+                            ProxyManager.saveProxyConfig(newConfig)
+                            proxyConfig = newConfig
+                            
+                            withContext(Dispatchers.Main) {
+                                context.makeToast("✓ Connected to working proxy: $proxyAddress (${validationResult.latencyMs}ms)")
+                            }
+                            break
+                        }
+                    }
+                    
+                    if (!foundWorking) {
+                        connectionStatus = ProxyValidator.ValidationResult.Failed("No working proxies found")
+                        withContext(Dispatchers.Main) {
+                            context.makeToast("✗ No working proxies found. Try another country.")
+                        }
+                    }
+                }.onFailure { error ->
+                    connectionStatus = ProxyValidator.ValidationResult.Failed(error.message ?: "Unknown error")
+                    withContext(Dispatchers.Main) {
+                        context.makeToast(error.message ?: "Failed to fetch proxies")
+                    }
+                }
+            } finally {
+                isLoadingProxies = false
+                isTesting = false
+            }
+        }
+    }
+    
+    // Manual fetch for showing proxy list (kept for advanced users)
     fun fetchFreeProxies() {
         scope.launch {
             isLoadingProxies = true
@@ -299,6 +390,10 @@ fun ProxySettingsPage(
                             onCheckedChange = { 
                                 proxyEnabled = it
                                 saveConfig()
+                                // Auto-connect to working proxy when enabled with free proxy
+                                if (it && useFreeProxy && selectedFreeProxy.isEmpty()) {
+                                    autoFetchAndTestProxies()
+                                }
                             }
                         )
                     }
@@ -389,13 +484,20 @@ fun ProxySettingsPage(
                         selectedCountry = selectedCountry,
                         onCountryChange = { 
                             selectedCountry = it
+                            selectedFreeProxy = ""
                             connectionStatus = null
                             speedTestResult = null
                             saveConfig()
+                            // Auto-fetch and test proxies when country changes
+                            if (proxyEnabled) {
+                                autoFetchAndTestProxies()
+                            }
                         },
                         selectedProxy = selectedFreeProxy,
                         isLoading = isLoadingProxies,
+                        isTesting = isTesting,
                         onFetchProxies = { fetchFreeProxies() },
+                        onAutoConnect = { autoFetchAndTestProxies() },
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
                 }
@@ -748,10 +850,13 @@ private fun FreeProxySection(
     onCountryChange: (ProxyManager.ProxyCountry) -> Unit,
     selectedProxy: String,
     isLoading: Boolean,
+    isTesting: Boolean,
     onFetchProxies: () -> Unit,
+    onAutoConnect: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
+    val isBusy = isLoading || isTesting
 
     Column(
         modifier = modifier,
@@ -779,7 +884,8 @@ private fun FreeProxySection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .menuAnchor(),
-                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                enabled = !isBusy
             )
 
             ExposedDropdownMenu(
@@ -814,21 +920,49 @@ private fun FreeProxySection(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-
-        // Fetch Button
-        Button(
-            onClick = onFetchProxies,
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
-        ) {
-            if (isLoading) {
+        
+        // Status message
+        if (isBusy) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
                     strokeWidth = 2.dp
                 )
                 Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = if (isTesting) stringResource(R.string.testing) else stringResource(R.string.loading_proxies),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
-            Text(if (isLoading) stringResource(R.string.loading_proxies) else stringResource(R.string.fetch_proxies))
+        }
+
+        // Auto-Connect Button (primary action)
+        Button(
+            onClick = onAutoConnect,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isBusy
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Refresh,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(stringResource(R.string.auto_connect_proxy))
+        }
+        
+        // Manual Fetch Button (secondary action for advanced users)
+        FilledTonalButton(
+            onClick = onFetchProxies,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isBusy
+        ) {
+            Text(stringResource(R.string.manual_select_proxy))
         }
     }
 }

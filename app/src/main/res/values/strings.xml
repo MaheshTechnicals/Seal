@@ -600,6 +600,8 @@
     <string name="proxy_port">Port</string>
     <string name="proxy_protocol">Proxy Protocol</string>
     <string name="save_configuration">Save Configuration</string>
+    <string name="auto_connect_proxy">Auto-Connect to Working Proxy</string>
+    <string name="manual_select_proxy">Manual Select from List</string>
     <string name="proxy_info_title">How It Works</string>
     <string name="proxy_info_description">When enabled, all download requests will be routed through the configured proxy server. This can help bypass regional restrictions or improve privacy. Test the connection before enabling to ensure the proxy is working correctly.</string>
 </resources>

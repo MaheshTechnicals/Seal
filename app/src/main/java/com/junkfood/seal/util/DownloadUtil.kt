@@ -344,11 +344,17 @@ object DownloadUtil {
                     videoClips = emptyList(),
                     splitByChapter = false,
                     debug = DEBUG.getBoolean(),
-                    proxy = PROXY.getBoolean() || ProxyManager.isProxyActive(),
+                    proxy = ProxyManager.isProxyActive() || PROXY.getBoolean(),
                     proxyUrl = if (ProxyManager.isProxyActive()) {
-                        ProxyManager.loadProxyConfig().getProxyAddress()
+                        val proxyAddress = ProxyManager.loadProxyConfig().getProxyAddress()
+                        Log.d("DownloadUtil", "Using new proxy system: $proxyAddress")
+                        proxyAddress
+                    } else if (PROXY.getBoolean()) {
+                        val legacyProxy = PROXY_URL.getString()
+                        Log.d("DownloadUtil", "Using legacy proxy: $legacyProxy")
+                        legacyProxy
                     } else {
-                        PROXY_URL.getString()
+                        ""
                     },
                     newTitle = "",
                     userAgentString =
