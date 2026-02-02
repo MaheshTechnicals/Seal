@@ -101,6 +101,38 @@ data class Format(
     fun containsVideo(): Boolean = vcodec != null && vcodec != "none"
 
     fun containsAudio(): Boolean = acodec != null && acodec != "none"
+    
+    /**
+     * Check if format appears to be DRM-protected based on format string
+     */
+    fun isPotentiallyDrmProtected(): Boolean {
+        val formatLower = format?.lowercase() ?: ""
+        val noteLower = formatNote?.lowercase() ?: ""
+        val drmIndicators = listOf("drm", "encrypted", "widevine", "playready", "fairplay", "protected")
+        return drmIndicators.any { formatLower.contains(it) || noteLower.contains(it) }
+    }
+    
+    /**
+     * Check if format has a valid, non-empty URL
+     */
+    fun hasValidUrl(): Boolean = !url.isNullOrBlank()
+    
+    /**
+     * Get a human-readable resolution label
+     */
+    fun getResolutionLabel(): String? {
+        val h = height?.toInt()
+        return when {
+            h == null -> null
+            h >= 2160 -> "4K"
+            h >= 1440 -> "2K"
+            h >= 1080 -> "1080p"
+            h >= 720 -> "720p"
+            h >= 480 -> "480p"
+            h >= 360 -> "360p"
+            else -> "${h}p"
+        }
+    }
 }
 
 @Serializable

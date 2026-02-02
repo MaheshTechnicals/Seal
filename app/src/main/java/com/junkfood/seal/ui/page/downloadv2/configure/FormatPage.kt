@@ -1,6 +1,7 @@
 package com.junkfood.seal.ui.page.downloadv2.configure
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeOut
@@ -96,6 +97,7 @@ import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.ui.theme.generateLabelColor
 import com.junkfood.seal.util.EXTRACT_AUDIO
 import com.junkfood.seal.util.Format
+import com.junkfood.seal.util.FormatValidator
 import com.junkfood.seal.util.MERGE_MULTI_AUDIO_STREAM
 import com.junkfood.seal.util.PreferenceUtil.getBoolean
 import com.junkfood.seal.util.PreferenceUtil.getString
@@ -112,6 +114,7 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.pow
 import kotlinx.coroutines.delay
+import androidx.compose.material3.CircularProgressIndicator
 import org.koin.compose.koinInject
 
 private const val TAG = "FormatPage"
@@ -352,36 +355,77 @@ private fun FormatPageImpl(
     onDownloadPressed: (FormatConfig) -> Unit = { _ -> },
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    
+    // State for format validation
+    var isValidatingFormats by remember { mutableStateOf(true) }
+    var validatedVideoOnlyFormats by remember { mutableStateOf<List<Format>>(emptyList()) }
+    var validatedAudioOnlyFormats by remember { mutableStateOf<List<Format>>(emptyList()) }
+    var validatedVideoAudioFormats by remember { mutableStateOf<List<Format>>(emptyList()) }
 
     if (videoInfo.formats.isNullOrEmpty()) return
-    val videoOnlyFormats =
+    
+    // Initial format separation (before validation)
+    val rawVideoOnlyFormats =
         videoInfo.formats.filter { it.vcodec != "none" && it.acodec == "none" }.reversed()
-    val audioOnlyFormats =
+    val rawAudioOnlyFormats =
         videoInfo.formats.filter { it.acodec != "none" && it.vcodec == "none" }.reversed()
     // Original video+audio combined formats (usually lower quality like 360p, 480p)
-    val videoAudioFormats =
+    val rawVideoAudioFormats =
         videoInfo.formats.filter { it.acodec != "none" && it.vcodec != "none" }.reversed()
     
+    // Validate and filter formats on composition
+    LaunchedEffect(videoInfo) {
+        isValidatingFormats = true
+        try {
+            // Validate all format categories
+            validatedVideoOnlyFormats = FormatValidator.filterValidFormats(rawVideoOnlyFormats, checkUrlAccessibility = false)
+            validatedAudioOnlyFormats = FormatValidator.filterValidFormats(rawAudioOnlyFormats, checkUrlAccessibility = false)
+            validatedVideoAudioFormats = FormatValidator.filterValidFormats(rawVideoAudioFormats, checkUrlAccessibility = false)
+            
+            // Deduplicate by resolution to avoid showing multiple formats for same resolution
+            validatedVideoOnlyFormats = FormatValidator.deduplicateByResolution(validatedVideoOnlyFormats)
+            validatedVideoAudioFormats = FormatValidator.deduplicateByResolution(validatedVideoAudioFormats)
+            
+            Log.d(TAG, "Format validation complete. Video-only: ${validatedVideoOnlyFormats.size}, " +
+                "Audio-only: ${validatedAudioOnlyFormats.size}, Video+Audio: ${validatedVideoAudioFormats.size}")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error validating formats: ${e.message}")
+            // Fallback to unvalidated formats
+            validatedVideoOnlyFormats = rawVideoOnlyFormats
+            validatedAudioOnlyFormats = rawAudioOnlyFormats
+            validatedVideoAudioFormats = rawVideoAudioFormats
+        } finally {
+            isValidatingFormats = false
+        }
+    }
+    
+    // Use validated formats
+    val videoOnlyFormats = validatedVideoOnlyFormats
+    val audioOnlyFormats = validatedAudioOnlyFormats
+    val videoAudioFormats = validatedVideoAudioFormats
+    
     // Get the best audio format to auto-merge with video-only formats
-    val bestAudioFormat = audioOnlyFormats.firstOrNull()
+    val bestAudioFormat = remember(audioOnlyFormats) { audioOnlyFormats.firstOrNull() }
     
     // Create merged video formats: video-only + best audio
     // This allows high-quality videos (720p, 1080p, 4K) to appear in Video section
-    val mergedVideoFormats = if (!audioOnly && bestAudioFormat != null) {
-        videoOnlyFormats.map { videoFormat ->
-            // Store reference to both formats for later merging
-            videoFormat.copy(
-                // Mark this as requiring audio merge (yt-dlp will handle it)
-                format = "${videoFormat.format} + audio",
-                // Keep original properties but indicate it will have audio
-                acodec = bestAudioFormat.acodec ?: "audio"
-            )
-        }
-    } else emptyList()
+    val mergedVideoFormats = remember(audioOnly, bestAudioFormat, videoOnlyFormats) {
+        if (!audioOnly && bestAudioFormat != null) {
+            videoOnlyFormats.map { videoFormat ->
+                // Store reference to both formats for later merging
+                videoFormat.copy(
+                    // Mark this as requiring audio merge (yt-dlp will handle it)
+                    format = "${videoFormat.format} + audio",
+                    // Keep original properties but indicate it will have audio
+                    acodec = bestAudioFormat.acodec ?: "audio"
+                )
+            }
+        } else emptyList()
+    }
     
     // Combine original video+audio formats with new merged formats
     // Sort ALL video formats by quality score (highest resolution first)
-    val allVideoFormats = remember(videoInfo, audioOnly, mergedVideoFormats, videoAudioFormats) {
+    val allVideoFormats = remember(audioOnly, mergedVideoFormats, videoAudioFormats) {
         if (audioOnly) {
             emptyList()
         } else {
@@ -393,7 +437,7 @@ private fun FormatPageImpl(
     
     // Find highest resolution format from allVideoFormats for suggested section
     // This will be the best quality format based on resolution sorting
-    val highestVideoFormat = remember(videoInfo, audioOnly, allVideoFormats) {
+    val highestVideoFormat = remember(audioOnly, allVideoFormats) {
         if (!audioOnly && allVideoFormats.isNotEmpty()) {
             allVideoFormats.firstOrNull() // Already sorted by quality, highest quality first
         } else {
@@ -552,32 +596,53 @@ private fun FormatPageImpl(
         },
         floatingActionButton = {
             val isFormatSelected = isSuggestedFormatSelected || formatList.isNotEmpty()
+            val isNetworkAvailable = FormatValidator.isNetworkAvailable()
+            val canDownload = isFormatSelected && isNetworkAvailable && !isValidatingFormats
+            
             if (isFormatSelected) {
                 ExtendedFloatingActionButton(
                     onClick = {
-                        onDownloadPressed(
-                            FormatConfig(
-                                formatList = formatList,
-                                videoClips =
-                                    if (isClippingVideo) listOf(VideoClip(videoClipDuration))
-                                    else emptyList(),
-                                splitByChapter = isSplittingVideo,
-                                newTitle = videoTitle,
-                                selectedSubtitles = selectedSubtitles,
-                                selectedAutoCaptions = selectedAutoCaptions,
+                        if (canDownload) {
+                            onDownloadPressed(
+                                FormatConfig(
+                                    formatList = formatList,
+                                    videoClips =
+                                        if (isClippingVideo) listOf(VideoClip(videoClipDuration))
+                                        else emptyList(),
+                                    splitByChapter = isSplittingVideo,
+                                    newTitle = videoTitle,
+                                    selectedSubtitles = selectedSubtitles,
+                                    selectedAutoCaptions = selectedAutoCaptions,
+                                )
                             )
-                        )
+                        }
                     },
                     modifier = Modifier.padding(12.dp),
                     icon = {
-                        Icon(
-                            imageVector = Icons.Outlined.FileDownload,
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp),
+                        if (isValidatingFormats) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(24.dp),
+                                strokeWidth = 2.dp
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Outlined.FileDownload,
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp),
+                            )
+                        }
+                    },
+                    text = { 
+                        Text(
+                            if (!isNetworkAvailable) "No Network"
+                            else if (isValidatingFormats) "Validating..."
+                            else stringResource(R.string.start_download)
                         )
                     },
-                    text = { Text(stringResource(R.string.start_download)) },
                     expanded = isFabExpanded,
+                    containerColor = if (!canDownload) 
+                        MaterialTheme.colorScheme.surfaceVariant 
+                        else MaterialTheme.colorScheme.primaryContainer,
                 )
             }
         },
@@ -608,6 +673,28 @@ private fun FormatPageImpl(
                         onRename = { showRenameDialog = true },
                         onOpenThumbnail = { uriHandler.openUri(thumbnail.toHttpsUrl()) },
                     )
+                }
+            }
+
+            // Show validation loading indicator
+            if (isValidatingFormats) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 32.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "Validating formats...",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
 
@@ -776,8 +863,50 @@ private fun FormatPageImpl(
                 }
             }
 
+            // Show info about validated formats if some were filtered out
+            if (!isValidatingFormats) {
+                val totalRawFormats = rawVideoOnlyFormats.size + rawAudioOnlyFormats.size + rawVideoAudioFormats.size
+                val totalValidatedFormats = videoOnlyFormats.size + audioOnlyFormats.size + videoAudioFormats.size
+                val filteredCount = totalRawFormats - totalValidatedFormats
+                
+                if (filteredCount > 0) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        PreferenceInfo(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                            text = "$filteredCount format(s) filtered out (DRM-protected, unsupported codec, or invalid URL)",
+                            applyPaddings = false,
+                        )
+                    }
+                }
+                
+                // Show warning if all formats were filtered out
+                if (totalValidatedFormats == 0 && totalRawFormats > 0) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "⚠️ All formats were filtered",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "All available formats are either DRM-protected, have unsupported codecs, or lack valid download URLs. Please try a different video or use custom command mode.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            }
+
             // SECTION 1: Video (with audio) - Now includes high-quality merged formats
-            if (allVideoFormats.isNotEmpty()) {
+            if (allVideoFormats.isNotEmpty() && !isValidatingFormats) {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -819,7 +948,7 @@ private fun FormatPageImpl(
             }
 
             // SECTION 2: Audio
-            if (audioOnlyFormats.isNotEmpty())
+            if (audioOnlyFormats.isNotEmpty() && !isValidatingFormats) {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -842,34 +971,35 @@ private fun FormatPageImpl(
                     }
                 }
 
-            itemsIndexed(
-                audioOnlyFormats.subList(
-                    fromIndex = 0,
-                    toIndex = min(audioOnlyItemLimit, audioOnlyFormats.size),
-                )
-            ) { index, formatInfo ->
-                FormatItem(
-                    formatInfo = formatInfo,
-                    duration = duration,
-                    selected = selectedAudioOnlyFormats.contains(index),
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    outlineColor = MaterialTheme.colorScheme.secondary,
-                    onLongClick = { formatInfo.url.share() },
-                ) {
-                    if (selectedAudioOnlyFormats.contains(index)) {
-                        selectedAudioOnlyFormats.remove(index)
-                    } else {
-                        if (!mergeAudioStream) {
-                            selectedAudioOnlyFormats.clear()
+                itemsIndexed(
+                    audioOnlyFormats.subList(
+                        fromIndex = 0,
+                        toIndex = min(audioOnlyItemLimit, audioOnlyFormats.size),
+                    )
+                ) { index, formatInfo ->
+                    FormatItem(
+                        formatInfo = formatInfo,
+                        duration = duration,
+                        selected = selectedAudioOnlyFormats.contains(index),
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        outlineColor = MaterialTheme.colorScheme.secondary,
+                        onLongClick = { formatInfo.url.share() },
+                    ) {
+                        if (selectedAudioOnlyFormats.contains(index)) {
+                            selectedAudioOnlyFormats.remove(index)
+                        } else {
+                            if (!mergeAudioStream) {
+                                selectedAudioOnlyFormats.clear()
+                            }
+                            isSuggestedFormatSelected = false
+                            selectedAudioOnlyFormats.add(index)
                         }
-                        isSuggestedFormatSelected = false
-                        selectedAudioOnlyFormats.add(index)
                     }
                 }
             }
 
             // SECTION 3: Video (no audio)
-            if (!audioOnly) {
+            if (!audioOnly && !isValidatingFormats) {
                 if (videoOnlyFormats.isNotEmpty())
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Row(
