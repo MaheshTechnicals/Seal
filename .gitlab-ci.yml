@@ -6,19 +6,16 @@ variables:
 
 build_job:
   stage: build
-  # We use the standard image with Java 17 pre-installed
   image: mobiledevops/android-sdk-image:34.0.0-jdk17
 
   before_script:
-    # FIX 1: We do NOT try to install Java 21. We use the existing Java 17.
     - echo "Using default Java version..."
     - java -version
 
-    # FIX 2: Sanitize the key. We remove spaces and newlines (tr -d) to prevent 'invalid input' errors
+    # Decode the key (We keep the 'tr' fix because it worked!)
     - echo "$ANDROID_SIGNING_KEY" | tr -d '\n' | tr -d ' ' | base64 -d > "$CI_PROJECT_DIR/Mahesh.jks"
-    
-    # Make gradlew executable
-    - chmod +x ./gradlew
+
+    # REMOVED: chmod +x ./gradlew (This was causing the error)
 
   script:
     # --- STEP 1: EXTRACT VERSION ---
@@ -26,9 +23,8 @@ build_job:
       VERSION=$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionMajor = \K\d+' | head -1).$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionMinor = \K\d+' | head -1).$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionPatch = \K\d+' | head -1)
       echo "🚀 Building Version: $VERSION"
 
-    # --- STEP 2: CHECK RELEASE CONFIG (Without installing jq) ---
+    # --- STEP 2: CHECK RELEASE CONFIG ---
     - |
-      # We just look for "release": true in the file
       if grep -q '"release": true' release.json; then
         echo "Release Mode: ON"
       else
@@ -36,8 +32,8 @@ build_job:
       fi
 
     # --- STEP 3: BUILD & SIGN ---
-    # We use 'assembleRelease' and pass the passwords/files
-    - ./gradlew assembleRelease \
+    # CHANGED: We use 'bash ./gradlew' instead of just './gradlew'
+    - bash ./gradlew assembleRelease \
         -Pandroid.injected.signing.store.file="$CI_PROJECT_DIR/Mahesh.jks" \
         -Pandroid.injected.signing.store.password="$ANDROID_KEYSTORE_PASSWORD" \
         -Pandroid.injected.signing.key.alias="$ANDROID_ALIAS" \
@@ -45,7 +41,6 @@ build_job:
 
     # --- STEP 4: ORGANIZE OUTPUT ---
     - mkdir -p release_output
-    # Move the signed APKs to our output folder
     - mv app/build/outputs/apk/generic/release/*-signed.apk release_output/ || true
     - mv app/build/outputs/apk/release/*.apk release_output/ || true
 
