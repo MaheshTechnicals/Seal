@@ -5,6 +5,44 @@ All notable changes (starting from v1.7.3) to stable releases will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.8] - 2026-02-02
+
+### 🎥 Format Selection Screen Improvements
+
+* **Enhanced Format Filtering**
+  * **Valid URLs Only** - Now filters and shows only valid video and audio URLs
+  * **Cleaner Interface** - Invalid or unavailable formats are automatically hidden
+  * **Improved Reliability** - Better format validation before display
+
+* **Maximum Quality Support**
+  * **Highest Resolution Downloads** - Support for maximum resolution available
+  * **No Quality Limits** - Download content at the best quality offered by the source
+  * **Smart Quality Detection** - Automatically identifies highest available quality
+
+* **Video & Audio (High) Merged**
+  * **Best Quality Option** - New "video & audio (high)" merged format in video section
+  * **Optimal Output** - Combines highest quality video with highest quality audio
+  * **Seamless Merging** - Automatic stream combination for best results
+
+* **Bug Fixes**
+  * Fixed video info couldn't fetch error
+  * Improved format extraction reliability
+  * Better error handling for unavailable formats
+
+### 📥 Recent Downloads Section Updates
+
+* **UI/UX Improvements**
+  * **Removed Delete Option** - Delete functionality moved to Downloads page for better organization
+  * **Fixed UI Issues** - Resolved layout problems and visual inconsistencies
+  * **Cleaner Design** - Streamlined interface for better user experience
+
+* **Additional Improvements**
+  * Enhanced performance and stability
+  * Better download state management
+  * Improved visual feedback
+
+---
+
 ## [1.2.7] - 2026-01-24
 
 ### ✨ UI Redesign & UX Improvements

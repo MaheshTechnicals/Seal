@@ -171,12 +171,27 @@ English
 
 ## ⬇️ Download & Installation
 
-### 🎉 What's New in v1.2.5?
+### 🎉 What's New in v1.2.8?
 
 <details>
-<summary><b>📱 Click to see latest updates (January 9, 2026)</b></summary>
+<summary><b>📱 Click to see latest updates (February 2, 2026)</b></summary>
 
-#### ✨ Professional Onboarding Screens
+#### 🎥 Format Selection Screen Improvements
+- ✅ **Valid URLs Only** - Filter and show only valid video/audio formats
+- 🎬 **Maximum Quality Support** - Download at highest resolution available
+- 💎 **Best Quality Merged** - New "video & audio (high)" option in videos section
+- 🐛 **Bug Fixes** - Fixed video info fetch error and format extraction
+
+#### 📥 Recent Downloads Section
+- 🗑️ **Delete Option Moved** - Now available in Downloads page for better organization
+- 🎨 **UI Fixes** - Resolved layout issues for cleaner interface
+- ⚡ **Performance** - Enhanced stability and visual feedback
+
+#### Previous Updates (v1.2.7, v1.2.6, v1.2.5)
+- 🎨 **Redesigned Home Page** - Modern, clutter-free interface
+- 🖼️ **New Navigation Drawer** - Gradient header with premium styling
+- 🎥 **Enhanced Video Merging** - Best video + best audio streams automatically
+- ✨ **Professional Onboarding Screens**
 - 👋 **4 Beautiful Pages** - Welcome, Downloads, Customizable, and Security
 - 🎭 **Smooth Animations** - Spring bounce, fade transitions, morphing indicators
 - 👆 **Swipe Navigation** - Intuitive HorizontalPager with gesture support
@@ -217,12 +232,12 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 ### 🚀 Latest Releases
 
 - **Latest Stable**: [Download from GitHub Releases](https://github.com/MaheshTechnicals/Sealplus/releases/latest)
-  - ✅ **Current Version**: v1.2.7 (January 2026)
-  - 🎨 **Fully Redesigned Home Page & Navigation Drawer**
-  - 🎥 **Enhanced Video/Audio Merging** for best available quality
-  - 🚀 **High Quality Download Options** in Suggested section
-  - 🛠️ **Critical Fixes** for Delete functionality and duplicate cards
-  - 🎨 **Premium Gradient UI** with theme-aware navigation header
+  - ✅ **Current Version**: v1.2.8 (February 2026)
+  - 🎥 **Enhanced Format Selection** - Filter valid URLs, maximum quality support
+  - 💎 **Best Quality Merged** - New "video & audio (high)" option
+  - 📥 **Improved Recent Downloads** - Better UI and organization
+  - 🐛 **Bug Fixes** - Fixed video info fetch error
+  - 🎨 **Premium Gradient UI** with redesigned home page
   - 🔄 **Latest yt-dlp Engine** integration 2025.12.08
   - 🚀 **Auto-Update System** enabled for seamless updates
 
@@ -237,8 +252,8 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 |------------|---------------|
 | **Minimum Android** | Android 7.0 (API 24) |
 | **Target Android** | Android 14 (API 36) |
-| **Current Version** | 1.2.7 |
-| **Release Date** | January 24, 2026 |
+| **Current Version** | 1.2.8 |
+| **Release Date** | February 2, 2026 |
 
 ### 🏗️ Architecture Support
 
