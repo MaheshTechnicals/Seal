@@ -2,20 +2,22 @@ stages:
   - build
 
 variables:
-  # Speed up Gradle
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 build_job:
   stage: build
+  # We use the standard image with Java 17 pre-installed
   image: mobiledevops/android-sdk-image:34.0.0-jdk17
 
   before_script:
-    # 1. Install Java 21 (Since your GitHub used JDK 21) & jq (for reading release.json)
-    - apt-get update && apt-get install -y openjdk-21-jdk jq
-    - export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+    # FIX 1: We do NOT try to install Java 21. We use the existing Java 17.
+    - echo "Using default Java version..."
+    - java -version
+
+    # FIX 2: Sanitize the key. We remove spaces and newlines (tr -d) to prevent 'invalid input' errors
+    - echo "$ANDROID_SIGNING_KEY" | tr -d '\n' | tr -d ' ' | base64 -d > "$CI_PROJECT_DIR/Mahesh.jks"
     
-    # 2. Decode the Keystore (Using your exact variable name: ANDROID_SIGNING_KEY)
-    - echo "$ANDROID_SIGNING_KEY" | base64 -d > "$CI_PROJECT_DIR/Mahesh.jks"
+    # Make gradlew executable
     - chmod +x ./gradlew
 
   script:
@@ -24,24 +26,28 @@ build_job:
       VERSION=$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionMajor = \K\d+' | head -1).$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionMinor = \K\d+' | head -1).$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionPatch = \K\d+' | head -1)
       echo "🚀 Building Version: $VERSION"
 
-    # --- STEP 2: CHECK RELEASE CONFIG ---
+    # --- STEP 2: CHECK RELEASE CONFIG (Without installing jq) ---
     - |
-      SHOULD_RELEASE=$(jq -r '.release' release.json)
-      echo "Release Status: $SHOULD_RELEASE"
+      # We just look for "release": true in the file
+      if grep -q '"release": true' release.json; then
+        echo "Release Mode: ON"
+      else
+        echo "Release Mode: OFF"
+      fi
 
-    # --- STEP 3: BUILD & SIGN (Using Gradle Injection) ---
-    # We build the 'release' variant and pass the keys directly
+    # --- STEP 3: BUILD & SIGN ---
+    # We use 'assembleRelease' and pass the passwords/files
     - ./gradlew assembleRelease \
         -Pandroid.injected.signing.store.file="$CI_PROJECT_DIR/Mahesh.jks" \
         -Pandroid.injected.signing.store.password="$ANDROID_KEYSTORE_PASSWORD" \
         -Pandroid.injected.signing.key.alias="$ANDROID_ALIAS" \
         -Pandroid.injected.signing.key.password="$ANDROID_KEY_PASSWORD"
 
-    # --- STEP 4: ORGANIZE ARTIFACTS ---
-    # Move the signed APK to a clean folder so it's easy to download
+    # --- STEP 4: ORGANIZE OUTPUT ---
     - mkdir -p release_output
-    - mv app/build/outputs/apk/release/*.apk release_output/
-    - echo "✅ Build and Sign Complete. APKs are in release_output folder."
+    # Move the signed APKs to our output folder
+    - mv app/build/outputs/apk/generic/release/*-signed.apk release_output/ || true
+    - mv app/build/outputs/apk/release/*.apk release_output/ || true
 
   artifacts:
     name: "SealPlus-$CI_COMMIT_SHORT_SHA"
