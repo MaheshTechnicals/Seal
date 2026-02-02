@@ -35,7 +35,6 @@ import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.outlined.Swipe
 import androidx.compose.material.icons.outlined.VideoLibrary
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -52,12 +51,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -107,10 +103,6 @@ import com.junkfood.seal.ui.theme.GradientDarkColors
 import com.junkfood.seal.util.DatabaseUtil
 import com.junkfood.seal.util.DownloadUtil
 import com.junkfood.seal.util.FileUtil
-import com.junkfood.seal.util.SWIPE_TO_DELETE_SHOWN
-import com.junkfood.seal.util.PreferenceUtil
-import com.junkfood.seal.util.PreferenceUtil.getBoolean
-import com.junkfood.seal.util.PreferenceUtil.updateBoolean
 import com.junkfood.seal.util.getErrorReport
 import com.junkfood.seal.util.makeToast
 import com.junkfood.seal.util.matchUrlFromClipboard
@@ -137,14 +129,12 @@ fun NewHomePage(
     var urlText by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     
-    // Delete confirmation dialog state (for swipe-to-delete)
-    var showDeleteDialog by remember { mutableStateOf(false) }
-    var itemToDelete by remember { mutableStateOf<DownloadedVideoInfo?>(null) }
-    var deleteFileWithRecord by remember { mutableStateOf(false) }
-    
-    // Get recent downloads from database - using Flow directly to sync with deletions from downloads page
+    // Get recent downloads from database - requery on composition to ensure fresh data
     val recentDownloads by DatabaseUtil.getDownloadHistoryFlow()
-        .collectAsStateWithLifecycle(initialValue = emptyList())
+        .collectAsStateWithLifecycle(
+            initialValue = emptyList(),
+            minActiveState = androidx.lifecycle.Lifecycle.State.STARTED
+        )
     
     // Get recent 5 downloads (remove duplicates by video URL and path to prevent duplicate cards)
     val recentFiveDownloads = remember(recentDownloads) {
@@ -152,19 +142,6 @@ fun NewHomePage(
             .distinctBy { it.videoUrl + it.videoPath } // Use both URL and path to ensure uniqueness
             .takeLast(5)
             .reversed()
-    }
-    
-    // Swipe-to-delete onboarding dialog state (placed after recentFiveDownloads is defined)
-    var showSwipeOnboarding by remember { mutableStateOf(!SWIPE_TO_DELETE_SHOWN.getBoolean()) }
-    
-    // Show onboarding only when there are recent downloads to swipe
-    LaunchedEffect(recentFiveDownloads, showSwipeOnboarding) {
-        if (showSwipeOnboarding && recentFiveDownloads.isNotEmpty()) {
-            // Onboarding will be shown
-        } else if (showSwipeOnboarding && recentFiveDownloads.isEmpty()) {
-            // Don't show until there are items to demonstrate swipe on
-            showSwipeOnboarding = false
-        }
     }
     
     // Get active downloads with proper state observation for real-time updates
@@ -234,108 +211,6 @@ fun NewHomePage(
                 TextButton(onClick = { showExitDialog = false }) {
                     Text(stringResource(R.string.dismiss))
                 }
-            }
-        )
-    }
-    
-    // Swipe-to-delete onboarding dialog (shown once when user has downloads)
-    if (showSwipeOnboarding && recentFiveDownloads.isNotEmpty()) {
-        AlertDialog(
-            onDismissRequest = {
-                SWIPE_TO_DELETE_SHOWN.updateBoolean(true)
-                showSwipeOnboarding = false
-            },
-            icon = { 
-                Icon(
-                    imageVector = Icons.Outlined.Swipe,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                ) 
-            },
-            title = { 
-                Text(
-                    text = "Swipe to Delete",
-                    style = MaterialTheme.typography.headlineSmall
-                ) 
-            },
-            text = {
-                Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                    Text(
-                        text = "You can now delete download cards by swiping left on them.",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = MaterialTheme.colorScheme.errorContainer,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Swipe Left",
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.weight(1f)
-                        )
-                        Icon(
-                            imageVector = Icons.Outlined.Swipe,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Icon(
-                            imageVector = Icons.Outlined.Delete,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = "A confirmation dialog will appear before deletion.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        SWIPE_TO_DELETE_SHOWN.updateBoolean(true)
-                        showSwipeOnboarding = false
-                    }
-                ) {
-                    Text("Got it!")
-                }
-            }
-        )
-    }
-    
-    // Delete confirmation dialog (triggered by swipe-to-delete)
-    if (showDeleteDialog && itemToDelete != null) {
-        RemoveItemDialog(
-            info = itemToDelete!!,
-            deleteFile = deleteFileWithRecord,
-            onDeleteFileToggled = { deleteFileWithRecord = it },
-            onRemoveConfirm = {
-                val info = itemToDelete
-                if (info != null) {
-                    scope.launch {
-                        DatabaseUtil.deleteInfoList(listOf(info), deleteFile = deleteFileWithRecord)
-                        context.makeToast(R.string.delete_info)
-                        showDeleteDialog = false
-                        itemToDelete = null
-                        deleteFileWithRecord = false
-                    }
-                }
-            },
-            onDismissRequest = {
-                showDeleteDialog = false
-                itemToDelete = null
-                deleteFileWithRecord = false
             }
         )
     }
@@ -436,7 +311,10 @@ fun NewHomePage(
             
             // Show active downloads first
             if (activeDownloads.isNotEmpty()) {
-                items(activeDownloads) { (task, state) ->
+                items(
+                    items = activeDownloads,
+                    key = { (task, _) -> task.id }
+                ) { (task, state) ->
                     ActiveDownloadCard(
                         task = task,
                         state = state,
@@ -487,61 +365,26 @@ fun NewHomePage(
                     items = recentFiveDownloads,
                     key = { it.id }
                 ) { downloadInfo ->
-                    val dismissState = rememberSwipeToDismissBoxState(
-                        confirmValueChange = { dismissValue ->
-                            if (dismissValue == SwipeToDismissBoxValue.EndToStart) {
-                                view.slightHapticFeedback()
-                                showDeleteDialog = true
-                                itemToDelete = downloadInfo
-                                false // Don't actually dismiss, show dialog first
-                            } else {
-                                false
+                    RecentDownloadCard(
+                        downloadInfo = downloadInfo,
+                        onClick = {
+                            FileUtil.openFile(downloadInfo.videoPath) {
+                                context.makeToast(R.string.file_unavailable)
                             }
+                        },
+                        onShare = {
+                            view.slightHapticFeedback()
+                            val shareTitle = context.getString(R.string.share)
+                            FileUtil.createIntentForSharingFile(downloadInfo.videoPath)?.let {
+                                context.startActivity(Intent.createChooser(it, shareTitle))
+                            }
+                        },
+                        onCopyLink = {
+                            view.slightHapticFeedback()
+                            clipboardManager.setText(AnnotatedString(downloadInfo.videoUrl))
+                            context.makeToast(R.string.link_copied)
                         }
                     )
-                    
-                    SwipeToDismissBox(
-                        state = dismissState,
-                        enableDismissFromStartToEnd = false,
-                        enableDismissFromEndToStart = true,
-                        backgroundContent = {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(Color(0xFFEF4444))
-                                    .padding(horizontal = 20.dp),
-                                contentAlignment = Alignment.CenterEnd
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Delete,
-                                    contentDescription = "Delete",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                        }
-                    ) {
-                        RecentDownloadCard(
-                            downloadInfo = downloadInfo,
-                            onClick = {
-                                FileUtil.openFile(downloadInfo.videoPath) {
-                                    context.makeToast(R.string.file_unavailable)
-                                }
-                            },
-                            onShare = {
-                                view.slightHapticFeedback()
-                                val shareTitle = context.getString(R.string.share)
-                                FileUtil.createIntentForSharingFile(downloadInfo.videoPath)?.let {
-                                    context.startActivity(Intent.createChooser(it, shareTitle))
-                                }
-                            },
-                            onCopyLink = {
-                                view.slightHapticFeedback()
-                                clipboardManager.setText(AnnotatedString(downloadInfo.videoUrl))
-                                context.makeToast(R.string.link_copied)
-                            }
-                        )
-                    }
                 }
             }
             

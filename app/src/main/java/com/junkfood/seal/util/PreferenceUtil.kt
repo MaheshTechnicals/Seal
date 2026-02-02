@@ -53,7 +53,6 @@ const val SORTING_FIELDS = "sorting_fields"
 
 const val WELCOME_DIALOG = "welcome_dialog"
 const val ONBOARDING_COMPLETED = "onboarding_completed"
-const val SWIPE_TO_DELETE_SHOWN = "swipe_to_delete_shown"
 const val VIDEO_DIRECTORY = "download_dir"
 const val AUDIO_DIRECTORY = "audio_dir"
 const val COMMAND_DIRECTORY = "command_directory"
@@ -243,7 +242,6 @@ private val BooleanPreferenceDefaults =
         NOTIFICATION_SUCCESS_SOUND to true,
         NOTIFICATION_ERROR_SOUND to true,
         ONBOARDING_COMPLETED to false,
-        SWIPE_TO_DELETE_SHOWN to false,
     )
 
 private val IntPreferenceDefaults =
