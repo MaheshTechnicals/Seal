@@ -12,20 +12,14 @@ build_job:
     - |
       echo "Downloading Java 21..."
       curl -L https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz -o jdk21.tar.gz
-      
-      echo "Extracting Java..."
       tar -xzf jdk21.tar.gz
       
-      # Find the folder name automatically
+      # Find Java folder
       JAVA_DIR=$(find . -maxdepth 1 -type d -name "jdk-21*" | head -n 1)
       export JAVA_HOME="$CI_PROJECT_DIR/$JAVA_DIR"
       export PATH="$JAVA_HOME/bin:$PATH"
       
-      echo "Java Path is: $JAVA_HOME"
-      java -version
-
-      # FIX: Write the Java path to gradle.properties instead of the command line.
-      # This prevents the "Task not found" error.
+      # Write config to gradle.properties to prevent syntax errors
       echo "org.gradle.java.home=$JAVA_HOME" >> gradle.properties
       
       echo "Decoding Key..."
@@ -38,14 +32,21 @@ build_job:
       echo "🚀 Building Version: $VERSION"
 
     # --- STEP 2: BUILD & SIGN ---
-    # We moved the Java configuration to gradle.properties, so this command is clean now.
-    # We put the signing variables on one line to ensure no spaces break it.
+    # (Build Successful!)
     - bash ./gradlew assembleRelease -Pandroid.injected.signing.store.file="$CI_PROJECT_DIR/Mahesh.jks" -Pandroid.injected.signing.store.password="$ANDROID_KEYSTORE_PASSWORD" -Pandroid.injected.signing.key.alias="$ANDROID_ALIAS" -Pandroid.injected.signing.key.password="$ANDROID_KEY_PASSWORD"
 
-    # --- STEP 3: ORGANIZE OUTPUT ---
+    # --- STEP 3: FIND & SAVE ARTIFACTS (Fixed) ---
     - mkdir -p release_output
-    - mv app/build/outputs/apk/generic/release/*-signed.apk release_output/ || true
-    - mv app/build/outputs/apk/release/*.apk release_output/ || true
+    
+    # 1. Print where the APKs are (for debugging)
+    - echo "🔎 searching for APKs..."
+    - find app/build/outputs -name "*.apk"
+    
+    # 2. Copy ANY APK found in the build folder to our release_output
+    - find app/build/outputs -name "*.apk" -exec cp {} release_output/ \;
+    
+    # 3. List what we copied to be sure
+    - ls -l release_output/
 
   artifacts:
     name: "SealPlus-$CI_COMMIT_SHORT_SHA"
