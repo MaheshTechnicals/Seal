@@ -9,24 +9,24 @@ build_job:
   image: mobiledevops/android-sdk-image:34.0.0-jdk17
 
   before_script:
-    # 1. Download Java 21 using CURL (instead of wget)
-    - echo "Downloading Java 21..."
-    - curl -L https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz -o jdk21.tar.gz
-    
-    # 2. Extract Java
-    - tar -xzf jdk21.tar.gz
-    
-    # 3. Smart-detect the folder name (so we don't guess wrong)
-    - JAVA_DIR=$(find . -maxdepth 1 -type d -name "jdk-21*" | head -n 1)
-    - export JAVA_HOME="$CI_PROJECT_DIR/$JAVA_DIR"
-    - export PATH="$JAVA_HOME/bin:$PATH"
-    
-    # 4. Verify Version
-    - echo "Java Path is: $JAVA_HOME"
-    - java -version
-
-    # 5. Decode the Keystore
-    - echo "$ANDROID_SIGNING_KEY" | tr -d '\n' | tr -d ' ' | base64 -d > "$CI_PROJECT_DIR/Mahesh.jks"
+    # We use ' | ' to start a script block. This prevents YAML syntax errors.
+    - |
+      echo "Downloading Java 21..."
+      curl -L https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz -o jdk21.tar.gz
+      
+      echo "Extracting Java..."
+      tar -xzf jdk21.tar.gz
+      
+      # Find the folder name automatically
+      JAVA_DIR=$(find . -maxdepth 1 -type d -name "jdk-21*" | head -n 1)
+      export JAVA_HOME="$CI_PROJECT_DIR/$JAVA_DIR"
+      export PATH="$JAVA_HOME/bin:$PATH"
+      
+      echo "Java Path is: $JAVA_HOME"
+      java -version
+      
+      echo "Decoding Key..."
+      echo "$ANDROID_SIGNING_KEY" | tr -d '\n' | tr -d ' ' | base64 -d > "$CI_PROJECT_DIR/Mahesh.jks"
 
   script:
     # --- STEP 1: EXTRACT VERSION ---
@@ -35,7 +35,7 @@ build_job:
       echo "🚀 Building Version: $VERSION"
 
     # --- STEP 2: BUILD & SIGN ---
-    # We pass the new JAVA_HOME to Gradle
+    # We use 'bash ./gradlew' and force the Java Home
     - bash ./gradlew assembleRelease \
         -Dorg.gradle.java.home="$JAVA_HOME" \
         -Pandroid.injected.signing.store.file="$CI_PROJECT_DIR/Mahesh.jks" \
