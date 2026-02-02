@@ -460,6 +460,21 @@ private fun FormatPageImpl(
     var selectedVideoAudioFormat by remember { mutableIntStateOf(NOT_SELECTED) }
     var selectedVideoOnlyFormat by remember { mutableIntStateOf(NOT_SELECTED) }
     val selectedAudioOnlyFormats = remember { mutableStateListOf<Int>() }
+    
+    // Clear invalid selections when validated lists change
+    LaunchedEffect(allVideoFormats.size, audioOnlyFormats.size, videoOnlyFormats.size) {
+        // Clear video+audio selection if index is now out of bounds
+        if (selectedVideoAudioFormat != NOT_SELECTED && selectedVideoAudioFormat >= allVideoFormats.size) {
+            selectedVideoAudioFormat = NOT_SELECTED
+        }
+        // Clear video-only selection if index is now out of bounds
+        if (selectedVideoOnlyFormat != NOT_SELECTED && selectedVideoOnlyFormat >= videoOnlyFormats.size) {
+            selectedVideoOnlyFormat = NOT_SELECTED
+        }
+        // Clear audio selections that are now out of bounds
+        selectedAudioOnlyFormats.removeAll { it >= audioOnlyFormats.size }
+    }
+    
     val context = LocalContext.current
 
     val uriHandler = LocalUriHandler.current
@@ -538,7 +553,7 @@ private fun FormatPageImpl(
                     }
                 } else {
                     selectedAudioOnlyFormats.forEach { index ->
-                        add(audioOnlyFormats.elementAt(index))
+                        audioOnlyFormats.getOrNull(index)?.let { add(it) }
                     }
                     // Handle merged video formats (video-only + audio)
                     allVideoFormats.getOrNull(selectedVideoAudioFormat)?.let { selectedFormat ->
