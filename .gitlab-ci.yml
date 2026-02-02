@@ -9,23 +9,23 @@ build_job:
   image: mobiledevops/android-sdk-image:34.0.0-jdk17
 
   before_script:
-    # 1. Manually Download Java 21 (No root permission needed)
+    # 1. Download Java 21 using CURL (instead of wget)
     - echo "Downloading Java 21..."
-    - wget -qO jdk21.tar.gz https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz
+    - curl -L https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz -o jdk21.tar.gz
+    
+    # 2. Extract Java
     - tar -xzf jdk21.tar.gz
     
-    # 2. Set JAVA_HOME to the new Java 21 folder
-    - export JAVA_HOME="$CI_PROJECT_DIR/jdk-21.0.6" 
-    # (Note: The extracted folder name usually matches the version. 
-    # If the build fails saying folder not found, we will list files to check name)
-    
-    # Update PATH so the system uses this new Java
+    # 3. Smart-detect the folder name (so we don't guess wrong)
+    - JAVA_DIR=$(find . -maxdepth 1 -type d -name "jdk-21*" | head -n 1)
+    - export JAVA_HOME="$CI_PROJECT_DIR/$JAVA_DIR"
     - export PATH="$JAVA_HOME/bin:$PATH"
     
-    # Verify Version
+    # 4. Verify Version
+    - echo "Java Path is: $JAVA_HOME"
     - java -version
 
-    # 3. Decode the Keystore (Standard fix)
+    # 5. Decode the Keystore
     - echo "$ANDROID_SIGNING_KEY" | tr -d '\n' | tr -d ' ' | base64 -d > "$CI_PROJECT_DIR/Mahesh.jks"
 
   script:
@@ -35,7 +35,7 @@ build_job:
       echo "🚀 Building Version: $VERSION"
 
     # --- STEP 2: BUILD & SIGN ---
-    # We force Gradle to use our new JAVA_HOME
+    # We pass the new JAVA_HOME to Gradle
     - bash ./gradlew assembleRelease \
         -Dorg.gradle.java.home="$JAVA_HOME" \
         -Pandroid.injected.signing.store.file="$CI_PROJECT_DIR/Mahesh.jks" \
