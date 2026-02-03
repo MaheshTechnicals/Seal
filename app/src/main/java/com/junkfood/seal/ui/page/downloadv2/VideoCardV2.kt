@@ -416,6 +416,14 @@ fun ListItemStateText(
                 is Error -> stringResource(R.string.status_error)
                 is FetchingInfo -> stringResource(R.string.status_fetching_video_info)
                 Idle -> stringResource(R.string.status_enqueued)
+                is Paused -> {
+                    val progress = downloadState.progress
+                    if (progress != null && progress >= 0) {
+                        "%.1f %% - %s".format(progress * 100, stringResource(R.string.status_paused))
+                    } else {
+                        stringResource(R.string.status_paused)
+                    }
+                }
                 ReadyWithInfo -> stringResource(R.string.status_enqueued)
                 is Running -> {
                     val progress = downloadState.progress
@@ -458,6 +466,18 @@ fun ListItemStateText(
                 ReadyWithInfo -> {
                     CircularProgressIndicator(modifier = sizeModifier, strokeWidth = 2.5.dp)
                 }
+                is Paused -> {
+                    val progress = downloadState.progress
+                    if (progress != null && progress >= 0) {
+                        CircularProgressIndicator(
+                            progress = { progress },
+                            modifier = sizeModifier,
+                            strokeWidth = 2.5.dp,
+                        )
+                    } else {
+                        CircularProgressIndicator(modifier = sizeModifier, strokeWidth = 2.5.dp)
+                    }
+                }
                 is Running -> {
                     val progress = downloadState.progress
                     CircularProgressIndicator(
@@ -496,6 +516,7 @@ private fun CardItemStateText(modifier: Modifier = Modifier, downloadState: Task
             is Error -> R.string.status_error
             is FetchingInfo -> R.string.status_fetching_video_info
             Idle -> R.string.status_enqueued
+            is Paused -> R.string.status_paused
             ReadyWithInfo -> R.string.status_enqueued
             is Running -> R.string.status_downloading
         }

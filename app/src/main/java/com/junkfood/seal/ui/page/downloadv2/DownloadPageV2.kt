@@ -829,6 +829,7 @@ internal class DownloadPageV2Test {
                                         is Error -> Idle
                                         is FetchingInfo -> ReadyWithInfo
                                         Idle -> FetchingInfo(Job(), task.id)
+                                        is Paused -> state.downloadState
                                         ReadyWithInfo -> Running(Job(), task.id)
                                         is Running -> {
                                             val preState: Running = state.downloadState
