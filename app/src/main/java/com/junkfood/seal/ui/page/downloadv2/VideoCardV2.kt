@@ -66,6 +66,7 @@ import com.junkfood.seal.download.Task.DownloadState.Completed
 import com.junkfood.seal.download.Task.DownloadState.Error
 import com.junkfood.seal.download.Task.DownloadState.FetchingInfo
 import com.junkfood.seal.download.Task.DownloadState.Idle
+import com.junkfood.seal.download.Task.DownloadState.Paused
 import com.junkfood.seal.download.Task.DownloadState.ReadyWithInfo
 import com.junkfood.seal.download.Task.DownloadState.Running
 import com.junkfood.seal.download.Task.RestartableAction
