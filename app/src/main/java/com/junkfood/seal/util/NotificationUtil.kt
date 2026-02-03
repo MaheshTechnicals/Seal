@@ -203,6 +203,24 @@ object NotificationUtil {
         notificationManager.notify(notificationId, builder.build())
     }
 
+    fun updateNotification(
+        notificationId: Int = DEFAULT_NOTIFICATION_ID,
+        title: String? = null,
+        text: String? = null,
+    ) {
+        if (!NOTIFICATION.getBoolean()) return
+
+        val builder =
+            NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_stat_seal)
+                .setContentText(text)
+                .setOngoing(false)
+                .setAutoCancel(true)
+        title?.let { builder.setContentTitle(title) }
+        applySmartNotificationSettings(builder)
+        notificationManager.notify(notificationId, builder.build())
+    }
+
     fun finishNotification(
         notificationId: Int = DEFAULT_NOTIFICATION_ID,
         title: String? = null,

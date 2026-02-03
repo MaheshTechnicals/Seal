@@ -34,6 +34,8 @@ import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Pause
+import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.VideoLibrary
 import androidx.compose.material3.AlertDialog
@@ -341,9 +343,10 @@ fun NewHomePage(
                         onAction = { action ->
                             view.slightHapticFeedback()
                             when (action) {
+                                UiAction.Pause -> downloader.pause(task)
                                 UiAction.Cancel -> downloader.cancel(task)
                                 UiAction.Delete -> downloader.remove(task)
-                                UiAction.Resume -> downloader.restart(task)
+                                UiAction.Resume -> downloader.resume(task)
                                 is UiAction.CopyErrorReport -> {
                                     clipboardManager.setText(
                                         AnnotatedString(getErrorReport(action.throwable, task.url))
@@ -674,12 +677,14 @@ fun ActiveDownloadCard(
     val downloadState = state.downloadState
     val progress = when (downloadState) {
         is Task.DownloadState.Running -> downloadState.progress
+        is Task.DownloadState.Paused -> downloadState.progress ?: 0f
         is Task.DownloadState.Canceled -> downloadState.progress ?: 0f
         else -> 0f
     }
     
     val statusText = when (downloadState) {
         is Task.DownloadState.Running -> "Downloading... ${(progress * 100).toInt()}%"
+        is Task.DownloadState.Paused -> stringResource(R.string.status_paused) + " ${(progress * 100).toInt()}%"
         is Task.DownloadState.Canceled -> stringResource(R.string.status_canceled)
         is Task.DownloadState.Error -> stringResource(R.string.download_error)
         is Task.DownloadState.Completed -> stringResource(R.string.completed) + " 100%"
@@ -693,6 +698,7 @@ fun ActiveDownloadCard(
         } else {
             MaterialTheme.colorScheme.primary
         }
+        is Task.DownloadState.Paused -> Color(0xFFFBBF24)
         is Task.DownloadState.Canceled -> Color(0xFFEF4444)
         is Task.DownloadState.Error -> Color(0xFFEF4444)
         is Task.DownloadState.Completed -> Color(0xFF4ADE80)
@@ -782,8 +788,44 @@ fun ActiveDownloadCard(
                     ) {
                         val downloadState = state.downloadState
                         
-                        // Cancel option for running downloads
-                        if (downloadState is Task.DownloadState.Running || downloadState is Task.DownloadState.FetchingInfo) {
+                        // Pause option for running downloads
+                        if (downloadState is Task.DownloadState.Running) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.pause)) },
+                                onClick = {
+                                    onAction(UiAction.Pause)
+                                    showMenu = false
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Pause,
+                                        contentDescription = null
+                                    )
+                                }
+                            )
+                        }
+                        
+                        // Resume option for paused downloads
+                        if (downloadState is Task.DownloadState.Paused) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.resume)) },
+                                onClick = {
+                                    onAction(UiAction.Resume)
+                                    showMenu = false
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.PlayArrow,
+                                        contentDescription = null
+                                    )
+                                }
+                            )
+                        }
+                        
+                        // Cancel option for running/fetching/paused downloads
+                        if (downloadState is Task.DownloadState.Running || 
+                            downloadState is Task.DownloadState.FetchingInfo ||
+                            downloadState is Task.DownloadState.Paused) {
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.cancel)) },
                                 onClick = {
@@ -834,15 +876,18 @@ fun ActiveDownloadCard(
                 }
             }
             
-            // Progress bar for active downloads
-            if (downloadState is Task.DownloadState.Running) {
+            // Progress bar for active and paused downloads
+            if (downloadState is Task.DownloadState.Running || downloadState is Task.DownloadState.Paused) {
                 LinearProgressIndicator(
                     progress = { progress },
                     modifier = Modifier.fillMaxWidth(),
-                    color = if (isGradientDark && isDarkTheme) {
-                        GradientDarkColors.GradientPrimaryStart
-                    } else {
-                        MaterialTheme.colorScheme.primary
+                    color = when (downloadState) {
+                        is Task.DownloadState.Paused -> Color(0xFFFBBF24)
+                        else -> if (isGradientDark && isDarkTheme) {
+                            GradientDarkColors.GradientPrimaryStart
+                        } else {
+                            MaterialTheme.colorScheme.primary
+                        }
                     },
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )

@@ -157,10 +157,12 @@
     <string name="completed">Completed</string>
     <string name="status_downloading">Downloading</string>
     <string name="status_canceled">Canceled</string>
+    <string name="status_paused">Paused</string>
     <string name="status_fetching_video_info">Fetching info</string>
     <string name="download_error">Download error</string>
     <string name="open_file">Open file</string>
     <string name="restart">Restart</string>
+    <string name="pause">Pause</string>
     <string name="status_error">Error</string>
     <string name="copy_link">Copy link</string>
     <string name="copy_error_report">Copy report</string>

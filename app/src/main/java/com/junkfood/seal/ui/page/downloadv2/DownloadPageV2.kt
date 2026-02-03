@@ -189,6 +189,8 @@ sealed interface UiAction {
 
     data class OpenVideoURL(val url: String) : UiAction
 
+    data object Pause : UiAction
+
     data object Cancel : UiAction
 
     data object Delete : UiAction
@@ -241,9 +243,10 @@ fun DownloadPageV2(
     ) { task, action ->
         view.slightHapticFeedback()
         when (action) {
+            UiAction.Pause -> downloader.pause(task)
             UiAction.Cancel -> downloader.cancel(task)
             UiAction.Delete -> downloader.remove(task)
-            UiAction.Resume -> downloader.restart(task)
+            UiAction.Resume -> downloader.resume(task)
             is UiAction.CopyErrorReport -> {
                 clipboardManager.setText(
                     AnnotatedString(getErrorReport(action.throwable, task.url))
@@ -850,6 +853,14 @@ internal class DownloadPageV2Test {
             }
 
             override fun cancel(task: Task): Boolean {
+                return false
+            }
+
+            override fun pause(task: Task): Boolean {
+                return false
+            }
+
+            override fun resume(task: Task): Boolean {
                 return false
             }
 

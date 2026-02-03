@@ -90,6 +90,10 @@ data class Task(
         }
 
         @Serializable
+        data class Paused(override val action: RestartableAction, val progress: Float? = null) :
+            DownloadState, Restartable
+
+        @Serializable
         data class Canceled(override val action: RestartableAction, val progress: Float? = null) :
             DownloadState, Restartable
 
@@ -108,9 +112,10 @@ data class Task(
         private val ordinal: Int
             get() =
                 when (this) {
-                    is Canceled -> 4
-                    is Error -> 5
-                    is Completed -> 6
+                    is Paused -> 4
+                    is Canceled -> 5
+                    is Error -> 6
+                    is Completed -> 7
                     Idle -> 3
                     is FetchingInfo -> 2
                     ReadyWithInfo -> 1

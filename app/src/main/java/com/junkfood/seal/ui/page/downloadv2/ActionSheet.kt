@@ -23,6 +23,7 @@ import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Link
+import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.VideoFile
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -59,6 +60,7 @@ import com.junkfood.seal.download.Task.DownloadState.Completed
 import com.junkfood.seal.download.Task.DownloadState.Error
 import com.junkfood.seal.download.Task.DownloadState.FetchingInfo
 import com.junkfood.seal.download.Task.DownloadState.Idle
+import com.junkfood.seal.download.Task.DownloadState.Paused
 import com.junkfood.seal.download.Task.DownloadState.ReadyWithInfo
 import com.junkfood.seal.download.Task.DownloadState.Running
 import com.junkfood.seal.ui.common.LocalFixedColorRoles
@@ -108,6 +110,18 @@ private fun ResumeButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
         contentColor = LocalFixedColorRoles.current.onTertiaryFixedVariant,
         imageVector = Icons.Outlined.RestartAlt,
         text = stringResource(R.string.resume),
+        onClick = onClick,
+    )
+}
+
+@Composable
+private fun PauseButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    ActionSheetPrimaryButton(
+        modifier = modifier,
+        containerColor = LocalFixedColorRoles.current.tertiaryFixed,
+        contentColor = LocalFixedColorRoles.current.onTertiaryFixedVariant,
+        imageVector = Icons.Outlined.Pause,
+        text = stringResource(R.string.pause),
         onClick = onClick,
     )
 }
@@ -314,10 +328,30 @@ fun LazyListScope.ActionButtons(
                 }
             }
         }
+        is Paused -> {
+            item(key = "ResumeButton") {
+                ResumeButton(modifier = Modifier.animateItem()) {
+                    onActionPost(task, UiAction.Resume)
+                    onDismissRequest()
+                }
+            }
+            item(key = "CancelButton") {
+                CancelButton(modifier = Modifier.animateItem()) {
+                    onActionPost(task, UiAction.Cancel)
+                    onDismissRequest()
+                }
+            }
+        }
         is FetchingInfo,
         ReadyWithInfo,
-        Idle,
+        Idle -> {}
         is Running -> {
+            item(key = "PauseButton") {
+                PauseButton(modifier = Modifier.animateItem()) {
+                    onActionPost(task, UiAction.Pause)
+                    onDismissRequest()
+                }
+            }
             item(key = "CancelButton") {
                 CancelButton(modifier = Modifier.animateItem()) {
                     onActionPost(task, UiAction.Cancel)

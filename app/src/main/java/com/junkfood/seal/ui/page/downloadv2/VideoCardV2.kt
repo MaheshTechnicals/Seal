@@ -533,6 +533,11 @@ fun ActionButton(
                 onActionPost(UiAction.Resume)
             }
         }
+        is Task.DownloadState.Paused -> {
+            ResumeButton(modifier = modifier, downloadState.progress) {
+                onActionPost(UiAction.Resume)
+            }
+        }
         is Completed -> {
             PlayVideoButton(modifier = modifier) {
                 onActionPost(UiAction.OpenFile(downloadState.filePath))
@@ -545,7 +550,7 @@ fun ActionButton(
         }
         is Running -> {
             ProgressButton(modifier = modifier, progress = downloadState.progress) {
-                onActionPost(UiAction.Cancel)
+                onActionPost(UiAction.Pause)
             }
         }
     }

@@ -14,6 +14,7 @@ import com.junkfood.seal.download.Task.DownloadState.Completed
 import com.junkfood.seal.download.Task.DownloadState.Error
 import com.junkfood.seal.download.Task.DownloadState.FetchingInfo
 import com.junkfood.seal.download.Task.DownloadState.Idle
+import com.junkfood.seal.download.Task.DownloadState.Paused
 import com.junkfood.seal.download.Task.DownloadState.ReadyWithInfo
 import com.junkfood.seal.download.Task.DownloadState.Running
 import com.junkfood.seal.download.Task.RestartableAction.Download
@@ -51,6 +52,18 @@ interface DownloaderV2 {
         return getTaskStateMap().keys.find { it.id == taskId }?.let { cancel(it) } ?: false
     }
 
+    fun pause(task: Task): Boolean
+
+    fun pause(taskId: String): Boolean {
+        return getTaskStateMap().keys.find { it.id == taskId }?.let { pause(it) } ?: false
+    }
+
+    fun resume(task: Task): Boolean
+
+    fun resume(taskId: String): Boolean {
+        return getTaskStateMap().keys.find { it.id == taskId }?.let { resume(it) } ?: false
+    }
+
     fun restart(task: Task)
 
     /** Enqueue a [Task] with an empty [Task.State] */
@@ -72,6 +85,14 @@ internal object FakeDownloaderV2 : DownloaderV2 {
     }
 
     override fun cancel(task: Task): Boolean {
+        return false
+    }
+
+    override fun pause(task: Task): Boolean {
+        return false
+    }
+
+    override fun resume(task: Task): Boolean {
         return false
     }
 
@@ -134,11 +155,15 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
                                 Canceled(action = FetchInfo)
                             }
                             is Running -> {
-                                Canceled(action = Download, progress = preState.progress)
+                                Paused(action = Download, progress = preState.progress)
                             }
 
                             ReadyWithInfo -> {
-                                Canceled(action = Download, progress = null)
+                                Paused(action = Download, progress = null)
+                            }
+                            is Paused -> {
+                                // Keep paused state on restart
+                                preState
                             }
                             else -> {
                                 preState
@@ -180,6 +205,10 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
     }
 
     override fun cancel(task: Task): Boolean = task.cancelImpl()
+
+    override fun pause(task: Task): Boolean = task.pauseImpl()
+
+    override fun resume(task: Task): Boolean = task.resumeImpl()
 
     override fun restart(task: Task) {
         task.restartImpl()
@@ -349,6 +378,46 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
             .also { job -> downloadState = Running(job = job, taskId = id) }
     }
 
+    private fun Task.pauseImpl(): Boolean {
+        when (val preState = downloadState) {
+            is DownloadState.Cancelable -> {
+                val res = YoutubeDL.destroyProcessById(preState.taskId)
+                if (res) {
+                    preState.job.cancel()
+                    val progress = if (preState is Running) preState.progress else null
+                    NotificationUtil.updateNotification(
+                        notificationId = notificationId,
+                        title = viewState.title,
+                        text = appContext.getString(R.string.status_paused),
+                    )
+                    downloadState =
+                        DownloadState.Paused(action = preState.action, progress = progress)
+                }
+                return res
+            }
+            else -> {
+                return false
+            }
+        }
+        return true
+    }
+
+    private fun Task.resumeImpl(): Boolean {
+        when (val preState = downloadState) {
+            is DownloadState.Paused -> {
+                downloadState =
+                    when (preState.action) {
+                        Download -> ReadyWithInfo
+                        FetchInfo -> Idle
+                    }
+                return true
+            }
+            else -> {
+                return false
+            }
+        }
+    }
+
     private fun Task.cancelImpl(): Boolean {
         when (val preState = downloadState) {
             is DownloadState.Cancelable -> {
@@ -367,6 +436,11 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
             }
             ReadyWithInfo -> {
                 downloadState = DownloadState.Canceled(action = Download)
+            }
+            is DownloadState.Paused -> {
+                NotificationUtil.cancelNotification(notificationId)
+                downloadState = DownloadState.Canceled(action = preState.action, progress = preState.progress)
+                return true
             }
 
             else -> {
