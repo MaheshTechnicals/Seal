@@ -2,10 +2,6 @@ package com.junkfood.seal.ui.page.home
 
 import android.app.Activity
 import android.content.Intent
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -823,7 +819,6 @@ fun ActiveDownloadCard(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Thumbnail
@@ -853,7 +848,9 @@ fun ActiveDownloadCard(
                 
                 // Content
                 Column(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 12.dp, end = 4.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
@@ -876,7 +873,7 @@ fun ActiveDownloadCard(
                 if (downloadState is Task.DownloadState.Running) {
                     IconButton(
                         onClick = { onAction(UiAction.Pause) },
-                        modifier = Modifier.size(36.dp)
+                        modifier = Modifier.size(40.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Pause,
@@ -890,7 +887,7 @@ fun ActiveDownloadCard(
                 if (downloadState is Task.DownloadState.Paused) {
                     IconButton(
                         onClick = { onAction(UiAction.Resume) },
-                        modifier = Modifier.size(36.dp)
+                        modifier = Modifier.size(40.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.PlayArrow,
