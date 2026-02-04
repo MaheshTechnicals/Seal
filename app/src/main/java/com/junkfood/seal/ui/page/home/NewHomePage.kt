@@ -2,6 +2,10 @@ package com.junkfood.seal.ui.page.home
 
 import android.app.Activity
 import android.content.Intent
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -708,15 +712,28 @@ fun ActiveDownloadCard(
     
     // Parse progress text to determine download phase
     val progressText = if (downloadState is Task.DownloadState.Running) downloadState.progressText else ""
+    val context = androidx.compose.ui.platform.LocalContext.current
     
-    // Log progressText for debugging
-    android.util.Log.d("ActiveDownloadCard", "ProgressText: '$progressText'")
+    // Log progressText to file for debugging
+    if (progressText.isNotEmpty()) {
+        try {
+            val logFile = File(context.getExternalFilesDir(null), "sealplus_debug.log")
+            val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+            logFile.appendText("[$timestamp] ProgressText: '$progressText'\n")
+        } catch (e: Exception) {
+            android.util.Log.e("ActiveDownloadCard", "Failed to write log", e)
+        }
+    }
     
     val downloadPhase = when {
         progressText.contains("[Merger]", ignoreCase = true) || 
         progressText.contains("Merging formats", ignoreCase = true) ||
         progressText.contains("Merging", ignoreCase = true) -> {
-            android.util.Log.d("ActiveDownloadCard", "Detected phase: merging")
+            try {
+                val logFile = File(context.getExternalFilesDir(null), "sealplus_debug.log")
+                val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                logFile.appendText("[$timestamp] Detected phase: merging\n")
+            } catch (e: Exception) { }
             "merging"
         }
         progressText.isNotEmpty() -> {
@@ -732,7 +749,11 @@ fun ActiveDownloadCard(
                 progressText.contains("f251", ignoreCase = false) ||
                 progressText.contains("f140", ignoreCase = false) ||
                 (progressText.contains(".webm", ignoreCase = true) && progressText.contains("audio", ignoreCase = true)) -> {
-                    android.util.Log.d("ActiveDownloadCard", "Detected phase: audio")
+                    try {
+                        val logFile = File(context.getExternalFilesDir(null), "sealplus_debug.log")
+                        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                        logFile.appendText("[$timestamp] Detected phase: audio\n")
+                    } catch (e: Exception) { }
                     "audio"
                 }
                 // Check for video indicators
@@ -743,17 +764,24 @@ fun ActiveDownloadCard(
                 progressText.contains("f616", ignoreCase = false) ||
                 progressText.contains("f137", ignoreCase = false) ||
                 progressText.contains(".webm", ignoreCase = true) -> {
-                    android.util.Log.d("ActiveDownloadCard", "Detected phase: video")
+                    try {
+                        val logFile = File(context.getExternalFilesDir(null), "sealplus_debug.log")
+                        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                        logFile.appendText("[$timestamp] Detected phase: video\n")
+                    } catch (e: Exception) { }
                     "video"
                 }
                 else -> {
-                    android.util.Log.d("ActiveDownloadCard", "Detected phase: downloading (no match)")
+                    try {
+                        val logFile = File(context.getExternalFilesDir(null), "sealplus_debug.log")
+                        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                        logFile.appendText("[$timestamp] Detected phase: downloading (no match)\n")
+                    } catch (e: Exception) { }
                     "downloading"
                 }
             }
         }
         else -> {
-            android.util.Log.d("ActiveDownloadCard", "Detected phase: downloading (empty)")
             "downloading"
         }
     }
