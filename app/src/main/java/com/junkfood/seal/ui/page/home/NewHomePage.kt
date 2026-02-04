@@ -714,76 +714,63 @@ fun ActiveDownloadCard(
     val progressText = if (downloadState is Task.DownloadState.Running) downloadState.progressText else ""
     val context = androidx.compose.ui.platform.LocalContext.current
     
-    // Log progressText to file for debugging
-    if (progressText.isNotEmpty()) {
-        try {
-            val logFile = File(context.getExternalFilesDir(null), "sealplus_debug.log")
-            val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-            logFile.appendText("[$timestamp] ProgressText: '$progressText'\n")
-        } catch (e: Exception) {
-            android.util.Log.e("ActiveDownloadCard", "Failed to write log", e)
-        }
-    }
+    // Track download state: format info -> video download -> audio download -> merging
+    var hasSeenFormatInfo by remember { mutableStateOf(false) }
+    var hasSeenVideoComplete by remember { mutableStateOf(false) }
+    var currentPhase by remember { mutableStateOf("downloading") }
     
+    // Determine phase based on progressText patterns
     val downloadPhase = when {
+        // Merging phase
         progressText.contains("[Merger]", ignoreCase = true) || 
-        progressText.contains("Merging formats", ignoreCase = true) ||
-        progressText.contains("Merging", ignoreCase = true) -> {
-            try {
-                val logFile = File(context.getExternalFilesDir(null), "sealplus_debug.log")
-                val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-                logFile.appendText("[$timestamp] Detected phase: merging\n")
-            } catch (e: Exception) { }
+        progressText.contains("Merging formats", ignoreCase = true) -> {
+            currentPhase = "merging"
+            hasSeenVideoComplete = false
+            hasSeenFormatInfo = false
             "merging"
         }
-        progressText.isNotEmpty() -> {
-            // Check for audio indicators first (more specific)
-            when {
-                progressText.contains(".m4a", ignoreCase = true) || 
-                progressText.contains(".opus", ignoreCase = true) ||
-                progressText.contains(".mp3", ignoreCase = true) ||
-                progressText.contains(".aac", ignoreCase = true) ||
-                progressText.contains(".flac", ignoreCase = true) ||
-                progressText.contains(".wav", ignoreCase = true) ||
-                progressText.contains("audio only", ignoreCase = true) ||
-                progressText.contains("f251", ignoreCase = false) ||
-                progressText.contains("f140", ignoreCase = false) ||
-                (progressText.contains(".webm", ignoreCase = true) && progressText.contains("audio", ignoreCase = true)) -> {
-                    try {
-                        val logFile = File(context.getExternalFilesDir(null), "sealplus_debug.log")
-                        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-                        logFile.appendText("[$timestamp] Detected phase: audio\n")
-                    } catch (e: Exception) { }
-                    "audio"
-                }
-                // Check for video indicators
-                progressText.contains(".mp4", ignoreCase = true) || 
-                progressText.contains(".mkv", ignoreCase = true) ||
-                progressText.contains(".avi", ignoreCase = true) ||
-                progressText.contains("video", ignoreCase = true) ||
-                progressText.contains("f616", ignoreCase = false) ||
-                progressText.contains("f137", ignoreCase = false) ||
-                progressText.contains(".webm", ignoreCase = true) -> {
-                    try {
-                        val logFile = File(context.getExternalFilesDir(null), "sealplus_debug.log")
-                        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-                        logFile.appendText("[$timestamp] Detected phase: video\n")
-                    } catch (e: Exception) { }
-                    "video"
-                }
-                else -> {
-                    try {
-                        val logFile = File(context.getExternalFilesDir(null), "sealplus_debug.log")
-                        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-                        logFile.appendText("[$timestamp] Detected phase: downloading (no match)\n")
-                    } catch (e: Exception) { }
-                    "downloading"
-                }
-            }
-        }
-        else -> {
+        // Format info line - indicates download will start
+        progressText.contains("[info]", ignoreCase = true) && progressText.contains("format", ignoreCase = true) -> {
+            hasSeenFormatInfo = true
+            hasSeenVideoComplete = false
+            currentPhase = "fetching"
             "downloading"
         }
+        // Download progress lines
+        progressText.contains("[download]", ignoreCase = true) -> {
+            when {
+                // First 100% completion - video is done, audio is next
+                progressText.contains("100%") && !hasSeenVideoComplete -> {
+                    hasSeenVideoComplete = true
+                    currentPhase = "video"
+                    "video"
+                }
+                // After video complete, any download progress is audio
+                hasSeenVideoComplete -> {
+                    currentPhase = "audio"
+                    "audio"
+                }
+                // Before any completion, it's video (first download is always video)
+                hasSeenFormatInfo -> {
+                    currentPhase = "video"
+                    "video"
+                }
+                else -> "downloading"
+            }
+        }
+        // Post-download file operations - maintain current phase
+        progressText.contains("Deleting original file", ignoreCase = true) ||
+        progressText.contains("[Metadata]", ignoreCase = true) ||
+        progressText.contains("[MoveFiles]", ignoreCase = true) -> {
+            currentPhase
+        }
+        // Fetching info phase
+        progressText.contains("[youtube]", ignoreCase = true) || 
+        progressText.contains("Downloading webpage", ignoreCase = true) ||
+        progressText.contains("Downloading player", ignoreCase = true) -> {
+            "fetching"
+        }
+        else -> currentPhase
     }
     
     val statusText = when (downloadState) {
@@ -792,6 +779,7 @@ fun ActiveDownloadCard(
                 "merging" -> stringResource(R.string.status_merging)
                 "video" -> "Downloading video... ${(progress * 100).toInt()}%"
                 "audio" -> "Downloading audio... ${(progress * 100).toInt()}%"
+                "fetching" -> stringResource(R.string.fetching_info)
                 else -> "Downloading... ${(progress * 100).toInt()}%"
             }
         }
