@@ -1449,11 +1449,16 @@ fun RecentDownloadDetailsDialog(
                         modifier = Modifier.weight(1f)
                     )
                     
+                    val downloadDate = if (file.exists()) {
+                        java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault())
+                            .format(java.util.Date(file.lastModified()))
+                    } else {
+                        "N/A"
+                    }
                     DetailCard(
                         icon = Icons.Outlined.CalendarToday,
                         label = stringResource(R.string.download_date),
-                        value = java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault())
-                            .format(java.util.Date(downloadInfo.timeCreated)),
+                        value = downloadDate,
                         modifier = Modifier.weight(1f)
                     )
                 }
