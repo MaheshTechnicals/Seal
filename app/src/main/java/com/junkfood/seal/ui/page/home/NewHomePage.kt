@@ -773,6 +773,33 @@ fun ActiveDownloadCard(
                     )
                 }
                 
+                // Pause/Resume action button
+                if (downloadState is Task.DownloadState.Running) {
+                    IconButton(
+                        onClick = { onAction(UiAction.Pause) },
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Pause,
+                            contentDescription = stringResource(R.string.pause),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                
+                if (downloadState is Task.DownloadState.Paused) {
+                    IconButton(
+                        onClick = { onAction(UiAction.Resume) },
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.PlayArrow,
+                            contentDescription = stringResource(R.string.resume),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                
                 // More button with dropdown menu
                 Box(modifier = Modifier.wrapContentSize(Alignment.TopEnd)) {
                     IconButton(onClick = { showMenu = true }) {
