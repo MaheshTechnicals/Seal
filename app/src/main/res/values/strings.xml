@@ -585,6 +585,14 @@
     <string name="recent_downloads">Recent downloads</string>
     <string name="enter_url_to_download">Enter URL to download</string>
     <string name="view_all_downloads">View all downloads</string>
+    <string name="queue_status">Queue</string>
+    
+    <!-- Download Control strings -->
+    <string name="download_control">Download Control</string>
+    <string name="max_concurrent_downloads">Concurrent Downloads</string>
+    <string name="concurrent_downloads_desc">Maximum: %d downloads at once</string>
+    <string name="unlimited_concurrent">Unlimited simultaneous downloads</string>
+    <string name="unlimited">Unlimited</string>
     
     <!-- Proxy Settings strings -->
     <string name="proxy_settings">Proxy Settings</string>

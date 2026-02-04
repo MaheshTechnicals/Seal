@@ -69,6 +69,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -901,12 +902,41 @@ fun ActiveDownloadCard(
                         overflow = TextOverflow.Ellipsis
                     )
                     
-                    Text(
-                        text = statusText,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = statusColor,
-                        fontWeight = FontWeight.Medium
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = statusText,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = statusColor,
+                            fontWeight = FontWeight.Medium
+                        )
+                        
+                        // Show Queue badge for Idle or ReadyWithInfo tasks
+                        if (downloadState is Task.DownloadState.Idle || downloadState is Task.DownloadState.ReadyWithInfo) {
+                            androidx.compose.material3.Surface(
+                                shape = RoundedCornerShape(4.dp),
+                                color = if (isGradientDark && isDarkTheme) {
+                                    GradientDarkColors.GradientSecondaryStart.copy(alpha = 0.3f)
+                                } else {
+                                    MaterialTheme.colorScheme.secondaryContainer
+                                }
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.queue_status),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = if (isGradientDark && isDarkTheme) {
+                                        GradientDarkColors.GradientSecondaryEnd
+                                    } else {
+                                        MaterialTheme.colorScheme.onSecondaryContainer
+                                    },
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                        }
+                    }
                 }
                 
                 // Pause/Resume action button

@@ -129,6 +129,9 @@ private const val DOWNLOAD_TYPE = "download_type"
 // Network Type Restriction
 const val NETWORK_TYPE_RESTRICTION = "network_type_restriction"
 
+// Download Control
+const val MAX_CONCURRENT_DOWNLOADS = "max_concurrent_downloads"
+
 // Smart Notifications
 const val NOTIFICATION_SOUND = "notification_sound"
 const val NOTIFICATION_VIBRATE = "notification_vibrate"
@@ -281,6 +284,7 @@ private val IntPreferenceDefaults =
         YT_DLP_UPDATE_CHANNEL to YT_DLP_NIGHTLY,
         DOWNLOAD_TYPE to DownloadType.Video.ordinal,
         NETWORK_TYPE_RESTRICTION to NETWORK_ANY,
+        MAX_CONCURRENT_DOWNLOADS to 3,
         PROXY_CUSTOM_PORT to 8080,
     )
 

@@ -22,8 +22,10 @@ import com.junkfood.seal.download.Task.RestartableAction.FetchInfo
 import com.junkfood.seal.download.Task.TypeInfo
 import com.junkfood.seal.util.DownloadUtil
 import com.junkfood.seal.util.FileUtil
+import com.junkfood.seal.util.MAX_CONCURRENT_DOWNLOADS
 import com.junkfood.seal.util.NotificationUtil
 import com.junkfood.seal.util.PreferenceUtil
+import com.junkfood.seal.util.PreferenceUtil.getInt
 import com.junkfood.seal.util.VideoInfo
 import com.yausername.youtubedl_android.YoutubeDL
 import kotlin.collections.component1
@@ -40,8 +42,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 private const val TAG = "DownloaderV2"
-
-private const val MAX_CONCURRENCY = 3
 
 interface DownloaderV2 {
     fun getTaskStateMap(): SnapshotStateMap<Task, Task.State>
@@ -247,7 +247,9 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
 
     /** Processes pending tasks, prioritizing downloads. */
     private fun doYourWork() {
-        if (taskStateMap.countRunning() >= MAX_CONCURRENCY) return
+        val maxConcurrency = MAX_CONCURRENT_DOWNLOADS.getInt()
+        val effectiveLimit = if (maxConcurrency == 0) Int.MAX_VALUE else maxConcurrency
+        if (taskStateMap.countRunning() >= effectiveLimit) return
 
         taskStateMap.entries
             .sortedBy { (_, state) -> state.downloadState }

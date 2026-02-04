@@ -1,7 +1,10 @@
 package com.junkfood.seal.ui.page.settings.sealplus
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -24,10 +27,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import com.junkfood.seal.R
@@ -38,6 +43,7 @@ import com.junkfood.seal.ui.component.PreferenceSingleChoiceItem
 import com.junkfood.seal.ui.component.PreferenceSwitch
 import com.junkfood.seal.ui.page.security.LockScreen
 import com.junkfood.seal.util.AuthenticationManager
+import com.junkfood.seal.util.MAX_CONCURRENT_DOWNLOADS
 import com.junkfood.seal.util.NETWORK_ANY
 import com.junkfood.seal.util.NETWORK_MOBILE_ONLY
 import com.junkfood.seal.util.NETWORK_TYPE_RESTRICTION
@@ -104,6 +110,80 @@ fun SealPlusExtrasPage(
         LazyColumn(
             modifier = Modifier.padding(paddingValues)
         ) {
+            item {
+                PreferenceSubtitle(text = stringResource(R.string.download_control))
+            }
+            
+            item {
+                var maxConcurrentDownloads by remember { 
+                    mutableStateOf(MAX_CONCURRENT_DOWNLOADS.getInt()) 
+                }
+                
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.max_concurrent_downloads),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = if (maxConcurrentDownloads == 0) {
+                                    stringResource(R.string.unlimited_concurrent)
+                                } else {
+                                    stringResource(R.string.concurrent_downloads_desc, maxConcurrentDownloads)
+                                },
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Text(
+                            text = if (maxConcurrentDownloads == 0) "∞" else maxConcurrentDownloads.toString(),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    
+                    androidx.compose.material3.Slider(
+                        value = maxConcurrentDownloads.toFloat(),
+                        onValueChange = { newValue ->
+                            maxConcurrentDownloads = newValue.toInt()
+                        },
+                        onValueChangeFinished = {
+                            MAX_CONCURRENT_DOWNLOADS.updateInt(maxConcurrentDownloads)
+                        },
+                        valueRange = 0f..10f,
+                        steps = 9,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "0 (${stringResource(R.string.unlimited)})",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = "10",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+            
             item {
                 PreferenceSubtitle(text = stringResource(R.string.security_and_privacy))
             }
