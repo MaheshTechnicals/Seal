@@ -2,6 +2,7 @@ package com.junkfood.seal.ui.page.home
 
 import android.app.Activity
 import android.content.Intent
+import java.io.File
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -412,6 +413,8 @@ fun NewHomePage(
                     items = recentFiveDownloads,
                     key = { it.id }
                 ) { downloadInfo ->
+                    var showRecentDetailsDialog by remember { mutableStateOf(false) }
+                    
                     RecentDownloadCard(
                         downloadInfo = downloadInfo,
                         onClick = {
@@ -430,8 +433,19 @@ fun NewHomePage(
                             view.slightHapticFeedback()
                             clipboardManager.setText(AnnotatedString(downloadInfo.videoUrl))
                             context.makeToast(R.string.link_copied)
+                        },
+                        onShowDetails = {
+                            view.slightHapticFeedback()
+                            showRecentDetailsDialog = true
                         }
                     )
+                    
+                    if (showRecentDetailsDialog) {
+                        RecentDownloadDetailsDialog(
+                            downloadInfo = downloadInfo,
+                            onDismiss = { showRecentDetailsDialog = false }
+                        )
+                    }
                 }
             }
             
@@ -570,6 +584,7 @@ fun RecentDownloadCard(
     onClick: () -> Unit,
     onShare: () -> Unit,
     onCopyLink: () -> Unit,
+    onShowDetails: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
@@ -655,6 +670,19 @@ fun RecentDownloadCard(
                     expanded = showMenu,
                     onDismissRequest = { showMenu = false }
                 ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.details)) },
+                        onClick = {
+                            onShowDetails()
+                            showMenu = false
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Info,
+                                contentDescription = null
+                            )
+                        }
+                    )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.share)) },
                         onClick = {
@@ -1167,6 +1195,109 @@ fun DownloadDetailsDialog(
                 DetailItem(
                     label = stringResource(R.string.source_url),
                     value = state.viewState.url
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RecentDownloadDetailsDialog(
+    downloadInfo: DownloadedVideoInfo,
+    onDismiss: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState()
+    val context = androidx.compose.ui.platform.LocalContext.current
+    
+    BackHandler {
+        onDismiss()
+    }
+    
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Header
+            Text(
+                text = stringResource(R.string.download_details),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            
+            // Thumbnail
+            AsyncImage(
+                model = downloadInfo.thumbnailUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentScale = ContentScale.Crop
+            )
+            
+            HorizontalDivider()
+            
+            // Title
+            DetailItem(
+                label = stringResource(R.string.title),
+                value = downloadInfo.videoTitle
+            )
+            
+            // File Name
+            val fileName = downloadInfo.videoPath.substringAfterLast("/")
+            DetailItem(
+                label = stringResource(R.string.file_name),
+                value = fileName
+            )
+            
+            // File Size
+            val file = java.io.File(downloadInfo.videoPath)
+            if (file.exists()) {
+                val fileSize = file.length()
+                DetailItem(
+                    label = stringResource(R.string.file_size),
+                    value = FileUtil.getFileSizeText(fileSize)
+                )
+                
+                // File Format
+                val fileExtension = fileName.substringAfterLast(".", "")
+                if (fileExtension.isNotEmpty()) {
+                    DetailItem(
+                        label = stringResource(R.string.file_format),
+                        value = fileExtension.uppercase()
+                    )
+                }
+            }
+            
+            // Video Creator
+            if (downloadInfo.videoAuthor.isNotEmpty()) {
+                DetailItem(
+                    label = stringResource(R.string.video_creator_label),
+                    value = downloadInfo.videoAuthor
+                )
+            }
+            
+            // Platform
+            DetailItem(
+                label = stringResource(R.string.platform),
+                value = downloadInfo.extractor
+            )
+            
+            // Source URL
+            SelectionContainer {
+                DetailItem(
+                    label = stringResource(R.string.source_url),
+                    value = downloadInfo.videoUrl
                 )
             }
             
