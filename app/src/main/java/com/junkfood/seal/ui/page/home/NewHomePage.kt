@@ -38,6 +38,7 @@ import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.FileDownload
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.HighQuality
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
@@ -1170,40 +1171,22 @@ fun DownloadDetailsDialog(
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Row 1: File Name and Format
+                // Row 1: File Format and File Size
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    if (state.downloadState is Task.DownloadState.Completed) {
-                        state.downloadState.filePath?.let { path ->
-                            val fileName = path.substringAfterLast("/")
-                            DetailCard(
-                                icon = Icons.Outlined.FileDownload,
-                                label = stringResource(R.string.file_name),
-                                value = fileName,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                    }
-                    
                     state.viewState.videoFormats?.firstOrNull()?.ext?.let { ext ->
                         if (ext.isNotBlank()) {
                             DetailCard(
                                 icon = Icons.Outlined.VideoFile,
                                 label = stringResource(R.string.file_format),
                                 value = ext.uppercase(),
-                                modifier = Modifier.weight(0.5f)
+                                modifier = Modifier.weight(1f)
                             )
                         }
                     }
-                }
-                
-                // Row 2: File Size and Duration
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
+                    
                     val fileSize = state.viewState.fileSizeApprox
                     if (fileSize > 0) {
                         DetailCard(
@@ -1213,29 +1196,43 @@ fun DownloadDetailsDialog(
                             modifier = Modifier.weight(1f)
                         )
                     }
-                    
-                    val duration = state.viewState.duration
-                    if (duration > 0) {
+                }
+                
+                // Row 2: Creator and Platform
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    if (state.viewState.uploader.isNotBlank()) {
                         DetailCard(
-                            icon = Icons.Outlined.Schedule,
-                            label = stringResource(R.string.duration),
-                            value = duration.toDurationText(),
+                            icon = Icons.Outlined.Person,
+                            label = stringResource(R.string.video_creator_label),
+                            value = state.viewState.uploader,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                    
+                    if (state.viewState.extractorKey.isNotBlank()) {
+                        DetailCard(
+                            icon = Icons.Outlined.Language,
+                            label = stringResource(R.string.platform),
+                            value = state.viewState.extractorKey,
                             modifier = Modifier.weight(1f)
                         )
                     }
                 }
                 
-                // Row 3: Resolution and Download Date
+                // Row 3: File Path and Download Date
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    state.viewState.videoFormats?.firstOrNull()?.resolution?.let { resolution ->
-                        if (resolution.isNotBlank()) {
+                    if (state.downloadState is Task.DownloadState.Completed) {
+                        state.downloadState.filePath?.let { path ->
                             DetailCard(
-                                icon = Icons.Outlined.HighQuality,
-                                label = stringResource(R.string.resolution),
-                                value = resolution,
+                                icon = Icons.Outlined.Folder,
+                                label = stringResource(R.string.file_path),
+                                value = path,
                                 modifier = Modifier.weight(1f)
                             )
                         }
@@ -1247,26 +1244,6 @@ fun DownloadDetailsDialog(
                         value = java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault())
                             .format(java.util.Date(task.timeCreated)),
                         modifier = Modifier.weight(1f)
-                    )
-                }
-                
-                // Creator Section
-                if (state.viewState.uploader.isNotBlank()) {
-                    DetailCard(
-                        icon = Icons.Outlined.Person,
-                        label = stringResource(R.string.video_creator_label),
-                        value = state.viewState.uploader,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                
-                // Platform
-                if (state.viewState.extractorKey.isNotBlank()) {
-                    DetailCard(
-                        icon = Icons.Outlined.Language,
-                        label = stringResource(R.string.platform),
-                        value = state.viewState.extractorKey,
-                        modifier = Modifier.fillMaxWidth()
                     )
                 }
                 

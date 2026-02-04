@@ -443,6 +443,7 @@
     <string name="file_size">File size</string>
     <string name="source_url">Source URL</string>
     <string name="file_format">File format</string>
+    <string name="file_path">File path</string>
     <string name="resolution">Resolution</string>
     <string name="download_date">Download date</string>
     <string name="duration">Duration</string>
