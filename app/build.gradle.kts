@@ -143,7 +143,7 @@ android {
     }
     androidResources { generateLocaleConfig = true }
 
-    namespace = "com.maheshtechnicals.sealplus"
+    namespace = "com.junkfood.seal"
 }
 
 ktfmt { kotlinLangStyle() }
