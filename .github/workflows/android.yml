@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
 
@@ -113,9 +112,9 @@ jobs:
           ### 🌐 Advanced Proxy Settings (BETA)
           
           * **Auto-fetch and auto-test proxies**
-          * Free proxy support by country
-          * Custom HTTP/HTTPS/SOCKS proxy configuration
-          * Automatic proxy testing and connection
+            * Free proxy support by country
+            * Custom HTTP/HTTPS/SOCKS proxy configuration
+            * Automatic proxy testing and connection
           
           ### 📊 Download Details & Information
           
@@ -180,16 +179,16 @@ jobs:
         files: |
           app/build/outputs/apk/generic/release/*-signed.apk
 
-    - name: Send Telegram Notification
+    - name: Send Telegram Notification to Channel
       if: steps.release_config.outputs.SHOULD_RELEASE == 'true'
       continue-on-error: true
       env:
         TGTOKEN: ${{ secrets.TGTOKEN }}
-        TGID: ${{ secrets.TGID }}
+        TGCHANNEL: ${{ secrets.TGCHANNEL }}
       run: |
         # Skip if Telegram credentials are not configured
-        if [ -z "$TGTOKEN" ] || [ -z "$TGID" ]; then
-          echo "⚠️ Telegram notification skipped (TGTOKEN or TGID not configured)"
+        if [ -z "$TGTOKEN" ] || [ -z "$TGCHANNEL" ]; then
+          echo "⚠️ Telegram notification skipped (TGTOKEN or TGCHANNEL not configured)"
           exit 0
         fi
         
@@ -273,13 +272,13 @@ jobs:
         # URL encode the message to avoid HTML parsing issues
         MESSAGE_ENCODED=$(echo -n "$MESSAGE" | jq -sRr @uri)
         
-        # Send to Telegram with HTML parse mode
+        # Send ONLY to Channel
         curl -s -X POST "https://api.telegram.org/bot${TGTOKEN}/sendMessage" \
-          -d "chat_id=${TGID}" \
+          -d "chat_id=${TGCHANNEL}" \
           -d "text=${MESSAGE_ENCODED}" \
           -d "parse_mode=HTML" \
           -d "disable_web_page_preview=false" \
-          && echo "✅ Telegram notification sent successfully!" \
+          && echo "✅ Telegram Channel notification sent successfully!" \
           || echo "⚠️ Failed to send Telegram notification"
 
     - name: Upload Universal APK as Artifact
