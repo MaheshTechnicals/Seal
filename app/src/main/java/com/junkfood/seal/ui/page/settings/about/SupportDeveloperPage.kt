@@ -386,6 +386,7 @@ private fun openUpiPayment(
         // Create intent to handle UPI payment
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = uri
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         
         // Check if any UPI app is available
@@ -393,17 +394,16 @@ private fun openUpiPayment(
         val activities = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             packageManager.queryIntentActivities(
                 intent,
-                android.content.pm.PackageManager.ResolveInfoFlags.of(android.content.pm.PackageManager.MATCH_DEFAULT_ONLY.toLong())
+                android.content.pm.PackageManager.ResolveInfoFlags.of(0)
             )
         } else {
             @Suppress("DEPRECATION")
-            packageManager.queryIntentActivities(intent, android.content.pm.PackageManager.MATCH_DEFAULT_ONLY)
+            packageManager.queryIntentActivities(intent, 0)
         }
         
         if (activities.isNotEmpty()) {
             // Show chooser with all available UPI apps
             val chooser = Intent.createChooser(intent, "Pay with")
-            chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(chooser)
         } else {
             // Fallback: Copy UPI ID to clipboard if no UPI apps installed
