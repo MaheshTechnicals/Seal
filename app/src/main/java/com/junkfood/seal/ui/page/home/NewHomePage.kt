@@ -1,7 +1,15 @@
 package com.junkfood.seal.ui.page.home
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import java.io.File
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -31,6 +39,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.ContentCopy
@@ -45,6 +54,7 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PlayArrow
@@ -174,6 +184,59 @@ fun NewHomePage(
         }
     }
     
+    // Permission states
+    var showNotificationPermissionDialog by remember { mutableStateOf(false) }
+    var showBatteryOptimizationDialog by remember { mutableStateOf(false) }
+    var permissionsChecked by remember { mutableStateOf(false) }
+    
+    // Check notification permission
+    val hasNotificationPermission = remember(lifecycleRefreshTrigger) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        } else {
+            true // Not needed below Android 13
+        }
+    }
+    
+    // Check battery optimization
+    val isBatteryOptimizationDisabled = remember(lifecycleRefreshTrigger) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val pm = context.getSystemService(PowerManager::class.java)
+            pm.isIgnoringBatteryOptimizations(context.packageName)
+        } else {
+            true // Not needed below Android 6
+        }
+    }
+    
+    // Notification permission launcher
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (!isGranted && !isBatteryOptimizationDisabled) {
+            showBatteryOptimizationDialog = true
+        }
+    }
+    
+    // Battery optimization launcher
+    val batteryOptimizationLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { /* Result handled by remembering state */ }
+    
+    // Check permissions on first load
+    LaunchedEffect(Unit) {
+        if (!permissionsChecked) {
+            permissionsChecked = true
+            if (!hasNotificationPermission) {
+                showNotificationPermissionDialog = true
+            } else if (!isBatteryOptimizationDisabled) {
+                showBatteryOptimizationDialog = true
+            }
+        }
+    }
+    
     // Get recent downloads from database - will refresh when lifecycleRefreshTrigger changes
     val recentDownloads by remember(lifecycleRefreshTrigger) {
         DatabaseUtil.getDownloadHistoryFlow()
@@ -231,6 +294,139 @@ fun NewHomePage(
     // Handle back press to show exit confirmation
     BackHandler {
         showExitDialog = true
+    }
+    
+    // Notification Permission Dialog
+    if (showNotificationPermissionDialog) {
+        AlertDialog(
+            onDismissRequest = { 
+                showNotificationPermissionDialog = false
+                if (!isBatteryOptimizationDisabled) {
+                    showBatteryOptimizationDialog = true
+                }
+            },
+            icon = { 
+                Icon(
+                    imageVector = Icons.Outlined.Notifications,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(32.dp)
+                )
+            },
+            title = { 
+                Text(
+                    text = stringResource(R.string.notification_permission_required),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = { 
+                Text(
+                    text = stringResource(R.string.notification_permission_desc),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showNotificationPermissionDialog = false
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        }
+                    }
+                ) {
+                    Text(
+                        text = stringResource(R.string.grant_permission),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { 
+                        showNotificationPermissionDialog = false
+                        if (!isBatteryOptimizationDisabled) {
+                            showBatteryOptimizationDialog = true
+                        }
+                    }
+                ) {
+                    Text(
+                        text = stringResource(R.string.skip),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            },
+            containerColor = MaterialTheme.colorScheme.surface,
+            tonalElevation = 6.dp
+        )
+    }
+    
+    // Battery Optimization Dialog
+    if (showBatteryOptimizationDialog) {
+        AlertDialog(
+            onDismissRequest = { showBatteryOptimizationDialog = false },
+            icon = { 
+                Icon(
+                    imageVector = Icons.Outlined.BatteryChargingFull,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(32.dp)
+                )
+            },
+            title = { 
+                Text(
+                    text = stringResource(R.string.battery_configuration),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = { 
+                Column(spacing = 8.dp) {
+                    Text(
+                        text = stringResource(R.string.battery_configuration_desc),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = stringResource(R.string.battery_settings_desc),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showBatteryOptimizationDialog = false
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                                data = Uri.parse("package:${context.packageName}")
+                            }
+                            batteryOptimizationLauncher.launch(intent)
+                        }
+                    }
+                ) {
+                    Text(
+                        text = stringResource(R.string.open_settings),
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showBatteryOptimizationDialog = false }
+                ) {
+                    Text(
+                        text = stringResource(R.string.skip),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            },
+            containerColor = MaterialTheme.colorScheme.surface,
+            tonalElevation = 6.dp
+        )
     }
     
     // Exit confirmation dialog

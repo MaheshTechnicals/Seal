@@ -626,5 +626,11 @@
     <string name="manual_select_proxy">Manual Select from List</string>
     <string name="proxy_info_title">How It Works</string>
     <string name="proxy_info_description">When enabled, all download requests will be routed through the configured proxy server. This can help bypass regional restrictions or improve privacy. Test the connection before enabling to ensure the proxy is working correctly.</string>
+    
+    <!-- Permission strings -->
+    <string name="notification_permission_required">Notification Permission Required</string>
+    <string name="notification_permission_desc">Seal Plus needs notification permission to show download progress and completion status. Please grant this permission for the best experience.</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="skip">Skip</string>
 </resources>
 
