@@ -369,52 +369,29 @@ private fun openUpiPayment(
     try {
         // Build UPI payment URI
         // Format: upi://pay?pa=UPI_ID&pn=NAME&tn=NOTE&cu=CURRENCY
-        val uriBuilder = Uri.Builder()
-            .scheme("upi")
-            .authority("pay")
+        val uri = Uri.parse("upi://pay").buildUpon()
             .appendQueryParameter("pa", upiId)  // Payee address (UPI ID)
             .appendQueryParameter("pn", name)    // Payee name
+            .appendQueryParameter("tn", note)    // Transaction note
             .appendQueryParameter("cu", "INR")   // Currency
-        
-        // Add transaction note if provided
-        if (note.isNotEmpty()) {
-            uriBuilder.appendQueryParameter("tn", note)
-        }
-        
-        val uri = uriBuilder.build()
+            .build()
         
         // Create intent to handle UPI payment
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = uri
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
+        val intent = Intent(Intent.ACTION_VIEW, uri)
         
-        // Check if any UPI app is available
-        val packageManager = context.packageManager
-        val activities = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            packageManager.queryIntentActivities(
-                intent,
-                android.content.pm.PackageManager.ResolveInfoFlags.of(0)
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            packageManager.queryIntentActivities(intent, 0)
-        }
+        // Show chooser with all available UPI apps
+        val chooser = Intent.createChooser(intent, "Pay with")
+        context.startActivity(chooser)
         
-        if (activities.isNotEmpty()) {
-            // Show chooser with all available UPI apps
-            val chooser = Intent.createChooser(intent, "Pay with")
-            context.startActivity(chooser)
-        } else {
-            // Fallback: Copy UPI ID to clipboard if no UPI apps installed
-            val clipboardManager = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) 
-                as android.content.ClipboardManager
-            val clip = android.content.ClipData.newPlainText("UPI ID", upiId)
-            clipboardManager.setPrimaryClip(clip)
-            context.makeToast("No UPI apps found. UPI ID copied to clipboard")
-        }
+    } catch (e: android.content.ActivityNotFoundException) {
+        // No UPI app found - copy to clipboard as fallback
+        val clipboardManager = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) 
+            as android.content.ClipboardManager
+        val clip = android.content.ClipData.newPlainText("UPI ID", upiId)
+        clipboardManager.setPrimaryClip(clip)
+        context.makeToast("No UPI apps found. UPI ID copied to clipboard")
     } catch (e: Exception) {
-        // Fallback on any error
+        // Other error - copy to clipboard as fallback
         val clipboardManager = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) 
             as android.content.ClipboardManager
         val clip = android.content.ClipData.newPlainText("UPI ID", upiId)
