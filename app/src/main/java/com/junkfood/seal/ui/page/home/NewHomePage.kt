@@ -212,17 +212,6 @@ fun NewHomePage(
     }
     
     // Notification permission launcher - tries system permission first
-    val notificationPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (!isGranted) {
-            // If permission denied, offer to open app settings
-            if (!isBatteryOptimizationDisabled) {
-                showBatteryOptimizationDialog = true
-            }
-        }
-    }
-    
     // Notification settings launcher - opens app notification settings
     val notificationSettingsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -232,6 +221,7 @@ fun NewHomePage(
     val batteryOptimizationLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { /* Result handled by remembering state */ }
+
     
     // Check permissions on first load
     LaunchedEffect(Unit) {
@@ -340,16 +330,11 @@ fun NewHomePage(
                     onClick = {
                         showNotificationPermissionDialog = false
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            // Try system permission request first
-                            try {
-                                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                            } catch (e: Exception) {
-                                // If permission dialog fails, open notification settings directly
-                                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                                    putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-                                }
-                                notificationSettingsLauncher.launch(intent)
+                            // Open notification settings directly
+                            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                                putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
                             }
+                            notificationSettingsLauncher.launch(intent)
                         }
                     }
                 ) {
