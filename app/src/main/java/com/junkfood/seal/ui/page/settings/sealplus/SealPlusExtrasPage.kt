@@ -222,21 +222,7 @@ fun SealPlusExtrasPage(
                     title = stringResource(R.string.proxy_settings),
                     description = stringResource(R.string.proxy_toggle_description),
                     icon = Icons.Outlined.Public,
-                    onClick = { onNavigateToProxySettings() },
-                    trailingIcon = {
-                        Text(
-                            text = stringResource(R.string.beta_features).uppercase(),
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(4.dp))
-                                .background(MaterialTheme.colorScheme.primaryContainer)
-                                .padding(horizontal = 6.dp, vertical = 2.dp)
-                        )
-                    }
+                    onClick = { onNavigateToProxySettings() }
                 )
             }
 
