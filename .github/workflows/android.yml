@@ -160,6 +160,88 @@ jobs:
         files: |
           app/build/outputs/apk/generic/release/*-signed.apk
 
+    - name: Send Telegram Notification
+      if: steps.release_config.outputs.SHOULD_RELEASE == 'true'
+      continue-on-error: true
+      env:
+        TGTOKEN: ${{ secrets.TGTOKEN }}
+        TGID: ${{ secrets.TGID }}
+      run: |
+        # Skip if Telegram credentials are not configured
+        if [ -z "$TGTOKEN" ] || [ -z "$TGID" ]; then
+          echo "⚠️ Telegram notification skipped (TGTOKEN or TGID not configured)"
+          exit 0
+        fi
+        
+        # Prepare the release URL
+        RELEASE_URL="https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.VERSION }}"
+        
+        # Create a beautiful Telegram message with HTML formatting
+        MESSAGE="🎉 <b>New Release Available!</b> 🎉
+        
+        ━━━━━━━━━━━━━━━━━━━━━
+        
+        📱 <b>App Name:</b> Seal Plus
+        
+        🏷️ <b>Version:</b> v${{ steps.version.outputs.VERSION }}
+        
+        ━━━━━━━━━━━━━━━━━━━━━
+        
+        📝 <b>Changelog:</b>
+        
+        <b>🎥 Format Selection Screen Improvements</b>
+        • Enhanced Format Filtering - Valid URLs only
+        • Maximum Quality Support - Highest resolution
+        • Video &amp; Audio (High) Merged format
+        
+        <b>📥 Recent Downloads Section Updates</b>
+        • Delete option moved to Downloads page
+        • Fixed UI layout issues
+        • Cleaner, streamlined design
+        
+        <b>🐛 Bug Fixes</b>
+        • Fixed video info fetch errors
+        • Improved format extraction reliability
+        • Better error handling
+        • Enhanced performance and stability
+        
+        ━━━━━━━━━━━━━━━━━━━━━
+        
+        💎 <b>Key Features:</b>
+        ✨ Professional onboarding screens
+        🎨 Gradient Dark theme with glassmorphism
+        🔒 App Lock (PIN &amp; Biometric)
+        📥 Download from 1000+ sites via yt-dlp
+        🌍 50+ language translations
+        
+        ━━━━━━━━━━━━━━━━━━━━━
+        
+        📦 <b>Available APKs:</b>
+        • Universal (All devices)
+        • arm64-v8a (Modern phones)
+        • armeabi-v7a (Older phones)
+        • x86_64 / x86 (Tablets)
+        
+        ━━━━━━━━━━━━━━━━━━━━━
+        
+        🔗 <b>Download Now:</b>
+        <a href=\"${RELEASE_URL}\">Click here to download v${{ steps.version.outputs.VERSION }}</a>
+        
+        ━━━━━━━━━━━━━━━━━━━━━
+        
+        ℹ️ <b>Note:</b> This release includes significant improvements to format selection and quality detection. Update recommended for best experience!
+        
+        📅 <i>Released: $(date '+%B %d, %Y at %H:%M UTC')</i>"
+        
+        # Send to Telegram with HTML parse mode
+        curl -s -X POST "https://api.telegram.org/bot${TGTOKEN}/sendMessage" \
+          -d "chat_id=${TGID}" \
+          -d "text=${MESSAGE}" \
+          -d "parse_mode=HTML" \
+          -d "disable_web_page_preview=false" \
+          && echo "✅ Telegram notification sent successfully!" \
+          || echo "⚠️ Failed to send Telegram notification"
+
     - name: Upload Universal APK as Artifact
       if: steps.release_config.outputs.SHOULD_RELEASE == 'false'
       uses: actions/upload-artifact@v4
