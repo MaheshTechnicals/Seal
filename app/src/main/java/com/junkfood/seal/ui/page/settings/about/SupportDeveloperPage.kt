@@ -262,8 +262,12 @@ fun SupportDeveloperPage(
                         )
                     },
                     onClick = {
-                        clipboardManager.setText(AnnotatedString("maheshtechnicals@apl"))
-                        context.makeToast("UPI ID copied to clipboard")
+                        openUpiPayment(
+                            context = context,
+                            upiId = "maheshtechnicals@apl",
+                            name = "Mahesh Technicals",
+                            note = "Support Seal Plus Development"
+                        )
                     }
                 )
             }
@@ -341,6 +345,78 @@ fun SupportDeveloperPage(
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
+    }
+}
+
+/**
+ * Opens UPI payment intent with pre-filled UPI ID
+ * Shows all available UPI apps (Google Pay, PhonePe, Paytm, BHIM, etc.)
+ * 
+ * @param context Android context
+ * @param upiId UPI ID of the payee
+ * @param name Name of the payee
+ * @param note Transaction note/description
+ */
+private fun openUpiPayment(
+    context: android.content.Context,
+    upiId: String,
+    name: String,
+    note: String = ""
+) {
+    try {
+        // Build UPI payment URI
+        // Format: upi://pay?pa=UPI_ID&pn=NAME&tn=NOTE&cu=CURRENCY
+        val uriBuilder = Uri.Builder()
+            .scheme("upi")
+            .authority("pay")
+            .appendQueryParameter("pa", upiId)  // Payee address (UPI ID)
+            .appendQueryParameter("pn", name)    // Payee name
+            .appendQueryParameter("cu", "INR")   // Currency
+        
+        // Add transaction note if provided
+        if (note.isNotEmpty()) {
+            uriBuilder.appendQueryParameter("tn", note)
+        }
+        
+        val uri = uriBuilder.build()
+        
+        // Create intent to handle UPI payment
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = uri
+        }
+        
+        // Check if any UPI app is available
+        val packageManager = context.packageManager
+        val activities = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            packageManager.queryIntentActivities(
+                intent,
+                android.content.pm.PackageManager.ResolveInfoFlags.of(android.content.pm.PackageManager.MATCH_DEFAULT_ONLY.toLong())
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            packageManager.queryIntentActivities(intent, android.content.pm.PackageManager.MATCH_DEFAULT_ONLY)
+        }
+        
+        if (activities.isNotEmpty()) {
+            // Show chooser with all available UPI apps
+            val chooser = Intent.createChooser(intent, "Pay with")
+            chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(chooser)
+        } else {
+            // Fallback: Copy UPI ID to clipboard if no UPI apps installed
+            val clipboardManager = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) 
+                as android.content.ClipboardManager
+            val clip = android.content.ClipData.newPlainText("UPI ID", upiId)
+            clipboardManager.setPrimaryClip(clip)
+            context.makeToast("No UPI apps found. UPI ID copied to clipboard")
+        }
+    } catch (e: Exception) {
+        // Fallback on any error
+        val clipboardManager = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) 
+            as android.content.ClipboardManager
+        val clip = android.content.ClipData.newPlainText("UPI ID", upiId)
+        clipboardManager.setPrimaryClip(clip)
+        context.makeToast("Error opening UPI app. UPI ID copied to clipboard")
     }
 }
 
