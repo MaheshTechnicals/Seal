@@ -1349,7 +1349,7 @@ fun DownloadDetailsDialog(
     state: Task.State,
     onDismiss: () -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
@@ -1608,7 +1608,7 @@ fun RecentDownloadDetailsDialog(
     downloadInfo: DownloadedVideoInfo,
     onDismiss: () -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val context = androidx.compose.ui.platform.LocalContext.current
     val clipboardManager = LocalClipboardManager.current
     var showFilePathDialog by remember { mutableStateOf(false) }
