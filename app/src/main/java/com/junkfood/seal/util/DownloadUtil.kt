@@ -761,6 +761,10 @@ object DownloadUtil {
                         addOption("--concurrent-fragments", concurrentFragments)
                     }
 
+                    // Speed optimization: Use Android player client for YouTube downloads
+                    // This significantly improves download speeds for YouTube videos
+                    addOption("--extractor-args", "youtube:player_client=android")
+
                     if (extractAudio || (videoInfo.vcodec == "none")) {
                         if (privateDirectory) pathBuilder.append(App.privateDownloadDir)
                         else pathBuilder.append(audioDownloadDir)
