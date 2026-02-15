@@ -121,9 +121,9 @@ object DownloadUtil {
                         addOption("--restrict-filenames")
                     }
                     
-                    // NOTE: Do NOT use android player client for playlist info fetching
-                    // It requires PO Token and limits available quality options
-                    // Let yt-dlp use default clients for full format availability
+                    // Use iOS player client for playlist info
+                    // Provides all quality options without PO Token and maintains good speed
+                    addOption("--extractor-args", "youtube:player_client=ios")
                 }
             }
             execute(request, playlistURL).out.run {
@@ -179,12 +179,16 @@ object DownloadUtil {
                         addOption("--write-auto-subs")
                     }
                     
-                    // Build YouTube extractor args for format fetching
-                    // NOTE: Do NOT use android player client here - it requires PO Token for high quality formats
-                    // Let yt-dlp use default clients (ios, tv) which provide all quality options
-                    if (autoSubtitle && !autoTranslatedSubtitles) {
-                        addOption("--extractor-args", "youtube:skip=translated_subs")
-                    }
+                    // Use iOS player client for format fetching
+                    // iOS client provides all quality formats without PO Token requirement
+                    // and maintains good download speeds
+                    val extractorArgs = buildList {
+                        if (autoSubtitle && !autoTranslatedSubtitles) {
+                            add("skip=translated_subs")
+                        }
+                        add("player_client=ios")
+                    }.joinToString(";")
+                    addOption("--extractor-args", "youtube:$extractorArgs")
                     
                     if (playlistIndex != null) {
                         addOption("--playlist-items", playlistIndex)
@@ -484,12 +488,15 @@ object DownloadUtil {
                     applyFormatSorter(this, toFormatSorter())
                 }
                 
-                // Build YouTube extractor args for downloads
-                // NOTE: Must use same clients as format fetching to ensure format IDs match
-                // Using android client causes format ID mismatch (different IDs between fetch and download)
-                if (downloadSubtitle && autoSubtitle && !autoTranslatedSubtitles) {
-                    addOption("--extractor-args", "youtube:skip=translated_subs")
-                }
+                // Use iOS player client for downloads - maintains speed while ensuring format ID consistency
+                // iOS client: fast downloads + all quality formats + no PO Token needed + consistent format IDs
+                val extractorArgs = buildList {
+                    if (downloadSubtitle && autoSubtitle && !autoTranslatedSubtitles) {
+                        add("skip=translated_subs")
+                    }
+                    add("player_client=ios")
+                }.joinToString(";")
+                addOption("--extractor-args", "youtube:$extractorArgs")
                 
                 if (downloadSubtitle) {
                     if (autoSubtitle) {
@@ -605,12 +612,14 @@ object DownloadUtil {
             with(preferences) {
                 addOption("-x")
                 
-                // Build YouTube extractor args for audio downloads
-                // NOTE: Must use same clients as format fetching to ensure format IDs match
-                // Using android client causes format ID mismatch (different IDs between fetch and download)
-                if (downloadSubtitle && autoSubtitle && !autoTranslatedSubtitles) {
-                    addOption("--extractor-args", "youtube:skip=translated_subs")
-                }
+                // Use iOS player client for audio downloads - maintains speed and format ID consistency
+                val extractorArgs = buildList {
+                    if (downloadSubtitle && autoSubtitle && !autoTranslatedSubtitles) {
+                        add("skip=translated_subs")
+                    }
+                    add("player_client=ios")
+                }.joinToString(";")
+                addOption("--extractor-args", "youtube:$extractorArgs")
                 
                 if (downloadSubtitle) {
                     addOption("--write-subs")
