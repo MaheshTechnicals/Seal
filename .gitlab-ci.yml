@@ -6,40 +6,29 @@ variables:
 
 build_job:
   stage: build
-  image: mobiledevops/android-sdk-image:34.0.0-jdk17
+  # UPDATE 1: Direct Java 21 wala image use kiya hai, ab manual download ki zarurat nahi!
+  image: mobiledevops/android-sdk-image:34.0.0-jdk21
 
   before_script:
-    - |
-      echo "Downloading Java 21..."
-      curl -L https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz -o jdk21.tar.gz
-      tar -xzf jdk21.tar.gz
-      
-      # Find Java folder
-      JAVA_DIR=$(find . -maxdepth 1 -type d -name "jdk-21*" | head -n 1)
-      export JAVA_HOME="$CI_PROJECT_DIR/$JAVA_DIR"
-      export PATH="$JAVA_HOME/bin:$PATH"
-      
-      # Write config to gradle.properties to prevent syntax errors
-      echo "org.gradle.java.home=$JAVA_HOME" >> gradle.properties
-      
-      echo "Decoding Key..."
-      echo "$ANDROID_SIGNING_KEY" | tr -d '\n' | tr -d ' ' | base64 -d > "$CI_PROJECT_DIR/Mahesh.jks"
+    - echo "Decoding Key..."
+    # UPDATE 2: Hidden characters (jaise \r) ko clean karne ke liye tr command update kiya hai
+    - echo "$ANDROID_SIGNING_KEY" | tr -d '\n\r ' | base64 --decode > "$CI_PROJECT_DIR/Mahesh.jks"
+    - ls -lh "$CI_PROJECT_DIR/Mahesh.jks" # Ye log me file size print karega verify karne ke liye
 
   script:
     # --- STEP 1: EXTRACT VERSION ---
     - |
       VERSION=$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionMajor = \K\d+' | head -1).$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionMinor = \K\d+' | head -1).$(grep -A 1 'val currentVersion: Version =' buildSrc/src/main/kotlin/Version.kt | grep -oP 'versionPatch = \K\d+' | head -1)
-      echo "🚀 Building Version: $VERSION"
+      echo "? Building Version: $VERSION"
 
     # --- STEP 2: BUILD & SIGN ---
-    # (Build Successful!)
     - bash ./gradlew assembleRelease -Pandroid.injected.signing.store.file="$CI_PROJECT_DIR/Mahesh.jks" -Pandroid.injected.signing.store.password="$ANDROID_KEYSTORE_PASSWORD" -Pandroid.injected.signing.key.alias="$ANDROID_ALIAS" -Pandroid.injected.signing.key.password="$ANDROID_KEY_PASSWORD"
 
-    # --- STEP 3: FIND & SAVE ARTIFACTS (Fixed) ---
+    # --- STEP 3: FIND & SAVE ARTIFACTS ---
     - mkdir -p release_output
     
     # 1. Print where the APKs are (for debugging)
-    - echo "🔎 searching for APKs..."
+    - echo "? searching for APKs..."
     - find app/build/outputs -name "*.apk"
     
     # 2. Copy ANY APK found in the build folder to our release_output
