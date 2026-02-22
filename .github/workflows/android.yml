@@ -26,20 +26,26 @@ jobs:
         build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
         build-scan-terms-of-use-agree: "yes"
 
-    - run: gradle assembleRelease
-
-    - name: Sign app APK
-      id: sign_app
-      continue-on-error: true
-      uses: ilharp/sign-android-release@nightly
+    # --- NAYA STEP: Keystore Decode Karna ---
+    - name: Decode Keystore
       env:
         ANDROID_SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY }}
-      with:
-        releaseDir: app/build/outputs/apk
-        signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
-        keyAlias: ${{ secrets.ANDROID_ALIAS }}
-        keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-        keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      run: |
+        echo "? Decoding Key..."
+        echo "$ANDROID_SIGNING_KEY" | tr -d '\n\r ' | base64 --decode > "${{ github.workspace }}/Mahesh.jks"
+
+    # --- UPDATED STEP: Fast Build aur Native Signing Ek Sath ---
+    - name: Build and Sign Release APKs
+      env:
+        ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        ANDROID_ALIAS: ${{ secrets.ANDROID_ALIAS }}
+        ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      run: |
+        ./gradlew assembleRelease --parallel --build-cache --no-daemon \
+          -Pandroid.injected.signing.store.file="${{ github.workspace }}/Mahesh.jks" \
+          -Pandroid.injected.signing.store.password="$ANDROID_KEYSTORE_PASSWORD" \
+          -Pandroid.injected.signing.key.alias="$ANDROID_ALIAS" \
+          -Pandroid.injected.signing.key.password="$ANDROID_KEY_PASSWORD"
 
     - name: Get version name
       id: version
@@ -48,17 +54,6 @@ jobs:
         echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
         echo "Version: ${VERSION}"
 
-    - name: Clean up temp and unsigned APKs
-      run: |
-        rm -f app/build/outputs/apk/generic/release/*-temp.apk
-        echo "All APKs before cleanup:"
-        ls -lh app/build/outputs/apk/generic/release/*.apk || echo "No APKs found"
-        find app/build/outputs/apk/generic/release/ -name "*.apk" ! -name "*-signed.apk" -delete || true
-        echo "Remaining signed APKs:"
-        ls -lh app/build/outputs/apk/generic/release/*.apk || echo "No signed APKs found"
-        echo "Checking all possible locations:"
-        find app/build/outputs/apk -name "*.apk" -type f
-
     - name: Read release configuration
       id: release_config
       run: |
@@ -66,17 +61,17 @@ jobs:
         echo "SHOULD_RELEASE=${SHOULD_RELEASE}" >> $GITHUB_OUTPUT
         echo "Release flag: ${SHOULD_RELEASE}"
         if [ "${SHOULD_RELEASE}" = "true" ]; then
-          echo "✅ Release will be published"
+          echo "? Release will be published"
         else
-          echo "⚠️ Release publishing is disabled - APKs will be uploaded as artifacts only"
+          echo "?? Release publishing is disabled - APKs will be uploaded as artifacts only"
         fi
 
     - name: List all APK files for debugging
       run: |
-        echo "📦 All APK files in output directory:"
+        echo "? All APK files in output directory:"
         find app/build/outputs/apk -name "*.apk" -type f -exec ls -lh {} \;
         echo ""
-        echo "📁 Directory structure:"
+        echo "? Directory structure:"
         ls -R app/build/outputs/apk/
 
     - name: Create Release
@@ -88,11 +83,11 @@ jobs:
         tag_name: v${{ steps.version.outputs.VERSION }}
         name: Seal Plus v${{ steps.version.outputs.VERSION }}
         body: |
-          ## 🚀 Seal Plus v2.1.0 - Enhanced Download Management & Performance
+          ## ? Seal Plus v2.1.0 - Enhanced Download Management & Performance
           
           ---
           
-          ### 🔄 Download Management Enhancements
+          ### ? Download Management Enhancements
           
           * **Retry Option for Failed/Canceled Downloads**
             * One-click retry button in failed/canceled download cards
@@ -100,7 +95,7 @@ jobs:
             * Quick recovery without re-entering URLs
             * Automatic error handling for temporary failures
           
-          ### 📊 Download Details & UI Improvements
+          ### ? Download Details & UI Improvements
           
           * **Enhanced Details Dialog**
             * Added comprehensive resolution section in details dialog
@@ -108,7 +103,7 @@ jobs:
             * Improved information layout with clear video/audio resolution
             * Better organized format specifications (codec, bitrate, quality)
           
-          ### ⚡ Performance Optimization
+          ### ? Performance Optimization
           
           * **Download Speed Optimization**
             * Advanced speed optimization algorithms for ultra-fast downloads
@@ -116,7 +111,7 @@ jobs:
             * Better bandwidth utilization and network efficiency
             * Reduced latency for faster connection and data transfer
           
-          ### 💎 Sponsors Feature
+          ### ? Sponsors Feature
           
           * **API Integration & Display**
             * Integrated sponsor data fetching from API endpoint
@@ -127,7 +122,7 @@ jobs:
           
           ---
           
-          ### 📦 Installation
+          ### ? Installation
           
           Download the appropriate APK for your device:
           - **Universal APK**: Works on all devices (recommended)
@@ -136,22 +131,22 @@ jobs:
           - **x86_64**: For 64-bit x86 devices
           - **x86**: For 32-bit x86 devices
           
-          ### 💎 Key Features (v2.1)
-          - 🔄 **Retry failed downloads** - One-click recovery for canceled/failed downloads
-          - 📊 **Enhanced details dialog** - Resolution section with full-length display
-          - ⚡ **Speed optimization** - Ultra-fast downloads with advanced algorithms
-          - 💎 **Sponsors feature** - API integration with dynamic display
-          - ⏯️ **Pause/Resume downloads** with queue support
-          - 🌐 **Advanced proxy settings** (BETA) with auto-fetch/test
-          - 💰 **Developer support** via UPI payments
-          - 🔢 **Concurrent downloads** control (1-5 simultaneous)
-          - 🎨 Gradient Dark theme with glassmorphism
-          - 🔒 App Lock with PIN & Biometric
-          - 📥 Download from 1000+ sites via yt-dlp
-          - 🌍 50+ language translations
-          - ⚙️ Custom command templates
+          ### ? Key Features (v2.1)
+          - ? **Retry failed downloads** - One-click recovery for canceled/failed downloads
+          - ? **Enhanced details dialog** - Resolution section with full-length display
+          - ? **Speed optimization** - Ultra-fast downloads with advanced algorithms
+          - ? **Sponsors feature** - API integration with dynamic display
+          - ?? **Pause/Resume downloads** with queue support
+          - ? **Advanced proxy settings** (BETA) with auto-fetch/test
+          - ? **Developer support** via UPI payments
+          - ? **Concurrent downloads** control (1-5 simultaneous)
+          - ? Gradient Dark theme with glassmorphism
+          - ? App Lock with PIN & Biometric
+          - ? Download from 1000+ sites via yt-dlp
+          - ? 50+ language translations
+          - ?? Custom command templates
           
-          ### 📝 Full Changelog
+          ### ? Full Changelog
           See [CHANGELOG.md](https://github.com/MaheshTechnicals/Sealplus/blob/main/CHANGELOG.md) for complete version history.
           
           ---
@@ -162,7 +157,7 @@ jobs:
         prerelease: false
         make_latest: true
         files: |
-          app/build/outputs/apk/generic/release/*-signed.apk
+          app/build/outputs/apk/generic/release/*.apk
 
     - name: Send Telegram Notification to Channel
       if: steps.release_config.outputs.SHOULD_RELEASE == 'true'
@@ -173,84 +168,84 @@ jobs:
       run: |
         # Skip if Telegram credentials are not configured
         if [ -z "$TGTOKEN" ] || [ -z "$TGCHANNEL" ]; then
-          echo "⚠️ Telegram notification skipped (TGTOKEN or TGCHANNEL not configured)"
+          echo "?? Telegram notification skipped (TGTOKEN or TGCHANNEL not configured)"
           exit 0
         fi
         
-        echo "📤 Sending notification to Telegram Channel: $TGCHANNEL"
+        echo "? Sending notification to Telegram Channel: $TGCHANNEL"
         
         # Prepare the release URL
         RELEASE_URL="https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.VERSION }}"
         
         # Create a beautiful Telegram message with HTML formatting
-        MESSAGE="🎉 <b>New Release Available!</b> 🎉
+        MESSAGE="? <b>New Release Available!</b> ?
         
-        ━━━━━━━━━━━━━━━━━━━━━
+        ?????????????????????
         
-        📱 <b>App Name:</b> Seal Plus
+        ? <b>App Name:</b> Seal Plus
         
-        🏷️ <b>Version:</b> v${{ steps.version.outputs.VERSION }}
+        ?? <b>Version:</b> v${{ steps.version.outputs.VERSION }}
         
-        ━━━━━━━━━━━━━━━━━━━━━
+        ?????????????????????
         
-        📝 <b>Changelog (v2.1):</b>
+        ? <b>Changelog (v2.1):</b>
         
-        <b>🔄 Download Management Enhancements</b>
-        • Retry option for failed/canceled downloads
-        • One-click recovery without re-entering URLs
-        • Smart state management for quick restart
+        <b>? Download Management Enhancements</b>
+        ? Retry option for failed/canceled downloads
+        ? One-click recovery without re-entering URLs
+        ? Smart state management for quick restart
         
-        <b>📊 Details Dialog &amp; UI Improvements</b>
-        • Added resolution section in details dialog
-        • Direct full-length display for better visibility
-        • Improved information layout with format specs
+        <b>? Details Dialog &amp; UI Improvements</b>
+        ? Added resolution section in details dialog
+        ? Direct full-length display for better visibility
+        ? Improved information layout with format specs
         
-        <b>⚡ Performance Optimization</b>
-        • Advanced speed optimization algorithms
-        • Ultra-fast downloads with enhanced aria2c
-        • Better bandwidth utilization
-        • Reduced latency for faster transfers
+        <b>? Performance Optimization</b>
+        ? Advanced speed optimization algorithms
+        ? Ultra-fast downloads with enhanced aria2c
+        ? Better bandwidth utilization
+        ? Reduced latency for faster transfers
         
-        <b>💎 Sponsors Feature</b>
-        • API integration for sponsor data
-        • Dynamic sponsor dialog with profiles
-        • Real-time updates from server
-        • Premium gradient design
+        <b>? Sponsors Feature</b>
+        ? API integration for sponsor data
+        ? Dynamic sponsor dialog with profiles
+        ? Real-time updates from server
+        ? Premium gradient design
         
-        ━━━━━━━━━━━━━━━━━━━━━
+        ?????????????????????
         
-        💎 <b>Key Features (v2.1):</b>
-        🔄 Retry failed downloads
-        📊 Enhanced details with resolution
-        ⚡ Speed optimization
-        💎 Sponsors API integration
-        ⏯️ Pause/Resume downloads
-        🌐 Advanced proxy (BETA)
-        💰 UPI payment integration
-        🔢 Concurrent downloads (1-5)
-        🎨 Gradient Dark theme
-        🔒 App Lock (PIN &amp; Biometric)
-        📥 Download from 1000+ sites
-        🌍 50+ language translations
+        ? <b>Key Features (v2.1):</b>
+        ? Retry failed downloads
+        ? Enhanced details with resolution
+        ? Speed optimization
+        ? Sponsors API integration
+        ?? Pause/Resume downloads
+        ? Advanced proxy (BETA)
+        ? UPI payment integration
+        ? Concurrent downloads (1-5)
+        ? Gradient Dark theme
+        ? App Lock (PIN &amp; Biometric)
+        ? Download from 1000+ sites
+        ? 50+ language translations
         
-        ━━━━━━━━━━━━━━━━━━━━━
+        ?????????????????????
         
-        📦 <b>Available APKs:</b>
-        • Universal (All devices)
-        • arm64-v8a (Modern phones)
-        • armeabi-v7a (Older phones)
-        • x86_64 / x86 (Tablets)
+        ? <b>Available APKs:</b>
+        ? Universal (All devices)
+        ? arm64-v8a (Modern phones)
+        ? armeabi-v7a (Older phones)
+        ? x86_64 / x86 (Tablets)
         
-        ━━━━━━━━━━━━━━━━━━━━━
+        ?????????????????????
         
-        🔗 <b>Download Now:</b>
+        ? <b>Download Now:</b>
         <a href=\"${RELEASE_URL}\">Click here to download v${{ steps.version.outputs.VERSION }}</a>
         
-        ━━━━━━━━━━━━━━━━━━━━━
+        ?????????????????????
         
-        ℹ️ <b>Note:</b> This release brings enhanced download management with retry functionality, improved details dialog with resolution info, ultra-fast speed optimization, and new sponsors feature with API integration. Enjoy faster downloads and better user experience!
+        ?? <b>Note:</b> This release brings enhanced download management with retry functionality, improved details dialog with resolution info, ultra-fast speed optimization, and new sponsors feature with API integration. Enjoy faster downloads and better user experience!
         
-        📅 <i>Released: $(date '+%B %d, %Y at %H:%M UTC')</i>"
+        ? <i>Released: $(date '+%B %d, %Y at %H:%M UTC')</i>"
         
         # URL encode the message to avoid HTML parsing issues
         MESSAGE_ENCODED=$(echo -n "$MESSAGE" | jq -sRr @uri)
@@ -261,17 +256,15 @@ jobs:
           -d "text=${MESSAGE_ENCODED}" \
           -d "parse_mode=HTML" \
           -d "disable_web_page_preview=false" \
-          && echo "✅ Telegram Channel notification sent successfully!" \
-          || echo "⚠️ Failed to send Telegram notification"
+          && echo "? Telegram Channel notification sent successfully!" \
+          || echo "?? Failed to send Telegram notification"
 
     - name: Upload Universal APK as Artifact
       if: steps.release_config.outputs.SHOULD_RELEASE == 'false'
       uses: actions/upload-artifact@v4
       with:
         name: SealPlus-${{ steps.version.outputs.VERSION }}-universal
-        path: |
-          app/build/outputs/apk/generic/release/*universal*-signed.apk
-          app/build/outputs/apk/generic/release/SealPlus-*-genericRelease-universal.apk
+        path: app/build/outputs/apk/generic/release/*universal*.apk
         if-no-files-found: warn
         retention-days: 30
 
@@ -280,9 +273,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: SealPlus-${{ steps.version.outputs.VERSION }}-arm64-v8a
-        path: |
-          app/build/outputs/apk/generic/release/*arm64-v8a*-signed.apk
-          app/build/outputs/apk/generic/release/SealPlus-*-genericRelease-arm64-v8a.apk
+        path: app/build/outputs/apk/generic/release/*arm64-v8a*.apk
         if-no-files-found: warn
         retention-days: 30
 
@@ -291,9 +282,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: SealPlus-${{ steps.version.outputs.VERSION }}-armeabi-v7a
-        path: |
-          app/build/outputs/apk/generic/release/*armeabi-v7a*-signed.apk
-          app/build/outputs/apk/generic/release/SealPlus-*-genericRelease-armeabi-v7a.apk
+        path: app/build/outputs/apk/generic/release/*armeabi-v7a*.apk
         if-no-files-found: warn
         retention-days: 30
 
@@ -302,9 +291,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: SealPlus-${{ steps.version.outputs.VERSION }}-x86_64
-        path: |
-          app/build/outputs/apk/generic/release/*x86_64*-signed.apk
-          app/build/outputs/apk/generic/release/SealPlus-*-genericRelease-x86_64.apk
+        path: app/build/outputs/apk/generic/release/*x86_64*.apk
         if-no-files-found: warn
         retention-days: 30
 
@@ -313,9 +300,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: SealPlus-${{ steps.version.outputs.VERSION }}-x86
-        path: |
-          app/build/outputs/apk/generic/release/*x86*-signed.apk
-          app/build/outputs/apk/generic/release/SealPlus-*-genericRelease-x86.apk
+        path: app/build/outputs/apk/generic/release/*x86*.apk
         if-no-files-found: warn
         retention-days: 30
 
@@ -324,8 +309,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: signed-apks-backup
-        path: |
-          app/build/outputs/apk/generic/release/*-signed.apk
-          app/build/outputs/apk/generic/release/SealPlus-*.apk
+        path: app/build/outputs/apk/generic/release/*.apk
         if-no-files-found: error
         retention-days: 20
