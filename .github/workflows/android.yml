@@ -160,62 +160,45 @@ jobs:
         
 
         # Create a beautiful Telegram message with HTML formatting
-        MESSAGE="? <b>New Release Available!</b> ?
-
-        ????????????????????????
-
-        ? <b>App Name:</b> Seal Plus
-
-        ?? <b>Version:</b> v${{ steps.version.outputs.VERSION }}
-
-        ????????????????????????
-
-        ? <b>Changelog (v2.2):</b>
-
-        <b>🚀 Performance Optimization</b>
-        ? Aria2c Speed Boost & Fixes
-        ? Fixed argument quoting issue for aria2c
-        ? Doubled parallel connection limits (8 → 16 streams)
-        ? Cleaned up summary interval args for libaria2c.so
-
-        <b>🛠️ Core Downloader Fixes</b>
-        ? Accurate resolution selection (no fallback to default)
-        ? Corrected format validation and stale state bug
-        ? Fixed audio codec checks for proper merging
-
-        <b>🎨 UI & Notification Improvements</b>
-        ? Cleaner progress tracking (no [download] prefix)
-        ? Fixed progress bar threshold logic (0.1–0.9% shows real bar)
-
-        ????????????????????????
-
-        ? <b>Key Features (v2.2):</b>
-        🏎️ Aria2c Speed Boost (16x parallel connections)
-        🎯 Precise Quality Selection
-        🎨 Enhanced Notifications
-        🔄 Retry failed downloads
-        💎 Sponsors feature (API integration)
-        ⏯️ Pause/Resume downloads with queue
-        🌐 Download from 1000+ sites via yt-dlp
-
-        ????????????????????????
-
-        ? <b>Available APKs:</b>
-        ? Universal (All devices)
-        ? arm64-v8a (Modern phones)
-        ? armeabi-v7a (Older phones)
-        ? x86_64 / x86 (Tablets)
-
-        ????????????????????????
-
-        ? <b>Download Now:</b>
-        <a href=\"${RELEASE_URL}\">Click here to download v${{ steps.version.outputs.VERSION }}</a>
-
-        ????????????????????????
-
-        ?? <b>Note:</b> This release brings massive download speed improvements, accurate resolution selection, cleaner progress tracking, and core fixes for a smoother experience. Enjoy ultra-fast downloads and enhanced notifications!
-
-        ? <i>Released: $(date '+%B %d, %Y at %H:%M UTC')</i>"
+        MESSAGE="<b>🎉 New Release Available!</b> 🎉\n\n"
+        MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        MESSAGE+="📱 <b>App Name:</b> Seal Plus\n\n"
+        MESSAGE+="🏷️ <b>Version:</b> v${{ steps.version.outputs.VERSION }}\n\n"
+        MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        MESSAGE+="📝 <b>Changelog (v2.2):</b>\n\n"
+        MESSAGE+="<b>🚀 Performance Optimization</b>\n"
+        MESSAGE+="• ⚡ Aria2c Speed Boost & Fixes\n"
+        MESSAGE+="• 🛠️ Fixed argument quoting issue for aria2c\n"
+        MESSAGE+="• 🔗 Doubled parallel connection limits (8 → 16 streams)\n"
+        MESSAGE+="• 🧹 Cleaned up summary interval args for libaria2c.so\n\n"
+        MESSAGE+="<b>🛠️ Core Downloader Fixes</b>\n"
+        MESSAGE+="• 🎯 Accurate resolution selection (no fallback to default)\n"
+        MESSAGE+="• 🧪 Corrected format validation and stale state bug\n"
+        MESSAGE+="• 🎵 Fixed audio codec checks for proper merging\n\n"
+        MESSAGE+="<b>🎨 UI & Notification Improvements</b>\n"
+        MESSAGE+="• 🧹 Cleaner progress tracking (no [download] prefix)\n"
+        MESSAGE+="• 📊 Fixed progress bar threshold logic (0.1–0.9% shows real bar)\n\n"
+        MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        MESSAGE+="✨ <b>Key Features (v2.2):</b>\n"
+        MESSAGE+="🏎️ Aria2c Speed Boost (16x parallel connections)\n"
+        MESSAGE+="🎯 Precise Quality Selection\n"
+        MESSAGE+="🎨 Enhanced Notifications\n"
+        MESSAGE+="🔄 Retry failed downloads\n"
+        MESSAGE+="💎 Sponsors feature (API integration)\n"
+        MESSAGE+="⏯️ Pause/Resume downloads with queue\n"
+        MESSAGE+="🌐 Download from 1000+ sites via yt-dlp\n\n"
+        MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        MESSAGE+="📦 <b>Available APKs:</b>\n"
+        MESSAGE+="• 🌍 Universal (All devices)\n"
+        MESSAGE+="• 📱 arm64-v8a (Modern phones)\n"
+        MESSAGE+="• 📲 armeabi-v7a (Older phones)\n"
+        MESSAGE+="• 💻 x86_64 / x86 (Tablets)\n\n"
+        MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        MESSAGE+="⬇️ <b>Download Now:</b>\n"
+        MESSAGE+="<a href=\"${RELEASE_URL}\">Click here to download v${{ steps.version.outputs.VERSION }}</a>\n\n"
+        MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        MESSAGE+="ℹ️ <b>Note:</b> This release brings massive download speed improvements, accurate resolution selection, cleaner progress tracking, and core fixes for a smoother experience. Enjoy ultra-fast downloads and enhanced notifications!\n\n"
+        MESSAGE+="🕒 <i>Released: $(date '+%B %d, %Y at %H:%M UTC')</i>"
         
         # URL encode the message to avoid HTML parsing issues
         MESSAGE_ENCODED=$(echo -n "$MESSAGE" | jq -sRr @uri)
