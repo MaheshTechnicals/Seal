@@ -185,13 +185,28 @@ object NotificationUtil {
                     }
             }
 
+        // FIX 1: Use progress < 0 (not <= 0) as indeterminate threshold.
+        // progressPercentage.toInt() truncates 0.1%–0.9% to 0, so the old
+        // "progress <= 0" made the bar show an indeterminate spinner for the
+        // first ~1% of every download. Only -1 truly means "unknown progress".
+        val isIndeterminate = progress < 0
+
+        // FIX 2: Strip the "[download] " prefix that yt-dlp adds to every progress
+        // line. Showing raw yt-dlp log output in a notification is noisy. After
+        // stripping we get clean text like "45.2% of 128.00MiB at 8.24MiB/s ETA 00:30".
+        val displayText = text
+            ?.removePrefix("[download] ")
+            ?.removePrefix("[download]")
+            ?.trim()
+            ?.takeIf { it.isNotEmpty() }
+
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_seal)
             .setContentTitle(title)
-            .setProgress(PROGRESS_MAX, progress, progress <= 0)
+            .setProgress(PROGRESS_MAX, progress, isIndeterminate)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(displayText))
         
         pendingIntent?.let {
             builder.addAction(R.drawable.outline_cancel_24, context.getString(R.string.cancel), it)

@@ -450,8 +450,17 @@ object DownloadUtil {
         getCookieListFromDatabase().mapCatching { it.toCookiesFileContent() }
 
     private fun YoutubeDLRequest.enableAria2c(): YoutubeDLRequest =
+        // FIX: addOption() builds a raw argv array — no shell quoting involved.
+        // The old value  aria2c:"-x 8 ..."  passes literal " characters to yt-dlp.
+        // Python's shlex.split() inside yt-dlp treats the whole quoted block as ONE
+        // argument, so aria2c received a single malformed string, ignored all flags,
+        // and fell back to single-connection mode → no speed boost + progress = -1.
+        // Correct form: no quotes, values separated by spaces, each flag is its own token.
+        // -x 16  = max 16 connections per server
+        // -s 16  = split download into 16 parallel streams
+        // -k 1M  = minimum chunk size 1 MB (prevents excessive requests)
         this.addOption("--downloader", "libaria2c.so")
-            .addOption("--external-downloader-args", "aria2c:\"-x 8 -s 8 -k 1M --summary-interval=1\"")
+            .addOption("--external-downloader-args", "aria2c:-x 16 -s 16 -k 1M")
 
     private fun YoutubeDLRequest.addOptionsForVideoDownloads(
         downloadPreferences: DownloadPreferences

@@ -324,14 +324,20 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
                         downloadPreferences = preferences,
                         progressCallback = { progressPercentage, _, text ->
                             val progress = progressPercentage / 100f
+                            // Strip yt-dlp's "[download] " prefix so progressText stored
+                            // in the Running state is clean for any UI that displays it.
+                            val cleanText = text
+                                .removePrefix("[download] ")
+                                .removePrefix("[download]")
+                                .trim()
                             when (val preState = downloadState) {
                                 is Running -> {
                                     downloadState =
-                                        preState.copy(progress = progress, progressText = text)
+                                        preState.copy(progress = progress, progressText = cleanText)
                                     NotificationUtil.notifyProgress(
                                         notificationId = notificationId,
                                         progress = progressPercentage.toInt(),
-                                        text = text,
+                                        text = cleanText,
                                         title = viewState.title,
                                         taskId = id,
                                     )
