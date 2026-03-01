@@ -78,6 +78,7 @@ const val MAX_FILE_SIZE = "max_file_size"
 const val SPONSORBLOCK = "sponsorblock"
 const val SPONSORBLOCK_CATEGORIES = "sponsorblock_categories"
 const val ARIA2C = "aria2c"
+const val ARIA2C_CONNECTIONS = "aria2c_connections"
 const val COOKIES = "cookies"
 const val USER_AGENT = "user_agent"
 const val USER_AGENT_STRING = "user_agent_string"
@@ -285,6 +286,7 @@ private val IntPreferenceDefaults =
         DOWNLOAD_TYPE to DownloadType.Video.ordinal,
         NETWORK_TYPE_RESTRICTION to NETWORK_ANY,
         MAX_CONCURRENT_DOWNLOADS to 1,
+        ARIA2C_CONNECTIONS to 16,
         PROXY_CUSTOM_PORT to 8080,
     )
 

@@ -592,6 +592,8 @@
     <string name="max_concurrent_downloads">Concurrent Downloads</string>
     <string name="concurrent_downloads_desc">Maximum: %d downloads at once</string>
     <string name="unlimited_concurrent">Unlimited simultaneous downloads</string>
+    <string name="aria2c_connections">Aria2c Connections</string>
+    <string name="aria2c_connections_desc">%d connections per download</string>
     
     <!-- Proxy Settings strings -->
     <string name="proxy_settings">Proxy Settings</string>

@@ -50,6 +50,7 @@ import com.junkfood.seal.ui.component.PreferenceSingleChoiceItem
 import com.junkfood.seal.ui.component.PreferenceSwitch
 import com.junkfood.seal.ui.page.security.LockScreen
 import com.junkfood.seal.util.AuthenticationManager
+import com.junkfood.seal.util.ARIA2C_CONNECTIONS
 import com.junkfood.seal.util.MAX_CONCURRENT_DOWNLOADS
 import com.junkfood.seal.util.NETWORK_ANY
 import com.junkfood.seal.util.NETWORK_MOBILE_ONLY
@@ -64,6 +65,7 @@ import com.junkfood.seal.util.PreferenceUtil.getBoolean
 import com.junkfood.seal.util.PreferenceUtil.getInt
 import com.junkfood.seal.util.PreferenceUtil.updateBoolean
 import com.junkfood.seal.util.PreferenceUtil.updateInt
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -191,6 +193,77 @@ fun SealPlusExtrasPage(
                 }
             }
             
+            item {
+                val aria2cConnectionOptions = listOf(2, 4, 8, 16, 32)
+                var aria2cConnections by remember {
+                    mutableStateOf(ARIA2C_CONNECTIONS.getInt().let { saved ->
+                        if (saved in aria2cConnectionOptions) saved else 16
+                    })
+                }
+                val aria2cSliderIndex = aria2cConnectionOptions.indexOf(aria2cConnections).coerceAtLeast(0)
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.aria2c_connections),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = stringResource(R.string.aria2c_connections_desc, aria2cConnections),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Text(
+                            text = aria2cConnections.toString(),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+
+                    androidx.compose.material3.Slider(
+                        value = aria2cSliderIndex.toFloat(),
+                        onValueChange = { newValue ->
+                            val idx = newValue.roundToInt().coerceIn(0, aria2cConnectionOptions.size - 1)
+                            aria2cConnections = aria2cConnectionOptions[idx]
+                        },
+                        onValueChangeFinished = {
+                            ARIA2C_CONNECTIONS.updateInt(aria2cConnections)
+                        },
+                        valueRange = 0f..4f,
+                        steps = 3,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "2",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = "32",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
             item {
                 PreferenceSubtitle(text = stringResource(R.string.security_and_privacy))
             }
