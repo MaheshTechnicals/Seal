@@ -631,6 +631,22 @@
     <string name="proxy_info_title">How It Works</string>
     <string name="proxy_info_description">When enabled, all download requests will be routed through the configured proxy server. This can help bypass regional restrictions or improve privacy. Test the connection before enabling to ensure the proxy is working correctly.</string>
     
+    <!-- Sponsor Support Dialog -->
+    <string name="support_us">Support Us ✨</string>
+    <string name="maybe_later">Maybe Later</string>
+    <string name="sponsor_dialog_title">Keep Seal Plus Free &amp; Thriving</string>
+    <string name="sponsor_dialog_subtitle">Powered by your support</string>
+    <string name="sponsor_dialog_message">Seal Plus is built with passion — free, open-source, and ad-free. Your support helps fund active development, faster updates, better performance, and exciting new features. Every contribution, big or small, makes a real difference.</string>
+    <string name="sponsor_dialog_frequency_title">Support Reminder</string>
+    <string name="sponsor_dialog_frequency_desc">Choose how often to show the sponsor reminder</string>
+    <string name="sponsor_dialog_off">Off</string>
+    <string name="sponsor_dialog_weekly">Weekly</string>
+    <string name="sponsor_dialog_monthly">Monthly</string>
+    <string name="sponsor_support_section">Support &amp; Sponsorship</string>
+    <string name="sponsor_feature_updates">Active development &amp; updates</string>
+    <string name="sponsor_feature_performance">Performance improvements</string>
+    <string name="sponsor_feature_features">New features &amp; bug fixes</string>
+
     <!-- Permission strings -->
     <string name="notification_permission_required">Notification Permission Required</string>
     <string name="notification_permission_desc">Seal Plus needs notification permission to show download progress and completion status. Please grant this permission for the best experience.</string>

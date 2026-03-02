@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.NetworkCell
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material.icons.outlined.SignalCellular4Bar
 import androidx.compose.material.icons.outlined.SignalWifi4Bar
 import androidx.compose.material.icons.rounded.NetworkCheck
@@ -61,6 +62,10 @@ import com.junkfood.seal.util.NOTIFICATION_LED
 import com.junkfood.seal.util.NOTIFICATION_SOUND
 import com.junkfood.seal.util.NOTIFICATION_SUCCESS_SOUND
 import com.junkfood.seal.util.NOTIFICATION_VIBRATE
+import com.junkfood.seal.util.SPONSOR_DIALOG_FREQUENCY
+import com.junkfood.seal.util.SPONSOR_FREQ_MONTHLY
+import com.junkfood.seal.util.SPONSOR_FREQ_OFF
+import com.junkfood.seal.util.SPONSOR_FREQ_WEEKLY
 import com.junkfood.seal.util.PreferenceUtil.getBoolean
 import com.junkfood.seal.util.PreferenceUtil.getInt
 import com.junkfood.seal.util.PreferenceUtil.updateBoolean
@@ -83,6 +88,8 @@ fun SealPlusExtrasPage(
     var notificationVibrate by remember { mutableStateOf(NOTIFICATION_VIBRATE.getBoolean()) }
     var notificationLed by remember { mutableStateOf(NOTIFICATION_LED.getBoolean()) }
     var notificationSuccessSound by remember { mutableStateOf(NOTIFICATION_SUCCESS_SOUND.getBoolean()) }
+    var sponsorDialogFrequency by remember { mutableStateOf(SPONSOR_DIALOG_FREQUENCY.getInt()) }
+    var showSponsorFrequencyDialog by remember { mutableStateOf(false) }
     var notificationErrorSound by remember { mutableStateOf(NOTIFICATION_ERROR_SOUND.getBoolean()) }
     
     // Authentication state for AppLock settings
@@ -388,6 +395,35 @@ fun SealPlusExtrasPage(
                     }
                 )
             }
+
+            item {
+                PreferenceSubtitle(text = stringResource(R.string.sponsor_support_section))
+            }
+
+            item {
+                PreferenceItem(
+                    title = stringResource(R.string.sponsor_dialog_frequency_title),
+                    description = when (sponsorDialogFrequency) {
+                        SPONSOR_FREQ_OFF -> stringResource(R.string.sponsor_dialog_off)
+                        SPONSOR_FREQ_MONTHLY -> stringResource(R.string.sponsor_dialog_monthly)
+                        else -> stringResource(R.string.sponsor_dialog_weekly)
+                    },
+                    icon = Icons.Outlined.VolunteerActivism,
+                    onClick = { showSponsorFrequencyDialog = true },
+                )
+            }
+        }
+
+        if (showSponsorFrequencyDialog) {
+            SponsorFrequencyDialog(
+                currentSelection = sponsorDialogFrequency,
+                onDismissRequest = { showSponsorFrequencyDialog = false },
+                onConfirm = { selected ->
+                    SPONSOR_DIALOG_FREQUENCY.updateInt(selected)
+                    sponsorDialogFrequency = selected
+                    showSponsorFrequencyDialog = false
+                },
+            )
         }
 
         if (showNetworkDialog) {
@@ -456,5 +492,53 @@ private fun NetworkTypeDialog(
                 Text(stringResource(android.R.string.cancel))
             }
         }
+    )
+}
+@Composable
+private fun SponsorFrequencyDialog(
+    currentSelection: Int,
+    onDismissRequest: () -> Unit,
+    onConfirm: (Int) -> Unit,
+) {
+    var selected by remember { mutableStateOf(currentSelection) }
+
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismissRequest,
+        icon = { Icon(Icons.Outlined.VolunteerActivism, contentDescription = null) },
+        title = { Text(stringResource(R.string.sponsor_dialog_frequency_title)) },
+        text = {
+            Column {
+                Text(
+                    text = stringResource(R.string.sponsor_dialog_frequency_desc),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
+                PreferenceSingleChoiceItem(
+                    text = stringResource(R.string.sponsor_dialog_off),
+                    selected = selected == SPONSOR_FREQ_OFF,
+                    onClick = { selected = SPONSOR_FREQ_OFF },
+                )
+                PreferenceSingleChoiceItem(
+                    text = stringResource(R.string.sponsor_dialog_weekly),
+                    selected = selected == SPONSOR_FREQ_WEEKLY,
+                    onClick = { selected = SPONSOR_FREQ_WEEKLY },
+                )
+                PreferenceSingleChoiceItem(
+                    text = stringResource(R.string.sponsor_dialog_monthly),
+                    selected = selected == SPONSOR_FREQ_MONTHLY,
+                    onClick = { selected = SPONSOR_FREQ_MONTHLY },
+                )
+            }
+        },
+        confirmButton = {
+            androidx.compose.material3.TextButton(onClick = { onConfirm(selected) }) {
+                Text(stringResource(android.R.string.ok))
+            }
+        },
+        dismissButton = {
+            androidx.compose.material3.TextButton(onClick = onDismissRequest) {
+                Text(stringResource(android.R.string.cancel))
+            }
+        },
     )
 }

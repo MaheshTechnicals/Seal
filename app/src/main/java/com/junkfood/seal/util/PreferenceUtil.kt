@@ -140,6 +140,14 @@ const val NOTIFICATION_LED = "notification_led"
 const val NOTIFICATION_SUCCESS_SOUND = "notification_success_sound"
 const val NOTIFICATION_ERROR_SOUND = "notification_error_sound"
 
+// Sponsor Support Dialog
+const val SPONSOR_DIALOG_FREQUENCY = "sponsor_dialog_frequency"  // 0=Off, 1=Weekly, 2=Monthly
+const val SPONSOR_DIALOG_LAST_SHOWN = "sponsor_dialog_last_shown"
+const val SPONSOR_FREQ_OFF = 0
+const val SPONSOR_FREQ_WEEKLY = 1
+const val SPONSOR_FREQ_MONTHLY = 2
+const val SPONSOR_URL = "https://buymeacoffee.com/maheshtechnical"
+
 const val YT_DLP_UPDATE_CHANNEL = "yt-dlp_update_channel"
 const val YT_DLP_UPDATE_TIME = "yt-dlp_last_update"
 const val YT_DLP_UPDATE_INTERVAL = "yt-dlp_update_interval"
@@ -288,11 +296,13 @@ private val IntPreferenceDefaults =
         MAX_CONCURRENT_DOWNLOADS to 1,
         ARIA2C_CONNECTIONS to 16,
         PROXY_CUSTOM_PORT to 8080,
+        SPONSOR_DIALOG_FREQUENCY to SPONSOR_FREQ_WEEKLY,
     )
 
 private val LongPreferenceDefaults = mapOf(
     YT_DLP_UPDATE_INTERVAL to DEFAULT_INTERVAL,
-    PROXY_LAST_VALIDATED to 0L
+    PROXY_LAST_VALIDATED to 0L,
+    SPONSOR_DIALOG_LAST_SHOWN to 0L,
 )
 
 fun String.getStringDefault() = StringPreferenceDefaults.getOrElse(this) { "" }
