@@ -676,14 +676,24 @@ object DownloadUtil {
     private fun insertInfoIntoDownloadHistory(
         videoInfo: VideoInfo,
         filePaths: List<String>,
+        downloadTimeMillis: Long = -1L,
+        averageSpeedBytesPerSec: Long = -1L,
     ): List<String> =
         filePaths.onEach {
-            DatabaseUtil.insertInfo(videoInfo.toDownloadedVideoInfo(videoPath = it))
+            DatabaseUtil.insertInfo(
+                videoInfo.toDownloadedVideoInfo(
+                    videoPath = it,
+                    downloadTimeMillis = downloadTimeMillis,
+                    averageSpeedBytesPerSec = averageSpeedBytesPerSec,
+                )
+            )
         }
 
     private fun VideoInfo.toDownloadedVideoInfo(
         id: Int = 0,
         videoPath: String,
+        downloadTimeMillis: Long = -1L,
+        averageSpeedBytesPerSec: Long = -1L,
     ): DownloadedVideoInfo =
         this.run {
             DownloadedVideoInfo(
@@ -694,15 +704,35 @@ object DownloadUtil {
                 thumbnailUrl = thumbnail.toHttpsUrl(),
                 videoPath = videoPath,
                 extractor = extractorKey,
+                downloadTimeMillis = downloadTimeMillis,
+                averageSpeedBytesPerSec = averageSpeedBytesPerSec,
             )
         }
 
-    private fun insertSplitChapterIntoHistory(videoInfo: VideoInfo, filePaths: List<String>) =
+    private fun insertSplitChapterIntoHistory(
+        videoInfo: VideoInfo,
+        filePaths: List<String>,
+        downloadTimeMillis: Long = -1L,
+        averageSpeedBytesPerSec: Long = -1L,
+    ) =
         filePaths.onEach {
             DatabaseUtil.insertInfo(
-                videoInfo.toDownloadedVideoInfo(videoPath = it).copy(videoTitle = it.getFileName())
+                videoInfo
+                    .toDownloadedVideoInfo(
+                        videoPath = it,
+                        downloadTimeMillis = downloadTimeMillis,
+                        averageSpeedBytesPerSec = averageSpeedBytesPerSec,
+                    )
+                    .copy(videoTitle = it.getFileName())
             )
         }
+
+    private fun computeAvgSpeed(videoInfo: VideoInfo, timing: LongArray): Long {
+        val elapsed = if (timing[0] > 0L) timing[1] - timing[0] else -1L
+        if (elapsed <= 0L) return -1L
+        val fileSize = ((videoInfo.fileSize ?: videoInfo.fileSizeApprox) ?: 0.0).toLong()
+        return if (fileSize > 0L) fileSize * 1000L / elapsed else -1L
+    }
 
     @CheckResult
     fun downloadVideo(
@@ -728,6 +758,8 @@ object DownloadUtil {
             val request = YoutubeDLRequest(url)
             val pathBuilder = StringBuilder()
             val outputBuilder = StringBuilder()
+            // Index 0 = start time ms, index 1 = end time ms
+            val downloadTiming = LongArray(2)
 
             request
                 .apply {
@@ -845,8 +877,10 @@ object DownloadUtil {
                     for (s in request.buildCommand()) Log.d(TAG, s)
                 }
                 .runCatching {
+                    val dlStartTime = System.currentTimeMillis()
                     YoutubeDL.getInstance()
                         .execute(request = this, processId = taskId, callback = progressCallback)
+                        .also { downloadTiming[0] = dlStartTime; downloadTiming[1] = System.currentTimeMillis() }
                 }
                 .onFailure { th ->
                     return if (
@@ -860,6 +894,8 @@ object DownloadUtil {
                             videoInfo = videoInfo,
                             downloadPath = pathBuilder.toString(),
                             sdcardUri = sdcardUri,
+                            downloadTimeMillis = if (downloadTiming[0] > 0L) downloadTiming[1] - downloadTiming[0] else -1L,
+                            averageSpeedBytesPerSec = computeAvgSpeed(videoInfo, downloadTiming),
                         )
                     } else Result.failure(th)
                 }
@@ -868,6 +904,8 @@ object DownloadUtil {
                 videoInfo = videoInfo,
                 downloadPath = pathBuilder.toString(),
                 sdcardUri = sdcardUri,
+                downloadTimeMillis = if (downloadTiming[0] > 0L) downloadTiming[1] - downloadTiming[0] else -1L,
+                averageSpeedBytesPerSec = computeAvgSpeed(videoInfo, downloadTiming),
             )
         }
     }
@@ -877,6 +915,8 @@ object DownloadUtil {
         videoInfo: VideoInfo,
         downloadPath: String,
         sdcardUri: String,
+        downloadTimeMillis: Long = -1L,
+        averageSpeedBytesPerSec: Long = -1L,
     ): Result<List<String>> =
         preferences.run {
             val fileName =
@@ -896,9 +936,17 @@ object DownloadUtil {
                         if (privateMode) {
                             return Result.success(emptyList())
                         } else if (splitByChapter) {
-                            insertSplitChapterIntoHistory(videoInfo, it)
+                            insertSplitChapterIntoHistory(
+                                videoInfo, it,
+                                downloadTimeMillis = downloadTimeMillis,
+                                averageSpeedBytesPerSec = averageSpeedBytesPerSec,
+                            )
                         } else {
-                            insertInfoIntoDownloadHistory(videoInfo, it)
+                            insertInfoIntoDownloadHistory(
+                                videoInfo, it,
+                                downloadTimeMillis = downloadTimeMillis,
+                                averageSpeedBytesPerSec = averageSpeedBytesPerSec,
+                            )
                         }
                     }
             } else {
@@ -911,9 +959,17 @@ object DownloadUtil {
                         else
                             Result.success(
                                 if (splitByChapter) {
-                                    insertSplitChapterIntoHistory(videoInfo, this)
+                                    insertSplitChapterIntoHistory(
+                                        videoInfo, this,
+                                        downloadTimeMillis = downloadTimeMillis,
+                                        averageSpeedBytesPerSec = averageSpeedBytesPerSec,
+                                    )
                                 } else {
-                                    insertInfoIntoDownloadHistory(videoInfo, this)
+                                    insertInfoIntoDownloadHistory(
+                                        videoInfo, this,
+                                        downloadTimeMillis = downloadTimeMillis,
+                                        averageSpeedBytesPerSec = averageSpeedBytesPerSec,
+                                    )
                                 }
                             )
                     }

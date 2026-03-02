@@ -104,6 +104,8 @@
     <string name="channel_description">Notify of downloaded files and progress</string>
     <string name="video_url">Video link</string>
     <string name="download_finish_notification">Download finished. Tap to open.</string>
+    <string name="download_time">Download Time</string>
+    <string name="average_speed">Average Speed</string>
     <string name="execute_command_notification">Running custom commands…</string>
     <string name="battery_settings_desc">"Please set battery usage of this app to \"Unrestricted\" in the system settings to download in the background."
     </string>

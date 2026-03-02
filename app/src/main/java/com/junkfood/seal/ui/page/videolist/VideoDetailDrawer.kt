@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -22,13 +24,17 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.Speed
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -52,6 +58,28 @@ import com.junkfood.seal.ui.component.SealModalBottomSheetM2
 import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.util.FileUtil
 import com.junkfood.seal.util.makeToast
+
+private fun formatDownloadTime(millis: Long): String {
+    val totalSeconds = millis / 1000L
+    val hours = totalSeconds / 3600L
+    val minutes = (totalSeconds % 3600L) / 60L
+    val seconds = totalSeconds % 60L
+    return when {
+        hours > 0 -> "${hours}h ${minutes}m ${seconds}s"
+        minutes > 0 -> "${minutes}m ${seconds}s"
+        else -> "${seconds}s"
+    }
+}
+
+private fun formatAverageSpeed(bytesPerSec: Long): String {
+    val mb = 1024L * 1024L
+    val kb = 1024L
+    return when {
+        bytesPerSec >= mb -> "%.1f MB/s".format(bytesPerSec.toDouble() / mb)
+        bytesPerSec >= kb -> "${bytesPerSec / kb} KB/s"
+        else -> "$bytesPerSec B/s"
+    }
+}
 
 @Composable
 fun VideoDetailDrawer(
@@ -91,6 +119,8 @@ fun VideoDetailDrawer(
             isFileAvailable = isFileAvailable,
             onReDownload = onReDownload,
             onDismissRequest = onDismissRequest,
+            downloadTimeMillis = downloadTimeMillis,
+            averageSpeedBytesPerSec = averageSpeedBytesPerSec,
             onDelete = {
                 view.slightHapticFeedback()
                 onDismissRequest()
@@ -140,6 +170,8 @@ fun VideoDetailDrawerImpl(
     onDelete: () -> Unit = {},
     onOpenLink: () -> Unit = {},
     onShareFile: () -> Unit = {},
+    downloadTimeMillis: Long = -1L,
+    averageSpeedBytesPerSec: Long = -1L,
 ) {
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
@@ -183,6 +215,68 @@ fun VideoDetailDrawerImpl(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
+            }
+
+            // Download stats section
+            if (downloadTimeMillis > 0L || averageSpeedBytesPerSec > 0L) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    if (downloadTimeMillis > 0L) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Timer,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Text(
+                                text = stringResource(R.string.download_time),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text(
+                                text = formatDownloadTime(downloadTimeMillis),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
+                        }
+                    }
+                    if (averageSpeedBytesPerSec > 0L) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Speed,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Text(
+                                text = stringResource(R.string.average_speed),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text(
+                                text = formatAverageSpeed(averageSpeedBytesPerSec),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(4.dp))
             }
 
             Row(
