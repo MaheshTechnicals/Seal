@@ -61,7 +61,9 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material.icons.outlined.Storage
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.VideoFile
 import androidx.compose.material.icons.outlined.VideoLibrary
 import androidx.compose.material3.AlertDialog
@@ -1794,7 +1796,33 @@ fun RecentDownloadDetailsDialog(
                         modifier = Modifier.weight(1f)
                     )
                 }
-                
+
+                // Row 4: Download Time and Average Speed
+                if (downloadInfo.downloadTimeMillis > 0L || downloadInfo.averageSpeedBytesPerSec > 0L) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        if (downloadInfo.downloadTimeMillis > 0L) {
+                            DetailCard(
+                                icon = Icons.Outlined.Timer,
+                                label = stringResource(R.string.download_time),
+                                value = formatDownloadTime(downloadInfo.downloadTimeMillis),
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+
+                        if (downloadInfo.averageSpeedBytesPerSec > 0L) {
+                            DetailCard(
+                                icon = Icons.Outlined.Speed,
+                                label = stringResource(R.string.average_speed),
+                                value = formatAverageSpeed(downloadInfo.averageSpeedBytesPerSec),
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                }
+
                 // Source URL Card
                 Card(
                     modifier = Modifier
@@ -1876,6 +1904,28 @@ fun RecentDownloadDetailsDialog(
                 }
             }
         )
+    }
+}
+
+private fun formatDownloadTime(millis: Long): String {
+    val totalSeconds = millis / 1000L
+    val hours = totalSeconds / 3600L
+    val minutes = (totalSeconds % 3600L) / 60L
+    val seconds = totalSeconds % 60L
+    return when {
+        hours > 0 -> "${hours}h ${minutes}m ${seconds}s"
+        minutes > 0 -> "${minutes}m ${seconds}s"
+        else -> "${seconds}s"
+    }
+}
+
+private fun formatAverageSpeed(bytesPerSec: Long): String {
+    val mb = 1024L * 1024L
+    val kb = 1024L
+    return when {
+        bytesPerSec >= mb -> "%.1f MB/s".format(bytesPerSec.toDouble() / mb)
+        bytesPerSec >= kb -> "${bytesPerSec / kb} KB/s"
+        else -> "$bytesPerSec B/s"
     }
 }
 
