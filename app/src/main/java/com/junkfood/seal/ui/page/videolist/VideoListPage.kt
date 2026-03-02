@@ -159,7 +159,7 @@ fun VideoListPage(viewModel: VideoListViewModel = koinViewModel(), onNavigateBac
 
     val fileSizeMap by
         viewModel.fileSizeMapFlow.collectAsStateWithLifecycle(initialValue = emptyMap())
-    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden, skipHalfExpanded = true)
     val hostState = remember { SnackbarHostState() }
 
     var currentVideoInfo by remember { mutableStateOf(DownloadedVideoInfo()) }
