@@ -149,7 +149,6 @@ import com.junkfood.seal.util.SPONSOR_DIALOG_FREQUENCY
 import com.junkfood.seal.util.SPONSOR_DIALOG_LAST_SHOWN
 import com.junkfood.seal.util.SPONSOR_FREQ_OFF
 import com.junkfood.seal.util.SPONSOR_FREQ_WEEKLY
-import com.junkfood.seal.util.SPONSOR_URL
 import com.junkfood.seal.util.PreferenceUtil.getInt
 import com.junkfood.seal.util.PreferenceUtil.getLong
 import com.junkfood.seal.util.PreferenceUtil.updateLong
@@ -480,7 +479,7 @@ fun NewHomePage(
             onSupport = {
                 showSponsorDialog = false
                 SPONSOR_DIALOG_LAST_SHOWN.updateLong(System.currentTimeMillis())
-                uriHandler.openUri(SPONSOR_URL)
+                onNavigateToSupport()
             },
         )
     }
