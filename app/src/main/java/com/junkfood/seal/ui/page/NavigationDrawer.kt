@@ -200,14 +200,12 @@ fun DrawerHeader(
         ) {
             // App Logo
             Image(
-                painter = painterResource(id = R.mipmap.ic_launcher_round),
+                painter = painterResource(id = R.drawable.splash_logo),
                 contentDescription = "Seal Plus Logo",
-                modifier = Modifier
-                    .size(72.dp)
-                    .clip(CircleShape)
+                modifier = Modifier.size(80.dp)
             )
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             
             // App Name - centered, bold, prominent
             Text(
