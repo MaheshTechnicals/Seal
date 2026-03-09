@@ -44,6 +44,7 @@ import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.DoneAll
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.MoreVert
@@ -624,7 +625,7 @@ private fun ConfigurePage(
             }
         }
         var expanded by remember { mutableStateOf(false) }
-        ExpandableTitle(expanded = expanded, onClick = { expanded = true }) { settingChips() }
+        ExpandableTitle(expanded = expanded, onClick = { expanded = !expanded }) { settingChips() }
 
         ActionButtons(
             modifier = Modifier.padding(horizontal = 20.dp),
@@ -721,7 +722,7 @@ fun ConfigurePagePlaylistVariant(
             )
         }
         var expanded by remember { mutableStateOf(false) }
-        ExpandableTitle(expanded = expanded, onClick = { expanded = true }) {
+        ExpandableTitle(expanded = expanded, onClick = { expanded = !expanded }) {
             AdditionalSettings(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 isQuickDownload = false,
@@ -830,7 +831,6 @@ fun ExpandableTitle(
                     .clickable(
                         onClick = onClick,
                         onClickLabel = stringResource(R.string.show_more_actions),
-                        enabled = !expanded,
                     )
                     .padding(top = 12.dp, bottom = 8.dp)
         ) {
@@ -844,14 +844,12 @@ fun ExpandableTitle(
                     style = MaterialTheme.typography.labelLarge,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                if (!expanded) {
-                    Icon(
-                        imageVector = Icons.Outlined.ExpandMore,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp),
-                    )
-                    Spacer(modifier = Modifier.width(32.dp))
-                }
+                Icon(
+                    imageVector = if (expanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                )
+                Spacer(modifier = Modifier.width(32.dp))
             }
             AnimatedVisibility(expanded) {
                 Column {
