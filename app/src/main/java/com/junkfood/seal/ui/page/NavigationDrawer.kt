@@ -54,15 +54,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.shape.CircleShape
 import com.junkfood.seal.App
 import com.junkfood.seal.R
 import com.junkfood.seal.ui.common.LocalDarkTheme
@@ -184,39 +189,59 @@ fun DrawerHeader(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(180.dp)
             .background(headerGradient)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.Center)
-                .padding(24.dp),
-            horizontalAlignment = Alignment.Start,
+                .padding(horizontal = 24.dp, vertical = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // App Name with gradient text effect
+            // App Logo
+            Image(
+                painter = painterResource(id = R.mipmap.ic_launcher_foreground),
+                contentDescription = "Seal Plus Logo",
+                modifier = Modifier
+                    .size(72.dp)
+                    .clip(CircleShape)
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primaryContainer,
+                                MaterialTheme.colorScheme.secondaryContainer
+                            )
+                        ),
+                        shape = CircleShape
+                    )
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // App Name - centered, bold, prominent
             Text(
                 text = "Seal Plus",
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 32.sp
+                    fontSize = 28.sp
                 ),
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center
             )
             
             Spacer(modifier = Modifier.height(4.dp))
             
-            // Tagline
+            // Tagline - centered, muted
             Text(
                 text = "Download Manager",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                textAlign = TextAlign.Center
             )
             
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             
-            // Version badge with gradient background
+            // Version badge with gradient background - centered
             Box(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.small)
@@ -237,12 +262,13 @@ fun DrawerHeader(
                             )
                         }
                     )
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
+                    .padding(horizontal = 14.dp, vertical = 5.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "v${App.packageInfo.versionName}",
                     style = MaterialTheme.typography.labelSmall.copy(
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.SemiBold
                     ),
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
