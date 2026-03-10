@@ -5,6 +5,87 @@ All notable changes (starting from v1.7.3) to stable releases will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-03-10
+
+### ✨ Animated Branding & Visual Polish
+
+* **Animated Glowing "+" Logo**
+  + The "+" in "Seal+" on the home page now features a flowing gradient animation (primary → tertiary → secondary)
+  + Continuous pulsing glow shadow effect for a premium, eye-catching look
+  + Hardware-accelerated infinite transition for smooth 60fps rendering
+
+* **Gradient Circular Progress Indicator**
+  + Replaced the plain loading spinner in the download dialog with a premium sweep-gradient spinner
+  + Rotating arc with breathing animation and smooth color shifting (primary → tertiary → secondary)
+  + 48dp canvas-based implementation with `StrokeCap.Round` for modern aesthetics
+
+### 🎨 UI & Theme Enhancements
+
+* **Typewriter URL Placeholder Animation**
+  + The "Enter URL to download" placeholder text now reveals character-by-character with a typewriter effect
+  + Flowing gradient brush on the placeholder text matching the Seal+ brand colors
+  + One-time animation on page load (50ms per character) for a clean, premium feel
+
+* **Redesigned Navigation Drawer Header**
+  + Center-aligned modern header layout with app logo (512×512 splash logo), "Seal Plus" title, "Download Manager" subtitle, and version badge
+  + Removed active/selected state highlighting from all drawer items for a cleaner look
+  + Reorganized drawer menu items into logical groups for better navigation clarity
+
+* **Dark Theme On by Default**
+  + New installations now default to dark theme instead of following the system setting
+  + Existing users keep their saved preference; everyone can still switch in Settings → Look & Feel
+
+### 🎯 Consistent Icon Theming
+
+* **Material Theme Color Refactor**
+  + Refactored icon tinting across 30+ screens to use `MaterialTheme.colorScheme` instead of hardcoded colors
+  + Icons now use `primary`, `secondary`, and `tertiary` colors from the active theme
+  + Ensures consistent look across Light, Dark, and Gradient Dark themes
+
+### 🍞 Themed Toast System
+
+* **Custom Themed Toast Manager**
+  + Replaced standard Android toasts with a branded themed toast system
+  + Toasts now match the app's Material 3 color scheme with rounded corners and proper styling
+  + Integrated across all activities for a unified notification experience
+
+### 🔗 Share Intent & Navigation
+
+* **Share Intent URL Handling**
+  + URLs shared from other apps (browsers, social media) now automatically pre-fill in the download input field
+  + Seamless integration — tap "Share" in any app, select Seal Plus, and the URL is ready to download
+
+* **Navigation Route Updates**
+  + Sponsor page navigation now redirects to the Support Developer page for streamlined user flow
+  + Settings toggle click behavior and icon animations improved for better UX
+
+---
+
+### 📦 Installation
+
+Download the appropriate APK for your device:
+
+* **Universal APK**: Works on all devices (recommended)
+* **arm64-v8a**: For 64-bit ARM devices (most modern phones)
+* **armeabi-v7a**: For 32-bit ARM devices
+* **x86_64**: For 64-bit x86 devices
+* **x86**: For 32-bit x86 devices
+
+### ✨ Key Features (v2.4)
+
+* ✨ **Animated Glowing "+"** - Flowing gradient animation on Seal+ branding
+* 🎨 **Typewriter URL Placeholder** - Character-by-character animated input hint
+* 🔄 **Gradient Spinner** - Premium sweep-gradient loading indicator
+* 🧭 **Redesigned Navigation Drawer** - Center-aligned header with logo and version badge
+* 🎯 **30+ Icon Theme Refactor** - Consistent MaterialTheme colors across all screens
+* 🍞 **Themed Toast System** - Branded toast notifications matching app theme
+* 🔗 **Share Intent Support** - Pre-fill URLs from external app shares
+* 🌙 **Dark Theme Default** - Dark mode enabled by default for new users
+* ⏯️ **Pause/Resume downloads** with queue support
+* 🌐 Download from 1000+ sites via yt-dlp
+
+---
+
 ## [2.3.0] - 2026-03-03
 
 ### ⚙️ Seal Plus Extras Enhancements

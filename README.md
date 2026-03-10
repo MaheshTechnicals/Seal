@@ -172,78 +172,70 @@ English
 ## ⬇️ Download & Installation
 
 
-### 🚀 What's New in v2.3?
+### 🚀 What's New in v2.4?
 
 <details open>
-<summary><b>📱 Click to see latest updates - Smart Downloads, Speed Controls & Better Details (March 3, 2026)</b></summary>
+<summary><b>📱 Click to see latest updates - Premium Animations, Icon Theming & Share Intent (March 10, 2026)</b></summary>
 
-## ✨ Seal Plus v2.3.0 - Smart Downloads, Speed Controls & Better Details
-
----
-
-### ⚙️ Seal Plus Extras Enhancements
-
-* **Aria2c Connection Control**
-  + Added a connection count selector in Settings → Seal Plus Extras
-  + Choose between 2, 4, 8, 16, 32 or more simultaneous aria2c connections to maximize download speed
-  + Setting takes effect immediately on the next download
-
-* **Sponsor Support Dialog Controls**
-  + Added a dedicated *Support & Sponsorship* section in Seal Plus Extras
-  + Users can configure how often the sponsor support dialog is shown: Off, Weekly, or Monthly
-  + Dialog opens the Support Developer page when tapped, respects the chosen schedule, and persists timing across restarts
-
-### 📊 Download Details Improvements
-
-* **Average Speed Display**
-  + Download Details dialog now shows the computed average download speed (e.g. `3.2 MB/s`)
-  + Derived from total file size ÷ elapsed download time for accurate reporting
-  + Hidden automatically for older history entries that predate this feature
-
-* **Download Time Display**
-  + Download Details dialog now shows total time taken (e.g. `2m 34s`)
-  + Captured as precise start-to-end duration around the actual yt-dlp execution
-  + Available in both the active-download details panel and the history drawer
-
-### 🎨 UI & Format Card Improvements
-
-* **Clean Resolution Labels on Format Cards**
-  + Format selection cards now show concise human-readable titles (`1080×1920`) instead of raw yt-dlp format strings
-  + Priority order: explicit width/height → `Format.resolution` → regex-extracted `WxH` → audio label → format ID fallback
-
-* **Redesigned Video Detail Drawer**
-  + Overhauled download-history detail sheet with a modern card-based layout
-  + 16:9 thumbnail card with rounded corners, source-URL card with copy/open actions
-  + Stats grid showing Download Time and Average Speed side-by-side
-
-### 🚀 Smart Stream-Merge Routing
-
-* **Platform-Aware Format Selection**
-  + Only YouTube and Reddit use the merge path (`videoId` + `audioId`)
-  + All other platforms now pick the best combined format directly via `videoAudioFormats`, skipping the redundant merge step
-  + Falls back to the merge path automatically when no combined format is available
+## ✨ Seal Plus v2.4.0 - Premium Animations, Icon Theming & Share Intent
 
 ---
 
-### 📦 Installation
+### ✨ Animated Branding & Visual Polish
 
-Download the appropriate APK for your device:
+* **Animated Glowing "+" Logo**
+  + The "+" in "Seal+" on the home page now features a flowing gradient animation (primary → tertiary → secondary)
+  + Continuous pulsing glow shadow effect for a premium, eye-catching look
 
-* **Universal APK**: Works on all devices (recommended)
-* **arm64-v8a**: For 64-bit ARM devices (most modern phones)
-* **armeabi-v7a**: For 32-bit ARM devices
-* **x86_64**: For 64-bit x86 devices
-* **x86**: For 32-bit x86 devices
+* **Gradient Circular Progress Indicator**
+  + Replaced the plain loading spinner with a premium sweep-gradient spinner in the download dialog
+  + Rotating arc with breathing animation and smooth color shifting
 
-### ✨ Key Features (v2.3)
+### 🎨 UI & Theme Enhancements
 
-* ⚙️ **Aria2c Connection Control** - Tune parallel connections (2–32+) for maximum download speed
-* 📊 **Average Speed & Download Time** - Real download metrics in the details dialog
-* 🚀 **Smart Stream-Merge Routing** - Best format per platform, no redundant merges
-* 🎨 **Clean Format Cards** - Human-readable resolution labels instead of raw strings
-* 💎 **Sponsor Dialog Controls** - Flexible Off/Weekly/Monthly schedule
-* 🏎️ **Aria2c Speed Boost** - Up to 32x parallel connections for ultra-fast downloads
-* 🔄 **Retry failed downloads** - One-click recovery for canceled/failed downloads
+* **Typewriter URL Placeholder Animation**
+  + The "Enter URL to download" placeholder text reveals character-by-character with a typewriter effect
+  + Flowing gradient brush matching the Seal+ brand colors
+
+* **Redesigned Navigation Drawer Header**
+  + Center-aligned modern header with app logo, title, subtitle, and version badge
+  + Removed active/selected state for cleaner navigation
+
+* **Dark Theme On by Default**
+  + New installations default to dark theme; existing users keep their saved preference
+
+### 🎯 Consistent Icon Theming
+
+* **Material Theme Color Refactor**
+  + Refactored icon tinting across 30+ screens to use `MaterialTheme.colorScheme`
+  + Consistent look across Light, Dark, and Gradient Dark themes
+
+### 🍞 Themed Toast System
+
+* **Custom Themed Toast Manager**
+  + Replaced standard Android toasts with a branded themed toast system matching Material 3
+
+### 🔗 Share Intent & Navigation
+
+* **Share Intent URL Handling**
+  + URLs shared from other apps automatically pre-fill in the download input field
+
+* **Navigation Route Updates**
+  + Sponsor page now redirects to Support Developer page
+  + Settings toggle click behavior and icon animations improved
+
+---
+
+### ✨ Key Features (v2.4)
+
+* ✨ **Animated Glowing "+"** - Flowing gradient animation on Seal+ branding
+* 🎨 **Typewriter URL Placeholder** - Character-by-character animated input hint
+* 🔄 **Gradient Spinner** - Premium sweep-gradient loading indicator
+* 🧭 **Redesigned Navigation Drawer** - Center-aligned header with logo and version badge
+* 🎯 **30+ Icon Theme Refactor** - Consistent MaterialTheme colors across all screens
+* 🍞 **Themed Toast System** - Branded toast notifications matching app theme
+* 🔗 **Share Intent Support** - Pre-fill URLs from external app shares
+* 🌙 **Dark Theme Default** - Dark mode enabled by default for new users
 * ⏯️ **Pause/Resume downloads** with queue support
 * 🌐 Download from 1000+ sites via yt-dlp
 
@@ -251,6 +243,29 @@ Download the appropriate APK for your device:
 
 See [CHANGELOG.md](https://github.com/MaheshTechnicals/Sealplus/blob/main/CHANGELOG.md) for complete version history.
 
+</details>
+
+<details>
+<summary><b>📱 Previous Release - v2.3 (March 3, 2026)</b></summary>
+
+#### ⚙️ Seal Plus v2.3.0 - Smart Downloads, Speed Controls & Better Details
+
+#### ⚙️ Seal Plus Extras Enhancements
+- ✅ **Aria2c Connection Control** - Connection count selector (2/4/8/16/32+)
+- ✅ **Sponsor Dialog Controls** - Off/Weekly/Monthly schedule
+
+#### 📊 Download Details Improvements
+- ✅ **Average Speed Display** - Real-time speed metrics in details dialog
+- ✅ **Download Time Display** - Total elapsed time tracking
+
+#### 🎨 UI & Format Card Improvements
+- ✅ **Clean Resolution Labels** - Human-readable format titles
+- ✅ **Redesigned Video Detail Drawer** - Modern card-based layout
+
+#### 🚀 Smart Stream-Merge Routing
+- ✅ **Platform-Aware Format Selection** - Best format per platform
+
+[View Full Changelog →](https://github.com/MaheshTechnicals/Sealplus/blob/main/CHANGELOG.md)
 </details>
 
 <details>
@@ -328,17 +343,17 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 ### 🚀 Latest Releases
 
 - **Latest Stable**: [Download from GitHub Releases](https://github.com/MaheshTechnicals/Sealplus/releases/latest)
-  - ✅ **Current Version**: v2.3.0 (March 2026)
-  - ⚙️ **Aria2c Connection Control** - Tune parallel connections (2–32+) for maximum speed
-  - 📊 **Average Speed & Download Time** - Real metrics in the details dialog
-  - 🚀 **Smart Stream-Merge Routing** - Best format per platform automatically
-  - 🎨 **Clean Format Cards** - Human-readable resolution labels
-  - 💎 **Sponsor Dialog Controls** - Flexible Off/Weekly/Monthly schedule
-  - 🏎️ **Aria2c Speed Boost** - Up to 32x parallel connections for ultra-fast downloads
-  - 🔄 **Retry Failed Downloads** - One-click retry for canceled/failed downloads
+  - ✅ **Current Version**: v2.4.0 (March 2026)
+  - ✨ **Animated Glowing "+"** - Flowing gradient on Seal+ branding
+  - 🎨 **Typewriter URL Placeholder** - Animated input hint with gradient
+  - 🔄 **Gradient Spinner** - Premium sweep-gradient loading indicator
+  - 🧭 **Redesigned Nav Drawer** - Center-aligned header with logo and version badge
+  - 🎯 **30+ Icon Theme Refactor** - Consistent MaterialTheme colors across screens
+  - 🍞 **Themed Toast System** - Branded toast notifications
+  - 🔗 **Share Intent Support** - Pre-fill URLs from external shares
+  - 🌙 **Dark Theme Default** - Dark mode for new users
   - ⏯️ **Pause/Resume Downloads** - Full download control with queue
-  - 🌐 **Advanced Proxy (BETA)** - Auto-fetch and test proxies
-  - 🔢 **Concurrent Downloads** - Control 1-5 simultaneous downloads
+  - 🌐 **1000+ Sites** - Download from YouTube, Instagram, TikTok & more
   - 🚀 **Auto-Update System** enabled for seamless updates
 
 - **Preview Builds**: [Download Pre-release Versions](https://github.com/MaheshTechnicals/Sealplus/releases) 
@@ -352,8 +367,8 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 |------------|---------------|
 | **Minimum Android** | Android 7.0 (API 24) |
 | **Target Android** | Android 14 (API 36) |
-| **Current Version** | 2.3.0 |
-| **Release Date** | March 3, 2026 |
+| **Current Version** | 2.4.0 |
+| **Release Date** | March 10, 2026 |
 
 ### 🏗️ Architecture Support
 

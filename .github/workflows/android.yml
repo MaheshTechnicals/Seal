@@ -83,52 +83,52 @@ jobs:
         tag_name: v${{ steps.version.outputs.VERSION }}
         name: Seal Plus v${{ steps.version.outputs.VERSION }}
         body: |
-          ## ✨ Seal Plus v2.3.0 - Smart Downloads, Speed Controls & Better Details
+          ## ✨ Seal Plus v2.4.0 - Premium Animations, Icon Theming & Share Intent
           
           ---
           
-          ### ⚙️ Seal Plus Extras Enhancements
+          ### ✨ Animated Branding & Visual Polish
           
-          * **Aria2c Connection Control**
-              + Added a connection count selector in Settings → Seal Plus Extras
-              + Choose between 2, 4, 8, 16, 32 or more simultaneous aria2c connections to maximize download speed
-              + Setting takes effect immediately on the next download
+          * **Animated Glowing "+" Logo**
+              + The "+" in "Seal+" features a flowing gradient animation (primary → tertiary → secondary)
+              + Continuous pulsing glow shadow for a premium, eye-catching look
           
-          * **Sponsor Support Dialog Controls**
-              + Added a dedicated *Support & Sponsorship* section in Seal Plus Extras
-              + Users can configure how often the sponsor support dialog is shown: Off, Weekly, or Monthly
-              + Dialog opens the Support Developer page when tapped, respects the chosen schedule, and persists timing across restarts
+          * **Gradient Circular Progress Indicator**
+              + Premium sweep-gradient spinner replaces the plain loading indicator in the download dialog
+              + Rotating arc with breathing animation and smooth color shifting
           
-          ### 📊 Download Details Improvements
+          ### 🎨 UI & Theme Enhancements
           
-          * **Average Speed Display**
-              + Download Details dialog now shows the computed average download speed (e.g. `3.2 MB/s`)
-              + Derived from total file size ÷ elapsed download time for accurate reporting
-              + Hidden automatically for older history entries that predate this feature
+          * **Typewriter URL Placeholder Animation**
+              + "Enter URL to download" placeholder reveals character-by-character with a typewriter effect
+              + Flowing gradient brush matching the Seal+ brand colors
           
-          * **Download Time Display**
-              + Download Details dialog now shows total time taken (e.g. `2m 34s`)
-              + Captured as precise start-to-end duration around the actual yt-dlp execution
-              + Available in both the active-download details panel and the history drawer
-              + Stored in the database (Room migration v5 → v6, existing rows default to `-1`)
+          * **Redesigned Navigation Drawer Header**
+              + Center-aligned modern header with app logo, title, subtitle, and version badge
+              + Removed active/selected state for cleaner navigation
           
-          ### 🎨 UI & Format Card Improvements
+          * **Dark Theme On by Default**
+              + New installations default to dark theme; existing users keep their saved preference
           
-          * **Clean Resolution Labels on Format Cards**
-              + Format selection cards now show concise human-readable titles (`1080×1920`) instead of raw yt-dlp format strings
-              + Priority order: explicit width/height metadata → `Format.resolution` field → regex-extracted `WxH` → audio-only label → format ID fallback
+          ### 🎯 Consistent Icon Theming
           
-          * **Redesigned Video Detail Drawer**
-              + Overhauled download-history detail sheet with a modern card-based layout
-              + 16:9 thumbnail card with rounded corners, source-URL card with copy/open actions
-              + Stats grid showing Download Time and Average Speed side-by-side
+          * **Material Theme Color Refactor**
+              + Refactored icon tinting across 30+ screens to use `MaterialTheme.colorScheme`
+              + Consistent look across Light, Dark, and Gradient Dark themes
           
-          ### 🚀 Smart Stream-Merge Routing
+          ### 🍞 Themed Toast System
           
-          * **Platform-Aware Format Selection**
-              + Only YouTube and Reddit use the merge path (`videoId` + `audioId`)
-              + All other platforms now pick the best combined format directly via `videoAudioFormats`, skipping the redundant merge step
-              + Falls back to the merge path automatically when no combined format is available
+          * **Custom Themed Toast Manager**
+              + Branded themed toast notifications matching the app's Material 3 color scheme
+          
+          ### 🔗 Share Intent & Navigation
+          
+          * **Share Intent URL Handling**
+              + URLs shared from other apps automatically pre-fill in the download input field
+          
+          * **Navigation Route Updates**
+              + Sponsor page now redirects to Support Developer page
+              + Settings toggle click behavior and icon animations improved
           
           ---
           
@@ -141,13 +141,17 @@ jobs:
           - **x86_64**: For 64-bit x86 devices
           - **x86**: For 32-bit x86 devices
           
-          ### ✨ Key Features (v2.3)
-          - ⚙️ **Aria2c Connection Control** - Tune parallel connections (2–32+) for maximum speed
-          - 📊 **Average Speed & Download Time** - Real metrics in the details dialog
-          - 🚀 **Smart Stream-Merge Routing** - Best format per platform, no redundant merges
-          - 🎨 **Clean Format Cards** - Human-readable resolution labels
-          - 💎 **Sponsor Dialog Controls** - Flexible Off/Weekly/Monthly schedule
-          - 🏎️ **Aria2c Speed Boost** - Up to 32x parallel connections
+          ### ✨ Key Features (v2.4)
+          - ✨ **Animated Glowing "+"** - Flowing gradient on Seal+ branding
+          - 🎨 **Typewriter URL Placeholder** - Animated input hint
+          - 🔄 **Gradient Spinner** - Premium loading indicator
+          - 🧭 **Redesigned Nav Drawer** - Center-aligned header with logo
+          - 🎯 **30+ Icon Theme Refactor** - Consistent theme colors
+          - 🍞 **Themed Toast System** - Branded toast notifications
+          - 🔗 **Share Intent Support** - Pre-fill URLs from shares
+          - 🌙 **Dark Theme Default** - Dark mode for new users
+          - ⏯️ **Pause/Resume downloads** with queue support
+          - 🌐 Download from 1000+ sites via yt-dlp
           - 🔄 **Retry failed downloads** - One-click recovery
           - ⏯️ **Pause/Resume downloads** with queue support
           - 🌐 Download from 1000+ sites via yt-dlp
@@ -189,29 +193,32 @@ jobs:
         MESSAGE+="📱 <b>App Name:</b> Seal Plus\n\n"
         MESSAGE+="🏷️ <b>Version:</b> v${{ steps.version.outputs.VERSION }}\n\n"
         MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        MESSAGE+="📋 <b>Changelog (v2.3):</b>\n\n"
-        MESSAGE+="<b>⚙️ Seal Plus Extras Enhancements</b>\n"
-        MESSAGE+="  ➤ Aria2c Connection Control (2/4/8/16/32+ connections)\n"
-        MESSAGE+="  ➤ Sponsor Support Dialog Controls (Off/Weekly/Monthly)\n\n"
-        MESSAGE+="<b>📊 Download Details Improvements</b>\n"
-        MESSAGE+="  ➤ Average Speed shown in details dialog (e.g. 3.2 MB/s)\n"
-        MESSAGE+="  ➤ Download Time shown in details dialog (e.g. 2m 34s)\n\n"
-        MESSAGE+="<b>🎨 UI & Format Card Improvements</b>\n"
-        MESSAGE+="  ➤ Clean resolution labels on format cards (1080×1920)\n"
-        MESSAGE+="  ➤ Redesigned Video Detail Drawer with modern card layout\n\n"
-        MESSAGE+="<b>🚀 Smart Stream-Merge Routing</b>\n"
-        MESSAGE+="  ➤ YouTube & Reddit use merge path (video+audio streams)\n"
-        MESSAGE+="  ➤ All other platforms pick best combined format directly\n"
-        MESSAGE+="  ➤ Falls back to merge path when no combined format exists\n\n"
+        MESSAGE+="📋 <b>Changelog (v2.4):</b>\n\n"
+        MESSAGE+="<b>✨ Animated Branding & Visual Polish</b>\n"
+        MESSAGE+="  ➤ Animated Glowing \"+\" with flowing gradient on Seal+ branding\n"
+        MESSAGE+="  ➤ Premium Gradient Spinner in download dialog\n\n"
+        MESSAGE+="<b>🎨 UI & Theme Enhancements</b>\n"
+        MESSAGE+="  ➤ Typewriter URL placeholder animation with gradient text\n"
+        MESSAGE+="  ➤ Redesigned Navigation Drawer with logo and version badge\n"
+        MESSAGE+="  ➤ Dark Theme ON by default for new installations\n\n"
+        MESSAGE+="<b>🎯 Consistent Icon Theming</b>\n"
+        MESSAGE+="  ➤ 30+ screens refactored to use MaterialTheme colors\n"
+        MESSAGE+="  ➤ Consistent across Light, Dark, and Gradient Dark themes\n\n"
+        MESSAGE+="<b>🍞 Themed Toast System</b>\n"
+        MESSAGE+="  ➤ Custom branded toasts matching Material 3 color scheme\n\n"
+        MESSAGE+="<b>🔗 Share Intent & Navigation</b>\n"
+        MESSAGE+="  ➤ URLs shared from other apps auto-fill in download input\n"
+        MESSAGE+="  ➤ Sponsor page redirects to Support Developer page\n\n"
         MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        MESSAGE+="✨ <b>Key Features (v2.3):</b>\n"
-        MESSAGE+="⚙️ Aria2c Connection Control (tune 2–32+ connections)\n"
-        MESSAGE+="📊 Average Speed & Download Time in details\n"
-        MESSAGE+="🚀 Smart Stream-Merge Routing per platform\n"
-        MESSAGE+="🎨 Clean resolution labels on format cards\n"
-        MESSAGE+="💎 Sponsor Dialog Controls (schedule support)\n"
-        MESSAGE+="🏎️ Aria2c Speed Boost (up to 32x parallel)\n"
-        MESSAGE+="🔄 Retry failed downloads one-click\n"
+        MESSAGE+="✨ <b>Key Features (v2.4):</b>\n"
+        MESSAGE+="✨ Animated Glowing \"+\" with flowing gradient\n"
+        MESSAGE+="🎨 Typewriter URL placeholder animation\n"
+        MESSAGE+="🔄 Premium Gradient Spinner\n"
+        MESSAGE+="🧭 Redesigned Nav Drawer with logo\n"
+        MESSAGE+="🎯 30+ Icon Theme Refactor\n"
+        MESSAGE+="🍞 Themed Toast System\n"
+        MESSAGE+="🔗 Share Intent URL pre-fill\n"
+        MESSAGE+="🌙 Dark Theme default for new users\n"
         MESSAGE+="⏯️ Pause/Resume downloads with queue\n"
         MESSAGE+="🌐 Download from 1000+ sites via yt-dlp\n\n"
         MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━\n\n"
@@ -224,7 +231,7 @@ jobs:
         MESSAGE+="🔗 <b>Download Now:</b>\n"
         MESSAGE+="<a href=\"${RELEASE_URL}\">Click here to download v${{ steps.version.outputs.VERSION }}</a>\n\n"
         MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        MESSAGE+="💡 <b>Note:</b> v2.3 brings connection-level aria2c control, real download metrics (speed + time), smart platform-aware format routing, cleaner format cards, and a revamped history drawer. Faster, smarter, and more informative than ever!\n\n"
+        MESSAGE+="💡 <b>Note:</b> v2.4 brings premium animated branding with glowing gradient \"+\", typewriter URL placeholder, gradient spinner, redesigned navigation drawer, 30+ icon theme refactor, branded toast system, share intent URL pre-fill, and dark theme by default. More polished and premium than ever!\n\n"
         MESSAGE+="🕐 <i>Released: $(date '+%B %d, %Y at %H:%M UTC')</i>"
         
         # URL encode the message to avoid HTML parsing issues
