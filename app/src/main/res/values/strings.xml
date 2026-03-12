@@ -652,5 +652,38 @@
     <string name="notification_permission_desc">Seal Plus needs notification permission to show download progress and completion status. Please grant this permission for the best experience.</string>
     <string name="grant_permission">Grant Permission</string>
     <string name="skip">Skip</string>
+
+    <string name="features">Features</string>
+
+    <!-- Torrent Downloader -->
+    <string name="torrent_downloader">Torrent Downloader</string>
+    <string name="torrent_service_channel_name">Torrent Service</string>
+    <string name="torrent_service_channel_description">Keeps torrent downloads running in the background</string>
+    <string name="torrent_service_idle">No active downloads</string>
+    <string name="torrent_add_magnet">Add Magnet Link</string>
+    <string name="torrent_add_file">Select .torrent File</string>
+    <string name="torrent_paste_magnet_hint">Paste magnet link here…</string>
+    <string name="torrent_download">Download</string>
+    <string name="torrent_state_checking">Checking files…</string>
+    <string name="torrent_state_metadata">Fetching metadata…</string>
+    <string name="torrent_state_downloading">Downloading</string>
+    <string name="torrent_state_finished">Finished</string>
+    <string name="torrent_state_seeding">Seeding</string>
+    <string name="torrent_state_paused">Paused</string>
+    <string name="torrent_state_error">Error</string>
+    <string name="torrent_state_unknown">Queued</string>
+    <string name="torrent_eta">ETA %s</string>
+    <string name="torrent_cancel_delete">Cancel &amp; Delete</string>
+    <string name="torrent_permission_title">Storage Permission Required</string>
+    <string name="torrent_permission_desc">Torrent Downloader needs All Files Access to save files to Download/SealPlus/Torrents. Tap Open Settings and grant the permission.</string>
+    <string name="torrent_permission_open_settings">Open Settings</string>
+    <string name="torrent_enable_in_settings">Enable Torrent Downloader in Settings › Sealplus Extras</string>
+    <string name="torrent_download_toggle">Torrent Download</string>
+    <string name="torrent_download_toggle_desc">Show Torrent Downloader in the navigation drawer</string>
+    <string name="torrent_empty_title">No torrents yet</string>
+    <string name="torrent_empty_desc">Tap + to add a magnet link or .torrent file</string>
+    <string name="torrent_peers_seeds">%1$d peers · %2$d seeds</string>
+    <string name="torrent_size">%s total</string>
+    <string name="torrent_delete_confirm_desc">This will remove the torrent and delete all downloaded files. This action cannot be undone.</string>
 </resources>
 

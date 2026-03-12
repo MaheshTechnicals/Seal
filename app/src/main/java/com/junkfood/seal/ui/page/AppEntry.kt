@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -70,6 +71,7 @@ import com.junkfood.seal.ui.page.settings.network.WebViewPage
 import com.junkfood.seal.ui.page.settings.sealplus.SealPlusExtrasPage
 import com.junkfood.seal.ui.page.settings.security.SecuritySettingsPage
 import com.junkfood.seal.ui.page.settings.troubleshooting.TroubleShootingPage
+import com.junkfood.seal.ui.page.torrent.TorrentDownloaderPage
 import com.junkfood.seal.ui.page.videolist.VideoListPage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -77,10 +79,13 @@ import org.koin.androidx.compose.koinViewModel
 private const val TAG = "HomeEntry"
 
 private val TopDestinations =
-    listOf(Route.HOME, Route.TASK_LIST, Route.SETTINGS_PAGE, Route.DOWNLOADS)
+    listOf(Route.HOME, Route.TASK_LIST, Route.SETTINGS_PAGE, Route.DOWNLOADS, Route.TORRENT_DOWNLOADER)
 
 @Composable
-fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
+fun AppEntry(
+    dialogViewModel: DownloadDialogViewModel,
+    navigateTo: MutableState<String?> = mutableStateOf(null),
+) {
 
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -93,6 +98,21 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
     val versionReport = App.packageInfo.versionName.toString()
     val appName = stringResource(R.string.app_name)
     val scope = rememberCoroutineScope()
+
+    // Handle deep-link navigation from the torrent foreground-service notification.
+    // Reading navigateTo.value inside LaunchedEffect's key causes relaunch on
+    // every new value (including from onNewIntent while the app is open).
+    val pendingRoute = navigateTo.value
+    LaunchedEffect(pendingRoute) {
+        if (!pendingRoute.isNullOrBlank() && pendingRoute in TopDestinations) {
+            navController.navigate(pendingRoute) {
+                launchSingleTop = true
+                popUpTo(Route.HOME)
+            }
+            // Consume the event so config-change / recomposition doesn't re-navigate
+            navigateTo.value = null
+        }
+    }
 
     val onNavigateBack: () -> Unit = {
         with(navController) {
@@ -162,6 +182,9 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
                     )
                 }
                 animatedComposable(Route.DOWNLOADS) { VideoListPage { onNavigateBack() } }
+                animatedComposable(Route.TORRENT_DOWNLOADER) {
+                    TorrentDownloaderPage(onNavigateBack = onNavigateBack)
+                }
                 animatedComposableVariant(Route.TASK_LIST) {
                     TaskListPage(
                         onNavigateBack = onNavigateBack,

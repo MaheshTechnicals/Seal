@@ -69,13 +69,49 @@
                 <data android:mimeType="video/*" />
                 <data android:mimeType="audio/*" />
             </intent-filter>
+            <!-- Magnet URI scheme (tapped in browser / other apps) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="magnet" />
+            </intent-filter>
+            <!-- .torrent file open -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/x-bittorrent" />
+            </intent-filter>
         </activity>
 
         <service
             android:name=".DownloadService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="specialUse" />
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="media_download" />
+        </service>
+
+        <!--
+            TorrentService — dedicated foreground service for the libtorrent4j engine.
+            Kept separate from DownloadService so yt-dlp and torrent downloads can
+            coexist without interfering with each other's lifecycles.
+        -->
+        <service
+            android:name=".torrent.TorrentService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="torrent_download" />
+        </service>
 
         <activity
             android:name=".MainActivity"
@@ -106,6 +142,23 @@
                 <data android:scheme="https" />
                 <data android:mimeType="video/*" />
                 <data android:mimeType="audio/*" />
+            </intent-filter>
+            <!-- Magnet URI scheme -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="magnet" />
+            </intent-filter>
+            <!-- .torrent file open -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/x-bittorrent" />
             </intent-filter>
         </activity>
 

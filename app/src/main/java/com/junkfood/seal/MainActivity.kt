@@ -13,6 +13,8 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.junkfood.seal.App.Companion.context
+import com.junkfood.seal.torrent.TorrentEngine
+import com.junkfood.seal.torrent.TorrentStorageUtil
 import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.common.SettingsProvider
 import com.junkfood.seal.ui.common.ThemedToastHost
@@ -29,13 +31,28 @@ import com.junkfood.seal.util.PreferenceUtil.getBoolean
 import com.junkfood.seal.util.PreferenceUtil.updateBoolean
 import com.junkfood.seal.util.matchUrlFromSharedText
 import com.junkfood.seal.util.setLanguage
+import java.io.File
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.compose.KoinContext
 
 class MainActivity : AppCompatActivity() {
     private val dialogViewModel: DownloadDialogViewModel by viewModel()
+    private val torrentEngine: TorrentEngine by inject()
+    private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var isAppInBackground = false
+
+    /**
+     * Reactive destination requested by the torrent notification's `navigate_to` extra.
+     * Read by [AppEntry] via a `LaunchedEffect` and reset after consumption.
+     */
+    private val _navigateTo = mutableStateOf<String?>(null)
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,9 +65,20 @@ class MainActivity : AppCompatActivity() {
 
         context = this.baseContext
 
-        // Handle shared URL from intent on cold launch
-        intent.getSharedURL()?.let { url ->
-            dialogViewModel.setSharedUrl(url)
+        // Torrent intents (magnet: / .torrent) must be checked FIRST.
+        // getSharedURL() returns dataString for ACTION_VIEW, which would include
+        // magnet URIs — routing them to yt-dlp before the torrent engine sees them.
+        val torrentInput = intent.getTorrentInput()
+        if (torrentInput != null) {
+            torrentInput.dispatch(torrentEngine, this, activityScope)
+        } else {
+            // Check for navigate_to deep-link (torrent notification tap)
+            intent.getStringExtra("navigate_to")?.let { _navigateTo.value = it }
+
+            // Not a torrent intent — fall through to normal yt-dlp URL handling
+            intent.getSharedURL()?.let { url ->
+                dialogViewModel.setSharedUrl(url)
+            }
         }
         
         setContent {
@@ -88,7 +116,10 @@ class MainActivity : AppCompatActivity() {
                                     )
                                 }
                                 else -> {
-                                    AppEntry(dialogViewModel = dialogViewModel)
+                                    AppEntry(
+                                        dialogViewModel = dialogViewModel,
+                                        navigateTo = _navigateTo,
+                                    )
                                     
                                     // Show lock screen overlay if locked
                                     if (isLocked) {
@@ -127,10 +158,85 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        val url = intent.getSharedURL()
-        if (url != null) {
+        setIntent(intent)
+
+        // navigate_to deep-link (torrent notification tap while app is open)
+        intent.getStringExtra("navigate_to")?.let { _navigateTo.value = it }
+
+        // Torrent check FIRST — getSharedURL() returns dataString for ACTION_VIEW,
+        // which would incorrectly capture magnet: URIs as yt-dlp download targets.
+        val torrentInput = intent.getTorrentInput()
+        if (torrentInput != null) {
+            torrentInput.dispatch(torrentEngine, this, activityScope)
+            return
+        }
+        intent.getSharedURL()?.let { url ->
             dialogViewModel.setSharedUrl(url)
         }
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // Torrent intent parsing
+    // ─────────────────────────────────────────────────────────────────
+
+    /** Sealed result of parsing an incoming [Intent] for torrent content. */
+    private sealed interface TorrentInput {
+        data class Magnet(val uri: String) : TorrentInput
+        data class TorrentFile(val uri: android.net.Uri) : TorrentInput
+
+        /**
+         * Sends the input to [TorrentEngine] after verifying storage permission.
+         * File I/O is dispatched to [Dispatchers.IO] via [scope].
+         */
+        fun dispatch(
+            engine: TorrentEngine,
+            context: android.content.Context,
+            scope: CoroutineScope,
+        ) {
+            if (!TorrentStorageUtil.isStoragePermissionGranted(context)) {
+                TorrentStorageUtil.openManageStorageSettings(context)
+                return
+            }
+            when (this) {
+                is Magnet -> engine.addMagnet(uri)
+                is TorrentFile -> {
+                    // Copy the .torrent file off the main thread, then hand it to the engine.
+                    scope.launch {
+                        withContext(Dispatchers.IO) {
+                            runCatching {
+                                val tmp = File(
+                                    context.cacheDir,
+                                    "incoming_${System.currentTimeMillis()}.torrent",
+                                )
+                                context.contentResolver.openInputStream(uri)?.use { ins ->
+                                    tmp.outputStream().use { out -> ins.copyTo(out) }
+                                }
+                                engine.addTorrentFile(tmp)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Parses the [Intent] looking for a magnet URI (`magnet:` scheme) or a
+     * `.torrent` file (`application/x-bittorrent` MIME type).
+     * Returns `null` if no torrent content is found so the normal URL path
+     * can continue.
+     */
+    private fun Intent.getTorrentInput(): TorrentInput? {
+        if (action == Intent.ACTION_VIEW) {
+            val uri = dataString ?: return null
+            if (uri.startsWith("magnet:")) return TorrentInput.Magnet(uri)
+            if (type == "application/x-bittorrent") return TorrentInput.TorrentFile(data ?: return null)
+        }
+        if (action == Intent.ACTION_SEND && type == "text/plain") {
+            val text = getStringExtra(Intent.EXTRA_TEXT) ?: return null
+            if (text.trimStart().startsWith("magnet:")) return TorrentInput.Magnet(text.trim())
+        }
+        return null
     }
 
     private fun Intent.getSharedURL(): String? {

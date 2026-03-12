@@ -37,9 +37,11 @@ object NotificationUtil {
     private const val PROGRESS_INITIAL = 0
     private const val CHANNEL_ID = "download_notification"
     private const val SERVICE_CHANNEL_ID = "download_service"
+    private const val TORRENT_SERVICE_CHANNEL_ID = "torrent_service"
     private const val NOTIFICATION_GROUP_ID = "seal.download.notification"
     private const val DEFAULT_NOTIFICATION_ID = 100
     const val SERVICE_NOTIFICATION_ID = 123
+    const val TORRENT_SERVICE_NOTIFICATION_ID = 456
     private lateinit var serviceNotification: Notification
 
     //    private var builder =
@@ -156,9 +158,24 @@ object NotificationUtil {
                 enableVibration(false)
                 enableLights(false)
             }
+        val torrentChannel =
+            NotificationChannel(
+                    TORRENT_SERVICE_CHANNEL_ID,
+                    context.getString(R.string.torrent_service_channel_name),
+                    NotificationManager.IMPORTANCE_LOW,
+                )
+                .apply {
+                    description =
+                        context.getString(R.string.torrent_service_channel_description)
+                    group = NOTIFICATION_GROUP_ID
+                    setSound(null, null)
+                    enableVibration(false)
+                    enableLights(false)
+                }
         notificationManager.createNotificationChannelGroup(channelGroup)
         notificationManager.createNotificationChannel(channel)
         notificationManager.createNotificationChannel(serviceChannel)
+        notificationManager.createNotificationChannel(torrentChannel)
     }
 
     fun notifyProgress(
@@ -391,6 +408,73 @@ object NotificationUtil {
 
     fun cancelAllNotifications() {
         notificationManager.cancelAll()
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // Torrent service notifications
+    // ─────────────────────────────────────────────────────────────────
+
+    /**
+     * Builds the initial foreground [Notification] for [TorrentService].
+     * Called once from [TorrentService.onStartCommand] before [startForeground].
+     */
+    fun makeTorrentServiceNotification(activeCount: Int, speedText: String): Notification {
+        val pendingIntent: android.app.PendingIntent =
+            Intent(context, com.junkfood.seal.MainActivity::class.java)
+                .apply { putExtra("navigate_to", "torrent_downloader") }
+                .let {
+                    android.app.PendingIntent.getActivity(
+                        context,
+                        0,
+                        it,
+                        android.app.PendingIntent.FLAG_IMMUTABLE or
+                            android.app.PendingIntent.FLAG_UPDATE_CURRENT,
+                    )
+                }
+        val contentText =
+            if (activeCount > 0) "$activeCount active  ↓ $speedText"
+            else context.getString(R.string.torrent_service_idle)
+        return NotificationCompat.Builder(context, TORRENT_SERVICE_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_stat_seal)
+            .setContentTitle(context.getString(R.string.torrent_downloader))
+            .setContentText(contentText)
+            .setOngoing(true)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+            .setContentIntent(pendingIntent)
+            .build()
+    }
+
+    /**
+     * Updates the live [TorrentService] foreground notification with the latest
+     * active-count and aggregate download speed.  Called every second from
+     * [TorrentService]'s flow collector.
+     */
+    fun updateTorrentServiceNotification(activeCount: Int, speedText: String) {
+        val contentText =
+            if (activeCount > 0) "$activeCount active  ↓ $speedText"
+            else context.getString(R.string.torrent_service_idle)
+        val pendingIntent: android.app.PendingIntent =
+            Intent(context, com.junkfood.seal.MainActivity::class.java)
+                .apply { putExtra("navigate_to", "torrent_downloader") }
+                .let {
+                    android.app.PendingIntent.getActivity(
+                        context,
+                        0,
+                        it,
+                        android.app.PendingIntent.FLAG_IMMUTABLE or
+                            android.app.PendingIntent.FLAG_UPDATE_CURRENT,
+                    )
+                }
+        val notification =
+            NotificationCompat.Builder(context, TORRENT_SERVICE_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_stat_seal)
+                .setContentTitle(context.getString(R.string.torrent_downloader))
+                .setContentText(contentText)
+                .setOngoing(true)
+                .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+                .setContentIntent(pendingIntent)
+                .build()
+        notificationManager.notify(TORRENT_SERVICE_NOTIFICATION_ID, notification)
     }
 
     fun areNotificationsEnabled(): Boolean {

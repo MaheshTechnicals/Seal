@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CloudDownload
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.NetworkCell
 import androidx.compose.material.icons.outlined.Notifications
@@ -53,6 +54,7 @@ import com.junkfood.seal.ui.page.security.LockScreen
 import com.junkfood.seal.util.AuthenticationManager
 import com.junkfood.seal.util.ARIA2C_CONNECTIONS
 import com.junkfood.seal.util.MAX_CONCURRENT_DOWNLOADS
+import com.junkfood.seal.util.TORRENT_DOWNLOAD_ENABLED
 import com.junkfood.seal.util.NETWORK_ANY
 import com.junkfood.seal.util.NETWORK_MOBILE_ONLY
 import com.junkfood.seal.util.NETWORK_TYPE_RESTRICTION
@@ -66,6 +68,7 @@ import com.junkfood.seal.util.SPONSOR_DIALOG_FREQUENCY
 import com.junkfood.seal.util.SPONSOR_FREQ_MONTHLY
 import com.junkfood.seal.util.SPONSOR_FREQ_OFF
 import com.junkfood.seal.util.SPONSOR_FREQ_WEEKLY
+import com.junkfood.seal.util.PreferenceUtil
 import com.junkfood.seal.util.PreferenceUtil.getBoolean
 import com.junkfood.seal.util.PreferenceUtil.getInt
 import com.junkfood.seal.util.PreferenceUtil.updateBoolean
@@ -83,6 +86,7 @@ fun SealPlusExtrasPage(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var networkTypeRestriction by remember { mutableStateOf(NETWORK_TYPE_RESTRICTION.getInt()) }
     var showNetworkDialog by remember { mutableStateOf(false) }
+    var torrentDownloadEnabled by remember { mutableStateOf(TORRENT_DOWNLOAD_ENABLED.getBoolean()) }
     
     var notificationSound by remember { mutableStateOf(NOTIFICATION_SOUND.getBoolean()) }
     var notificationVibrate by remember { mutableStateOf(NOTIFICATION_VIBRATE.getBoolean()) }
@@ -122,10 +126,31 @@ fun SealPlusExtrasPage(
                 scrollBehavior = scrollBehavior
             )
         }
-    ) { paddingValues ->
+        ) { paddingValues ->
         LazyColumn(
             modifier = Modifier.padding(paddingValues)
         ) {
+            // ── Features ──────────────────────────────────────────────
+            item {
+                PreferenceSubtitle(text = stringResource(R.string.features))
+            }
+
+            item {
+                PreferenceSwitch(
+                    title = stringResource(R.string.torrent_download_toggle),
+                    description = stringResource(R.string.torrent_download_toggle_desc),
+                    icon = Icons.Outlined.CloudDownload,
+                    isChecked = torrentDownloadEnabled,
+                    onClick = {
+                        val newValue = !torrentDownloadEnabled
+                        // switchTorrentDownload updates both MMKV AND AppSettingsStateFlow
+                        // so NavigationDrawer reacts reactively without re-reading MMKV.
+                        PreferenceUtil.switchTorrentDownload(newValue)
+                        torrentDownloadEnabled = newValue
+                    },
+                )
+            }
+
             item {
                 PreferenceSubtitle(text = stringResource(R.string.download_control))
             }

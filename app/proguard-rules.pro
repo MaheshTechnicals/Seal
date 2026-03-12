@@ -27,6 +27,14 @@
 -keep class com.yausername.** { *; }
 -keep class org.apache.commons.compress.archivers.zip.** { *; }
 
+# ── libtorrent4j / libtorrent native bindings ──────────────────────────────
+# The SWIG-generated JNI layer uses reflection to find Java classes by name.
+# Stripping or renaming any of these causes UnsatisfiedLinkError at runtime.
+-keep class org.libtorrent4j.** { *; }
+-keep class org.libtorrent4j.swig.** { *; }
+-keepclassmembers class org.libtorrent4j.** { *; }
+-keepclassmembers class org.libtorrent4j.swig.** { *; }
+
 # Keep `Companion` object fields of serializable classes.
 # This avoids serializer lookup through `getDeclaredClasses` as done for named companion objects.
 -if @kotlinx.serialization.Serializable class **

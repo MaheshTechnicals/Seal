@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Subscriptions
 import androidx.compose.material.icons.filled.Terminal
+import androidx.compose.material.icons.outlined.CloudDownload
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Settings
@@ -30,6 +31,8 @@ import androidx.compose.material.icons.outlined.Terminal
 import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.Info
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.junkfood.seal.util.PreferenceUtil
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
@@ -276,6 +279,11 @@ fun NavigationDrawerSheetContent(
     onDismissRequest: suspend () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
+    // Collect from AppSettingsStateFlow so the drawer item appears/disappears immediately
+    // when the user toggles the setting in SealPlusExtrasPage — no recomposition needed.
+    val appSettings by PreferenceUtil.AppSettingsStateFlow.collectAsStateWithLifecycle()
+    val torrentEnabled = appSettings.isTorrentDownloadEnabled
+
     Column(
         modifier =
             modifier
@@ -324,6 +332,28 @@ fun NavigationDrawerSheetContent(
                     selected = false,
                     modifier = Modifier.padding(vertical = 2.dp)
                 )
+                // Shown only if the user has enabled Torrent Downloader in Settings
+                if (torrentEnabled) {
+                    NavigationDrawerItem(
+                        label = { Text(stringResource(R.string.torrent_downloader)) },
+                        icon = {
+                            Icon(
+                                Icons.Outlined.CloudDownload,
+                                null,
+                                tint = ThemedIconColors.primary,
+                            )
+                        },
+                        onClick = {
+                            scope
+                                .launch { onDismissRequest() }
+                                .invokeOnCompletion {
+                                    onNavigateToRoute(Route.TORRENT_DOWNLOADER)
+                                }
+                        },
+                        selected = currentRoute == Route.TORRENT_DOWNLOADER,
+                        modifier = Modifier.padding(vertical = 2.dp),
+                    )
+                }
             }
         }
 

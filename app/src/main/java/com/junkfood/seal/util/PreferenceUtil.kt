@@ -130,6 +130,9 @@ private const val DOWNLOAD_TYPE = "download_type"
 // Network Type Restriction
 const val NETWORK_TYPE_RESTRICTION = "network_type_restriction"
 
+// Torrent Downloader feature toggle
+const val TORRENT_DOWNLOAD_ENABLED = "torrent_download_enabled"
+
 // Download Control
 const val MAX_CONCURRENT_DOWNLOADS = "max_concurrent_downloads"
 
@@ -273,6 +276,7 @@ private val BooleanPreferenceDefaults =
         PROXY_ENABLED to false,
         PROXY_USE_FREE to true,
         PROXY_IS_WORKING to false,
+        TORRENT_DOWNLOAD_ENABLED to false,
     )
 
 private val IntPreferenceDefaults =
@@ -484,6 +488,7 @@ object PreferenceUtil {
         val seedColor: Int = DEFAULT_SEED_COLOR,
         val paletteStyleIndex: Int = 0,
         val isGradientDarkModeEnabled: Boolean = false,
+        val isTorrentDownloadEnabled: Boolean = false,
     )
 
     fun getMaxDownloadRate(): String = MAX_RATE.getString()
@@ -501,6 +506,7 @@ object PreferenceUtil {
                 seedColor = kv.decodeInt(THEME_COLOR, DEFAULT_SEED_COLOR),
                 paletteStyleIndex = kv.decodeInt(PALETTE_STYLE, 0),
                 isGradientDarkModeEnabled = kv.decodeBool(GRADIENT_DARK_MODE, true),
+                isTorrentDownloadEnabled = kv.decodeBool(TORRENT_DOWNLOAD_ENABLED, false),
             )
         )
     val AppSettingsStateFlow = mutableAppSettingsStateFlow.asStateFlow()
@@ -550,6 +556,13 @@ object PreferenceUtil {
         applicationScope.launch(Dispatchers.IO) {
             mutableAppSettingsStateFlow.update { it.copy(isGradientDarkModeEnabled = enabled) }
             kv.encode(GRADIENT_DARK_MODE, enabled)
+        }
+    }
+
+    fun switchTorrentDownload(enabled: Boolean) {
+        applicationScope.launch(Dispatchers.IO) {
+            mutableAppSettingsStateFlow.update { it.copy(isTorrentDownloadEnabled = enabled) }
+            kv.encode(TORRENT_DOWNLOAD_ENABLED, enabled)
         }
     }
 

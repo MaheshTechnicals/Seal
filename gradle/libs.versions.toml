@@ -38,6 +38,8 @@ mmkv = "1.3.12"
 
 koin = "4.0.0"
 
+libtorrent4j = "2.1.0-31"
+
 ktfmt = "0.20.1"
 
 [libraries]
@@ -112,6 +114,11 @@ youtubedl-android-aria2c = { group = "io.github.junkfood02.youtubedl-android", n
 
 mmkv = { group = "com.tencent", name = "mmkv", version.ref = "mmkv" }
 
+libtorrent4j-android-arm64  = { group = "org.libtorrent4j", name = "libtorrent4j-android-arm64",  version.ref = "libtorrent4j" }
+libtorrent4j-android-arm    = { group = "org.libtorrent4j", name = "libtorrent4j-android-arm",    version.ref = "libtorrent4j" }
+libtorrent4j-android-x86    = { group = "org.libtorrent4j", name = "libtorrent4j-android-x86",    version.ref = "libtorrent4j" }
+libtorrent4j-android-x86-64 = { group = "org.libtorrent4j", name = "libtorrent4j-android-x86_64", version.ref = "libtorrent4j" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
@@ -145,6 +152,13 @@ androidxCompose = ["androidx-compose-ui",
 youtubedlAndroid = ["youtubedl-android-library",
     "youtubedl-android-ffmpeg",
     "youtubedl-android-aria2c"]
+
+libtorrent4j = [
+    "libtorrent4j-android-arm64",
+    "libtorrent4j-android-arm",
+    "libtorrent4j-android-x86",
+    "libtorrent4j-android-x86-64",
+]
 
 core = ["androidx-activity-compose",
     "android-material",

@@ -28,19 +28,100 @@ import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialogViewModel.Ac
 import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialogViewModel.SelectionState
 import com.junkfood.seal.ui.page.downloadv2.configure.FormatPage
 import com.junkfood.seal.ui.page.downloadv2.configure.PlaylistSelectionPage
+import com.junkfood.seal.torrent.TorrentEngine
+import com.junkfood.seal.torrent.TorrentStorageUtil
 import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.util.DownloadUtil
 import com.junkfood.seal.util.PreferenceUtil
 import com.junkfood.seal.util.matchUrlFromSharedText
 import com.junkfood.seal.util.setLanguage
+import java.io.File
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 private const val TAG = "QuickDownloadActivity"
 
 class QuickDownloadActivity : ComponentActivity() {
     private var sharedUrlCached: String = ""
+    private val torrentEngine: TorrentEngine by inject()
+    private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+
+    /**
+     * Checks whether [intent] is a torrent-related intent (magnet URI or .torrent file).
+     * If so, dispatches it to [TorrentEngine] and returns `true` so the caller can
+     * `finish()` immediately — no yt-dlp dialog needed.
+     *
+     * When storage permission is missing the user is sent to the system settings
+     * page and `true` is still returned so the magnet/torrent link doesn't
+     * accidentally fall through to yt-dlp.
+     */
+    private fun handleTorrentIntent(intent: Intent): Boolean {
+        val isTorrent = when {
+            intent.action == Intent.ACTION_VIEW &&
+                intent.dataString?.startsWith("magnet:") == true -> true
+            intent.action == Intent.ACTION_VIEW &&
+                intent.type == "application/x-bittorrent" &&
+                intent.data != null -> true
+            intent.action == Intent.ACTION_SEND &&
+                intent.type == "text/plain" &&
+                intent.getStringExtra(Intent.EXTRA_TEXT)?.trim()
+                    ?.startsWith("magnet:") == true -> true
+            else -> false
+        }
+        if (!isTorrent) return false
+
+        // Gate on storage permission — prompt but don't fall through to yt-dlp
+        if (!TorrentStorageUtil.isStoragePermissionGranted(this)) {
+            TorrentStorageUtil.openManageStorageSettings(this)
+            return true
+        }
+
+        return when {
+            // magnet: URI opened directly
+            intent.action == Intent.ACTION_VIEW &&
+                intent.dataString?.startsWith("magnet:") == true -> {
+                torrentEngine.addMagnet(intent.dataString!!)
+                true
+            }
+            // .torrent file opened via file manager / browser
+            intent.action == Intent.ACTION_VIEW &&
+                intent.type == "application/x-bittorrent" &&
+                intent.data != null -> {
+                // File I/O must NOT run on the main thread
+                val data = intent.data!!
+                activityScope.launch {
+                    withContext(Dispatchers.IO) {
+                        runCatching {
+                            val tmp = File(cacheDir, "incoming_${System.currentTimeMillis()}.torrent")
+                            contentResolver.openInputStream(data)?.use { ins ->
+                                tmp.outputStream().use { out -> ins.copyTo(out) }
+                            }
+                            torrentEngine.addTorrentFile(tmp)
+                        }
+                    }
+                }
+                true
+            }
+            // magnet: link shared as text (e.g. from browser share sheet)
+            intent.action == Intent.ACTION_SEND &&
+                intent.type == "text/plain" -> {
+                val text = intent.getStringExtra(Intent.EXTRA_TEXT)?.trim() ?: return false
+                if (text.startsWith("magnet:")) {
+                    torrentEngine.addMagnet(text)
+                    true
+                } else {
+                    false
+                }
+            }
+            else -> false
+        }
+    }
 
     private fun Intent.getSharedURL(): String? {
         val intent = this
@@ -66,6 +147,15 @@ class QuickDownloadActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // ── Torrent intercept: magnet link or .torrent file ──────────
+        // These must NOT be passed to yt-dlp (DownloadDialogViewModel).
+        // Instead hand them to TorrentEngine and close this activity.
+        if (handleTorrentIntent(intent)) {
+            finish()
+            return
+        }
+
         intent.getSharedURL()?.let { sharedUrlCached = it }
 
         if (sharedUrlCached.isEmpty()) {
