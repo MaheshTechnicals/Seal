@@ -157,7 +157,7 @@ libtorrent4j = [
     "libtorrent4j-android-arm64",
     "libtorrent4j-android-arm",
     "libtorrent4j-android-x86",
-    "libtorrent4j-android-x86-64",
+    "libtorrent4j-android-x86v64",
 ]
 
 core = ["androidx-activity-compose",
