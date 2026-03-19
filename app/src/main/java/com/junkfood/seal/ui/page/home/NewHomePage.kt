@@ -446,12 +446,10 @@ fun NewHomePage(
                 TextButton(
                     onClick = {
                         showBatteryOptimizationDialog = false
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                                data = Uri.parse("package:${context.packageName}")
-                            }
-                            batteryOptimizationLauncher.launch(intent)
+                        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                            data = Uri.parse("package:${context.packageName}")
                         }
+                        batteryOptimizationLauncher.launch(intent)
                     }
                 ) {
                     Text(
