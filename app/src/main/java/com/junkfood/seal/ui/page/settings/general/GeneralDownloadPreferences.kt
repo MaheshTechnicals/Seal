@@ -418,7 +418,7 @@ fun GeneralDownloadPreferences(onNavigateBack: () -> Unit, navigateToTemplate: (
     if (showNotificationDialog) {
         NotificationPermissionDialog(
             onDismissRequest = { showNotificationDialog = false },
-            onPermissionGranted = {
+            onConfirm = {
                 notificationPermission?.launchPermissionRequest()
                 NOTIFICATION.updateBoolean(true)
                 downloadNotification = true

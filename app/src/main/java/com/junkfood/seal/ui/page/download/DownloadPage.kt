@@ -213,7 +213,7 @@ fun DownloadPage(
                 showNotificationDialog = false
                 NOTIFICATION.updateBoolean(false)
             },
-            onPermissionGranted = { notificationPermission?.launchPermissionRequest() },
+            onConfirm = { notificationPermission?.launchPermissionRequest() },
         )
     }
 
