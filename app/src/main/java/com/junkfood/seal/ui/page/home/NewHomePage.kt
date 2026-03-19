@@ -28,17 +28,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.Cancel
-import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.FileDownload
@@ -65,15 +61,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -106,7 +98,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -121,6 +112,7 @@ import com.junkfood.seal.download.Task
 import com.junkfood.seal.ui.common.HapticFeedback.slightHapticFeedback
 import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.common.LocalGradientDarkMode
+import com.junkfood.seal.ui.component.URLInputField
 import com.junkfood.seal.ui.icons.PlusIcon
 import com.junkfood.seal.ui.page.downloadv2.UiAction
 import com.junkfood.seal.ui.page.downloadv2.configure.Config
@@ -789,81 +781,6 @@ fun NewHomePage(
     }
 }
 
-@Composable
-fun URLInputField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    onDownloadClick: () -> Unit,
-    onPasteClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
-    val isGradientDark = LocalGradientDarkMode.current
-    val fullPlaceholder = stringResource(R.string.enter_url_to_download)
-
-
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(64.dp),
-        placeholder = {
-            Text(
-                text = fullPlaceholder,
-                style = MaterialTheme.typography.bodyLarge
-            )
-        },
-        singleLine = true,
-        shape = RoundedCornerShape(32.dp),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { onDownloadClick() }),
-        trailingIcon = {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (value.isEmpty()) {
-                    IconButton(onClick = onPasteClick) {
-                        Icon(
-                            imageVector = Icons.Outlined.ContentPaste,
-                            contentDescription = "Paste",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-
-                FilledIconButton(
-                    onClick = onDownloadClick,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .padding(end = 4.dp),
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = if (isGradientDark && isDarkTheme) {
-                            GradientDarkColors.GradientPrimaryStart
-                        } else {
-                            MaterialTheme.colorScheme.primary
-                        }
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.FileDownload,
-                        contentDescription = stringResource(R.string.download),
-                        tint = Color.White
-                    )
-                }
-            }
-        },
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = if (isGradientDark && isDarkTheme) {
-                GradientDarkColors.GradientPrimaryStart
-            } else {
-                MaterialTheme.colorScheme.primary
-            },
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline
-        )
-    )
-}
 
 @Composable
 fun RecentDownloadCard(
