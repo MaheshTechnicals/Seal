@@ -105,11 +105,9 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -123,6 +121,7 @@ import com.junkfood.seal.download.Task
 import com.junkfood.seal.ui.common.HapticFeedback.slightHapticFeedback
 import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.common.LocalGradientDarkMode
+import com.junkfood.seal.ui.icons.PlusIcon
 import com.junkfood.seal.ui.page.downloadv2.UiAction
 import com.junkfood.seal.ui.page.downloadv2.configure.Config
 import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialog
@@ -2058,17 +2057,4 @@ private fun DetailCard(
 }
 
 
-@Preview
-@Composable
-fun PlusIcon() {
 
-    Text(
-        text = "+",
-        style = MaterialTheme.typography.displayMedium.merge(
-            TextStyle(
-                color = Color.Magenta
-            )
-        ),
-        fontWeight = FontWeight.Bold
-    )
-}
