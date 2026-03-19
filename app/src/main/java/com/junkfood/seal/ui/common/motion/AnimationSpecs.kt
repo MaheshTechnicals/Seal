@@ -6,7 +6,6 @@ import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.PathEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.graphics.Path
-import com.junkfood.seal.ui.common.DURATION_ENTER
 
 fun PathInterpolator.toEasing(): Easing {
     return Easing { f -> this.getInterpolation(f) }
@@ -28,4 +27,4 @@ private val standardDecelerate = CubicBezierEasing(.0f, .0f, 0f, 1f)
 
 private val motionEasingStandard = CubicBezierEasing(0.4F, 0.0F, 0.2F, 1F)
 
-private val tweenSpec = tween<Float>(durationMillis = DURATION_ENTER, easing = EmphasizeEasing)
+private val tweenSpec = tween<Float>(durationMillis = 250, easing = EmphasizeEasing)
