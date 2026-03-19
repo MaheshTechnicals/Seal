@@ -1,6 +1,7 @@
 package com.junkfood.seal.ui.page.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -144,7 +145,9 @@ import com.junkfood.seal.util.toFileSizeText
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import androidx.core.net.toUri
 
+@SuppressLint("BatteryLife")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewHomePage(
@@ -436,7 +439,7 @@ fun NewHomePage(
                         showBatteryOptimizationDialog = false
                         val intent =
                             Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                                data = Uri.parse("package:${context.packageName}")
+                                data = "package:${context.packageName}".toUri()
                             }
                         batteryOptimizationLauncher.launch(intent)
                     }
