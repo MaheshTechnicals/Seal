@@ -1,5 +1,10 @@
 package com.junkfood.seal.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,16 +26,17 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.junkfood.seal.R
 import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.common.LocalGradientDarkMode
 import com.junkfood.seal.ui.theme.GradientDarkColors
-import com.junkfood.seal.R
 
 @Composable
 fun URLInputField(
@@ -42,8 +48,29 @@ fun URLInputField(
 ) {
     val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
     val isGradientDark = LocalGradientDarkMode.current
-    val fullPlaceholder = stringResource(R.string.enter_url_to_download)
 
+    val themePrimary = MaterialTheme.colorScheme.primary
+    val themeOutline = MaterialTheme.colorScheme.outline
+
+    val primaryColor = remember(isDarkTheme, isGradientDark, themePrimary) {
+        if (isGradientDark && isDarkTheme) {
+            GradientDarkColors.GradientPrimaryStart
+        } else {
+            themePrimary
+        }
+    }
+
+    val textFieldColors = OutlinedTextFieldDefaults.colors(
+        focusedBorderColor = primaryColor,
+        unfocusedBorderColor = themeOutline,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+    )
+
+
+    val keyboardOptions = remember { KeyboardOptions(imeAction = ImeAction.Done) }
+    val keyboardActions = remember(onDownloadClick) { KeyboardActions(onDone = { onDownloadClick() }) }
+    val placeholderText = stringResource(R.string.enter_url_to_download)
 
     OutlinedTextField(
         value = value,
@@ -53,20 +80,26 @@ fun URLInputField(
             .height(64.dp),
         placeholder = {
             Text(
-                text = fullPlaceholder,
+                text = placeholderText,
                 style = MaterialTheme.typography.bodyLarge
             )
         },
         singleLine = true,
         shape = RoundedCornerShape(32.dp),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { onDownloadClick() }),
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         trailingIcon = {
             Row(
+                modifier = Modifier.padding(end = 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (value.isEmpty()) {
+
+                AnimatedVisibility(
+                    visible = value.isEmpty(),
+                    enter = fadeIn() + scaleIn(),
+                    exit = fadeOut() + scaleOut()
+                ) {
                     IconButton(onClick = onPasteClick) {
                         Icon(
                             imageVector = Icons.Outlined.ContentPaste,
@@ -78,15 +111,9 @@ fun URLInputField(
 
                 FilledIconButton(
                     onClick = onDownloadClick,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .padding(end = 4.dp),
+                    modifier = Modifier.size(48.dp),
                     colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = if (isGradientDark && isDarkTheme) {
-                            GradientDarkColors.GradientPrimaryStart
-                        } else {
-                            MaterialTheme.colorScheme.primary
-                        }
+                        containerColor = primaryColor
                     )
                 ) {
                     Icon(
@@ -97,13 +124,6 @@ fun URLInputField(
                 }
             }
         },
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = if (isGradientDark && isDarkTheme) {
-                GradientDarkColors.GradientPrimaryStart
-            } else {
-                MaterialTheme.colorScheme.primary
-            },
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline
-        )
+        colors = textFieldColors
     )
 }
