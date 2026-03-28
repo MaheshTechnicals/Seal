@@ -10,7 +10,6 @@ import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import java.io.File
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,10 +25,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,7 +40,6 @@ import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.CalendarToday
-import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.ExitToApp
@@ -59,7 +55,6 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material.icons.outlined.Storage
@@ -73,7 +68,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -97,9 +91,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.compose.ui.Alignment
@@ -135,13 +127,11 @@ import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialogViewModel
 import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialogViewModel.Action
 import com.junkfood.seal.ui.page.downloadv2.configure.FormatPage
 import com.junkfood.seal.ui.page.downloadv2.configure.PlaylistSelectionPage
-import com.junkfood.seal.ui.page.videolist.RemoveItemDialog
 import com.junkfood.seal.ui.theme.GradientDarkColors
 import com.junkfood.seal.util.DatabaseUtil
 import com.junkfood.seal.util.DownloadUtil
 import com.junkfood.seal.util.FileUtil
 import com.junkfood.seal.util.toFileSizeText
-import com.junkfood.seal.util.toDurationText
 import com.junkfood.seal.util.getErrorReport
 import com.junkfood.seal.util.makeToast
 import com.junkfood.seal.util.matchUrlFromClipboard
@@ -158,7 +148,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.TileMode
@@ -179,7 +168,6 @@ fun NewHomePage(
 ) {
     val view = LocalView.current
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val clipboardManager = LocalClipboardManager.current
     val uriHandler = LocalUriHandler.current
     val activity = context as? Activity
@@ -306,45 +294,79 @@ fun NewHomePage(
             .reversed()
     }
     
-    // Get active downloads with proper state observation for real-time updates
+    // Get active downloads with proper state observation for real-time updates.
+    // SnapshotStateMap is a stable reference; derivedStateOf tracks snapshot reads internally.
     val taskStateMap = downloader.getTaskStateMap()
-    
+
+    // Build the set of URLs that currently have an *active* (non-completed) task so we can
+    // suppress those entries from the "completed" database section and avoid dual-listing.
+    val activeTaskUrls by remember {
+        derivedStateOf {
+            taskStateMap
+                .filter { (_, state) -> state.downloadState !is Task.DownloadState.Completed }
+                .keys
+                .map { it.url }
+                .toSet()
+        }
+    }
+
     // Create a comprehensive set of identifiers from recent downloads to avoid duplicates
     val recentDownloadIdentifiers = remember(recentFiveDownloads) {
         recentFiveDownloads.flatMap { download ->
             listOf(
                 download.videoUrl,
                 download.videoPath,
-                "${download.videoUrl}|${download.videoPath}" // Combined key for extra safety
+                "${download.videoUrl}|${download.videoPath}"
             )
         }.toSet()
     }
-    
-    // Filter active downloads - only show non-completed tasks OR completed tasks not in recent downloads
-    val activeDownloads by remember(taskStateMap, recentDownloadIdentifiers) {
+
+    // Filter active downloads:
+    //   • Always show non-completed tasks (running, queued, paused, canceled, error)
+    //   • Show completed tasks only if they haven't yet appeared in the recent-downloads DB section
+    // Sort order (strict, stable):
+    //   1. Running / FetchingInfo   — actively working right now
+    //   2. ReadyWithInfo            — info fetched, waiting for a download slot (more advanced than Idle)
+    //   3. Idle                     — just queued, nothing started yet
+    //   4. Paused                   — user paused
+    //   5. Canceled / Error         — terminal but user-visible
+    //   6. Completed                — transition state before DB write, shown below
+    // Within each group: newer tasks (higher timeCreated) appear first.
+    // IMPORTANT: recentDownloadIdentifiers is a plain Set (not snapshot state), so
+    // derivedStateOf cannot track it. We pass it as a key to remember() so the
+    // derivedStateOf object is recreated (and re-evaluated) whenever the DB-backed
+    // identifiers set changes — e.g. when a completed task is flushed to the DB.
+    val activeDownloads by remember(recentDownloadIdentifiers) {
         derivedStateOf {
-            taskStateMap.toList().filter { (task, state) ->
-                val downloadState = state.downloadState
-                val isCompleted = downloadState is Task.DownloadState.Completed
-                
-                when {
-                    // If completed, check if it's already in recent downloads
-                    isCompleted && downloadState is Task.DownloadState.Completed -> {
-                        val filePath = downloadState.filePath
-                        val taskUrl = task.url
-                        
-                        // Don't show if URL, path, or combined key is in recent downloads
-                        val isInRecent = recentDownloadIdentifiers.contains(taskUrl) ||
-                                       recentDownloadIdentifiers.contains(filePath) ||
-                                       recentDownloadIdentifiers.contains("$taskUrl|$filePath")
-                        
-                        !isInRecent // Show only if NOT in recent downloads
+            taskStateMap
+                .filter { (task, state) ->
+                    val ds = state.downloadState
+                    when {
+                        ds is Task.DownloadState.Completed -> {
+                            val filePath = ds.filePath
+                            val taskUrl  = task.url
+                            val isInRecent =
+                                recentDownloadIdentifiers.contains(taskUrl) ||
+                                recentDownloadIdentifiers.contains(filePath) ||
+                                recentDownloadIdentifiers.contains("$taskUrl|$filePath")
+                            !isInRecent
+                        }
+                        else -> true
                     }
-                    // Show all non-completed tasks (running, canceled, error, etc.)
-                    else -> true
                 }
-            }
+                .toList()
+                .sortedWith(
+                    compareBy<Pair<Task, Task.State>> { (_, state) ->
+                        downloadStateSortPriority(state.downloadState)
+                    }.thenByDescending { (task, _) -> task.timeCreated }
+                )
         }
+    }
+
+    // Exclude recent-DB entries whose URL still has a live (non-completed) active task so items
+    // don't appear in both sections simultaneously during the Running → Completed transition.
+    val recentFiveDownloadsFiltered = remember(recentFiveDownloads, activeTaskUrls) {
+        recentFiveDownloads.filter { it.videoUrl !in activeTaskUrls }
     }
     
     // Handle back press to show exit confirmation
@@ -624,8 +646,10 @@ fun NewHomePage(
                 )
             }
             
-            // Recent Downloads Section - combines both active and completed
-            if (taskStateMap.isNotEmpty() || recentFiveDownloads.isNotEmpty()) {
+            // Recent Downloads Section - combines both active and completed.
+            // Use activeDownloads (not taskStateMap) so the header hides correctly when all
+            // tasks are Completed and already present in the DB-backed section.
+            if (activeDownloads.isNotEmpty() || recentFiveDownloadsFiltered.isNotEmpty()) {
                 item {
                     Text(
                         text = stringResource(R.string.recent_downloads),
@@ -705,9 +729,9 @@ fun NewHomePage(
             }
             
             // Show recent completed downloads
-            if (recentFiveDownloads.isNotEmpty()) {
+            if (recentFiveDownloadsFiltered.isNotEmpty()) {
                 items(
-                    items = recentFiveDownloads,
+                    items = recentFiveDownloadsFiltered,
                     key = { it.id }
                 ) { downloadInfo ->
                     var showRecentDetailsDialog by remember { mutableStateOf(false) }
@@ -1154,6 +1178,9 @@ fun ActiveDownloadCard(
         is Task.DownloadState.Error -> stringResource(R.string.download_error)
         is Task.DownloadState.Completed -> stringResource(R.string.completed) + " 100%"
         is Task.DownloadState.FetchingInfo -> stringResource(R.string.fetching_info)
+        // Idle = waiting for a download slot to open; ReadyWithInfo = info fetched, waiting to start
+        Task.DownloadState.Idle,
+        Task.DownloadState.ReadyWithInfo -> stringResource(R.string.queue_status)
         else -> ""
     }
     
@@ -1367,10 +1394,14 @@ fun ActiveDownloadCard(
                             )
                         }
                         
-                        // Cancel option for running/fetching/paused downloads
-                        if (downloadState is Task.DownloadState.Running || 
+                        // Cancel option for running/fetching/paused/queued downloads.
+                        // Idle and ReadyWithInfo are queued states — DownloaderV2.cancelImpl()
+                        // handles them correctly but the UI must expose the action.
+                        if (downloadState is Task.DownloadState.Running ||
                             downloadState is Task.DownloadState.FetchingInfo ||
-                            downloadState is Task.DownloadState.Paused) {
+                            downloadState is Task.DownloadState.Paused ||
+                            downloadState == Task.DownloadState.Idle ||
+                            downloadState == Task.DownloadState.ReadyWithInfo) {
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.cancel)) },
                                 onClick = {
@@ -1469,7 +1500,6 @@ fun DownloadDetailsDialog(
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
     var showFilePathDialog by remember { mutableStateOf(false) }
@@ -2093,6 +2123,32 @@ private fun DetailCard(
 }
 
 /**
+ * Returns a numeric sort priority for a [Task.DownloadState] so that the
+ * Recent Downloads list always shows items in the order:
+ *
+ *   Running                (0)    →  actively downloading NOW
+ *   FetchingInfo           (1)    →  actively fetching metadata NOW
+ *   ReadyWithInfo          (2)    →  info fetched, waiting for a download slot
+ *   Idle                   (3)    →  just queued, nothing started yet
+ *   Paused                 (4)    →  user-paused
+ *   Canceled               (5)    →  user-canceled
+ *   Error                  (6)    →  failed
+ *   Completed              (7)    →  transition state before DB flush
+ *
+ * Lower number = shown closer to the top of the list.
+ */
+private fun downloadStateSortPriority(state: Task.DownloadState): Int = when (state) {
+    is Task.DownloadState.Running       -> 0  // actively downloading right now
+    is Task.DownloadState.FetchingInfo  -> 1  // actively fetching metadata right now
+    Task.DownloadState.ReadyWithInfo    -> 2  // info fetched, waiting for a download slot — more advanced than Idle
+    Task.DownloadState.Idle             -> 3  // just queued, nothing started yet
+    is Task.DownloadState.Paused        -> 4  // user-paused
+    is Task.DownloadState.Canceled      -> 5  // user-canceled
+    is Task.DownloadState.Error         -> 6  // failed
+    is Task.DownloadState.Completed     -> 7  // done, transitioning to DB section
+}
+
+/**
  * Animated glowing "+" text with continuously cycling gradient colors
  * and a pulsing glow effect that matches the app theme.
  */
@@ -2120,17 +2176,6 @@ fun AnimatedGlowingPlus() {
             repeatMode = RepeatMode.Reverse
         ),
         label = "glowAlpha"
-    )
-
-    // Animate scale for subtle pulse
-    val scale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.05f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1200, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "scale"
     )
 
     val gradientColors = listOf(
