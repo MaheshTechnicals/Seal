@@ -18,6 +18,7 @@ data class DownloadedVideoInfo(
     @ColumnInfo(defaultValue = "Unknown") val extractor: String = "Unknown",
     @ColumnInfo(defaultValue = "-1") val downloadTimeMillis: Long = -1L,
     @ColumnInfo(defaultValue = "-1") val averageSpeedBytesPerSec: Long = -1L,
+    @ColumnInfo(defaultValue = "0") val isHidden: Boolean = false,
 ) {
     @Ignore
     constructor() :
@@ -31,5 +32,6 @@ data class DownloadedVideoInfo(
             extractor = "Unknown",
             downloadTimeMillis = -1L,
             averageSpeedBytesPerSec = -1L,
+            isHidden = false,
         )
 }

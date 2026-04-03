@@ -71,6 +71,7 @@ import com.junkfood.seal.ui.page.settings.sealplus.SealPlusExtrasPage
 import com.junkfood.seal.ui.page.settings.security.SecuritySettingsPage
 import com.junkfood.seal.ui.page.settings.troubleshooting.TroubleShootingPage
 import com.junkfood.seal.ui.page.videolist.VideoListPage
+import com.junkfood.seal.ui.page.hidden.HiddenContentPage
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -273,8 +274,12 @@ fun NavGraphBuilder.settingsGraph(
             SealPlusExtrasPage(
                 onNavigateBack = onNavigateBack,
                 onNavigateToSecurity = { onNavigateTo(Route.SECURITY_SETTINGS) },
-                onNavigateToProxySettings = { onNavigateTo(Route.PROXY_SETTINGS) }
+                onNavigateToProxySettings = { onNavigateTo(Route.PROXY_SETTINGS) },
+                onNavigateToHiddenContent = { onNavigateTo(Route.HIDDEN_CONTENT) },
             )
+        }
+        animatedComposable(Route.HIDDEN_CONTENT) {
+            HiddenContentPage(onNavigateBack = onNavigateBack)
         }
         animatedComposable(Route.SECURITY_SETTINGS) {
             SecuritySettingsPage(onBackPressed = onNavigateBack)

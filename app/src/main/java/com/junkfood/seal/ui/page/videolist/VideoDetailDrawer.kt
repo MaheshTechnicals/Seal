@@ -33,6 +33,7 @@ import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -101,6 +102,7 @@ fun VideoDetailDrawer(
     isFileAvailable: Boolean = true,
     onDismissRequest: () -> Unit = {},
     onDelete: () -> Unit = {},
+    onHide: () -> Unit = {},
 ) {
     val uriHandler = LocalUriHandler.current
     val view = LocalView.current
@@ -141,6 +143,11 @@ fun VideoDetailDrawer(
                 view.slightHapticFeedback()
                 onDismissRequest()
                 onDelete()
+            },
+            onHide = {
+                view.slightHapticFeedback()
+                onDismissRequest()
+                onHide()
             },
             onOpenLink = {
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -189,6 +196,7 @@ fun VideoDetailDrawerImpl(
     isFileAvailable: Boolean = true,
     onReDownload: (() -> Unit) = {},
     onDelete: () -> Unit = {},
+    onHide: () -> Unit = {},
     onOpenLink: () -> Unit = {},
     onShareFile: () -> Unit = {},
     downloadTimeMillis: Long = -1L,
@@ -389,6 +397,34 @@ fun VideoDetailDrawerImpl(
                     }
 
                     if (isFileAvailable) {
+                        OutlinedButton(
+                            onClick = onHide,
+                            modifier = Modifier
+                                .height(52.dp)
+                                .weight(1f),
+                            shape = RoundedCornerShape(14.dp),
+                            border = BorderStroke(
+                                1.dp,
+                                MaterialTheme.colorScheme.outline,
+                            ),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = MaterialTheme.colorScheme.onSurface,
+                            ),
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.VisibilityOff,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(18.dp),
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = stringResource(R.string.hide),
+                                style = MaterialTheme.typography.labelLarge,
+                            )
+                        }
+
                         Button(
                             onClick = onShareFile,
                             modifier = Modifier

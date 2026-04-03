@@ -1,6 +1,10 @@
 package com.junkfood.seal.util
 
+import android.media.MediaScannerConnection
+import android.provider.MediaStore
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.junkfood.seal.App.Companion.applicationScope
 import com.junkfood.seal.App.Companion.context
 import com.junkfood.seal.database.AppDatabase
@@ -15,9 +19,31 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+private val MIGRATION_5_6 = object : Migration(5, 6) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            "ALTER TABLE DownloadedVideoInfo ADD COLUMN downloadTimeMillis INTEGER NOT NULL DEFAULT -1"
+        )
+        database.execSQL(
+            "ALTER TABLE DownloadedVideoInfo ADD COLUMN averageSpeedBytesPerSec INTEGER NOT NULL DEFAULT -1"
+        )
+    }
+}
+
+private val MIGRATION_6_7 = object : Migration(6, 7) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            "ALTER TABLE DownloadedVideoInfo ADD COLUMN isHidden INTEGER NOT NULL DEFAULT 0"
+        )
+    }
+}
+
 object DatabaseUtil {
     private const val DATABASE_NAME = "app_database"
-    private val db = Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME).build()
+    private val db =
+        Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+            .addMigrations(MIGRATION_5_6, MIGRATION_6_7)
+            .build()
     private val dao = db.videoInfoDao()
 
     fun insertInfo(vararg infoList: DownloadedVideoInfo) {
@@ -35,6 +61,32 @@ object DatabaseUtil {
     }
 
     fun getDownloadHistoryFlow() = dao.getDownloadHistoryFlow()
+
+    fun getVisibleDownloadHistoryFlow() = dao.getVisibleDownloadHistoryFlow()
+
+    fun getHiddenDownloadHistoryFlow() = dao.getHiddenDownloadHistoryFlow()
+
+    suspend fun hideItem(info: DownloadedVideoInfo) {
+        dao.setHidden(info.id, true)
+        removeFromMediaStore(info.videoPath)
+    }
+
+    suspend fun unhideItem(info: DownloadedVideoInfo) {
+        dao.setHidden(info.id, false)
+        MediaScannerConnection.scanFile(context, arrayOf(info.videoPath), null, null)
+    }
+
+    private fun removeFromMediaStore(filePath: String) {
+        val selection = "${MediaStore.MediaColumns.DATA} = ?"
+        val args = arrayOf(filePath)
+        listOf(
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        ).forEach { uri ->
+            runCatching { context.contentResolver.delete(uri, selection, args) }
+        }
+    }
 
     private suspend fun getDownloadHistory() = dao.getDownloadHistory()
 

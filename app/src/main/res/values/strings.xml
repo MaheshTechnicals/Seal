@@ -654,5 +654,13 @@
     <string name="notification_permission_desc">Seal Plus needs notification permission to show download progress and completion status. Please grant this permission for the best experience.</string>
     <string name="grant_permission">Grant Permission</string>
     <string name="skip">Skip</string>
+
+    <!-- Hidden Content strings -->
+    <string name="hide">Hide</string>
+    <string name="unhide">Unhide</string>
+    <string name="hidden_content">Hidden Content</string>
+    <string name="hidden_content_desc">View and manage your hidden media files</string>
+    <string name="no_hidden_content">No hidden content</string>
+    <string name="hidden_content_requires_app_lock">Enable App Lock first to use Hidden Content</string>
 </resources>
 

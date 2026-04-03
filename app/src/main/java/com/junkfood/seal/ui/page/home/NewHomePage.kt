@@ -283,7 +283,7 @@ fun NewHomePage(
     
     // Get recent downloads from database - will refresh when lifecycleRefreshTrigger changes
     val recentDownloads by remember(lifecycleRefreshTrigger) {
-        DatabaseUtil.getDownloadHistoryFlow()
+        DatabaseUtil.getVisibleDownloadHistoryFlow()
     }.collectAsStateWithLifecycle(initialValue = emptyList())
     
     // Get recent 5 downloads (remove duplicates by video URL and path to prevent duplicate cards)

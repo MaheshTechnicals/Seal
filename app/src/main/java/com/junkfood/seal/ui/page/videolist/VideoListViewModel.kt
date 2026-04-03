@@ -31,7 +31,7 @@ class VideoListViewModel : ViewModel() {
     private val viewState
         get() = stateFlow.value
 
-    private val _mediaInfoFlow = DatabaseUtil.getDownloadHistoryFlow()
+    private val _mediaInfoFlow = DatabaseUtil.getVisibleDownloadHistoryFlow()
 
     val videoListFlow: Flow<List<DownloadedVideoInfo>> =
         _mediaInfoFlow.map { it.reversed().sortedBy { info -> info.filterByType() } }
@@ -91,6 +91,12 @@ class VideoListViewModel : ViewModel() {
     fun deleteDownloadHistory(infoList: List<DownloadedVideoInfo>, deleteFile: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             DatabaseUtil.deleteInfoList(infoList = infoList, deleteFile = deleteFile)
+        }
+    }
+
+    fun hideItem(info: DownloadedVideoInfo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            DatabaseUtil.hideItem(info)
         }
     }
 

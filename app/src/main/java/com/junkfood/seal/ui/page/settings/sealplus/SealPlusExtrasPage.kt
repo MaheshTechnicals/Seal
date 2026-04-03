@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.NetworkCell
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material.icons.outlined.SignalCellular4Bar
 import androidx.compose.material.icons.outlined.SignalWifi4Bar
@@ -70,6 +71,7 @@ import com.junkfood.seal.util.PreferenceUtil.getBoolean
 import com.junkfood.seal.util.PreferenceUtil.getInt
 import com.junkfood.seal.util.PreferenceUtil.updateBoolean
 import com.junkfood.seal.util.PreferenceUtil.updateInt
+import com.junkfood.seal.util.makeToast
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,7 +79,8 @@ import kotlin.math.roundToInt
 fun SealPlusExtrasPage(
     onNavigateBack: () -> Unit,
     onNavigateToSecurity: () -> Unit = {},
-    onNavigateToProxySettings: () -> Unit = {}
+    onNavigateToProxySettings: () -> Unit = {},
+    onNavigateToHiddenContent: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -96,6 +99,10 @@ fun SealPlusExtrasPage(
     var showAuthScreen by remember { mutableStateOf(false) }
     var isAuthenticated by remember { mutableStateOf(false) }
 
+    // Authentication state for Hidden Content navigation
+    var showHiddenContentAuthScreen by remember { mutableStateOf(false) }
+    var hiddenContentAuthDone by remember { mutableStateOf(false) }
+
     // Show authentication screen if AppLock is enabled and user tries to access settings
     if (showAuthScreen && !isAuthenticated) {
         LockScreen(
@@ -103,6 +110,19 @@ fun SealPlusExtrasPage(
                 isAuthenticated = true
                 showAuthScreen = false
                 onNavigateToSecurity()
+            },
+            useBiometric = AuthenticationManager.useBiometric()
+        )
+        return
+    }
+
+    // Show authentication screen before entering Hidden Content page
+    if (showHiddenContentAuthScreen && !hiddenContentAuthDone) {
+        LockScreen(
+            onUnlocked = {
+                hiddenContentAuthDone = true
+                showHiddenContentAuthScreen = false
+                onNavigateToHiddenContent()
             },
             useBiometric = AuthenticationManager.useBiometric()
         )
@@ -288,6 +308,24 @@ fun SealPlusExtrasPage(
                         } else {
                             // AppLock not enabled, go directly to settings
                             onNavigateToSecurity()
+                        }
+                    }
+                )
+            }
+
+            item {
+                PreferenceItem(
+                    title = stringResource(R.string.hidden_content),
+                    description = stringResource(R.string.hidden_content_desc),
+                    icon = Icons.Outlined.VisibilityOff,
+                    onClick = {
+                        // Hidden Content requires App Lock to be enabled
+                        if (AuthenticationManager.isSecurityEnabled() && AuthenticationManager.isPinSet()) {
+                            hiddenContentAuthDone = false
+                            showHiddenContentAuthScreen = true
+                        } else {
+                            // App Lock not set up — cannot access hidden content
+                            context.makeToast(R.string.hidden_content_requires_app_lock)
                         }
                     }
                 )
