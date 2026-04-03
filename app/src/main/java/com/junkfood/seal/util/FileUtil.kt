@@ -209,6 +209,13 @@ object FileUtil {
             PRIVATE_DIRECTORY_SUFFIX,
         )
 
+    fun getHiddenPrivateDirectory(): File =
+        File(getExternalDownloadDirectory(), ".private").also {
+            it.mkdirs()
+            // .nomedia tells gallery apps not to index anything in this folder
+            File(it, ".nomedia").apply { if (!exists()) createNewFile() }
+        }
+
     fun File.createEmptyFile(fileName: String): Result<File> =
         this.runCatching {
                 mkdirs()

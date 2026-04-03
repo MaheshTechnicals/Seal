@@ -530,9 +530,6 @@ fun VideoListPage(viewModel: VideoListViewModel = koinViewModel(), onNavigateBac
                 scope.launch { sheetState.hide() }.invokeOnCompletion { showBottomSheet = false }
             },
             onDelete = { showRemoveDialog = true },
-            onHide = {
-                viewModel.hideItem(currentVideoInfo)
-            },
         )
     }
 

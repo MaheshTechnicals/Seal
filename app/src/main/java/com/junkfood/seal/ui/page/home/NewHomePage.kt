@@ -57,6 +57,7 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Speed
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.VideoFile
@@ -91,6 +92,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -152,6 +154,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.TextStyle
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -171,6 +174,7 @@ fun NewHomePage(
     val clipboardManager = LocalClipboardManager.current
     val uriHandler = LocalUriHandler.current
     val activity = context as? Activity
+    val scope = rememberCoroutineScope()
     
     var showExitDialog by remember { mutableStateOf(false) }
     var urlText by remember { mutableStateOf("") }
@@ -758,6 +762,12 @@ fun NewHomePage(
                         onShowDetails = {
                             view.slightHapticFeedback()
                             showRecentDetailsDialog = true
+                        },
+                        onHide = {
+                            view.slightHapticFeedback()
+                            scope.launch(Dispatchers.IO) {
+                                DatabaseUtil.hideItem(downloadInfo)
+                            }
                         }
                     )
                     
@@ -947,6 +957,7 @@ fun RecentDownloadCard(
     onShare: () -> Unit,
     onCopyLink: () -> Unit,
     onShowDetails: () -> Unit,
+    onHide: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
@@ -1072,6 +1083,20 @@ fun RecentDownloadCard(
                                 imageVector = Icons.Outlined.Link,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.hide)) },
+                        onClick = {
+                            onHide()
+                            showMenu = false
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.VisibilityOff,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     )

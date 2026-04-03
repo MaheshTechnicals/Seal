@@ -18,6 +18,7 @@ import com.junkfood.seal.database.objects.OptionShortcut
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 private val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(database: SupportSQLiteDatabase) {
@@ -67,13 +68,45 @@ object DatabaseUtil {
     fun getHiddenDownloadHistoryFlow() = dao.getHiddenDownloadHistoryFlow()
 
     suspend fun hideItem(info: DownloadedVideoInfo) {
-        dao.setHidden(info.id, true)
-        removeFromMediaStore(info.videoPath)
+        val sourceFile = File(info.videoPath)
+        if (sourceFile.exists()) {
+            // Move the file into the hidden private folder
+            val hiddenDir = FileUtil.getHiddenPrivateDirectory()
+            val destFile = File(hiddenDir, sourceFile.name).let { candidate ->
+                // Avoid name collisions
+                if (!candidate.exists()) candidate
+                else File(hiddenDir, "${info.id}_${sourceFile.name}")
+            }
+            sourceFile.copyTo(destFile, overwrite = true)
+            sourceFile.delete()
+            // Remove old path from MediaStore (index-only; file is already gone)
+            removeFromMediaStore(info.videoPath)
+            // Update DB: mark hidden + save new path so we can move it back later
+            dao.setHiddenAndPath(info.id, true, destFile.absolutePath)
+        } else {
+            // File doesn't exist on disk — just mark hidden in DB
+            dao.setHidden(info.id, true)
+        }
     }
 
     suspend fun unhideItem(info: DownloadedVideoInfo) {
-        dao.setHidden(info.id, false)
-        MediaScannerConnection.scanFile(context, arrayOf(info.videoPath), null, null)
+        val hiddenFile = File(info.videoPath)
+        if (hiddenFile.exists()) {
+            // Restore to the original SealPlus download directory
+            val downloadDir = FileUtil.getExternalDownloadDirectory()
+            val destFile = File(downloadDir, hiddenFile.name).let { candidate ->
+                if (!candidate.exists()) candidate
+                else File(downloadDir, "${info.id}_${hiddenFile.name}")
+            }
+            hiddenFile.copyTo(destFile, overwrite = true)
+            hiddenFile.delete()
+            // Scan restored file back into MediaStore
+            MediaScannerConnection.scanFile(context, arrayOf(destFile.absolutePath), null, null)
+            // Update DB: mark visible + save restored path
+            dao.setHiddenAndPath(info.id, false, destFile.absolutePath)
+        } else {
+            dao.setHidden(info.id, false)
+        }
     }
 
     private fun removeFromMediaStore(filePath: String) {

@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Subscriptions
 import androidx.compose.material.icons.outlined.Terminal
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.Info
@@ -69,6 +70,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import com.junkfood.seal.App
 import com.junkfood.seal.R
 import com.junkfood.seal.ui.common.LocalDarkTheme
@@ -76,6 +79,8 @@ import com.junkfood.seal.ui.common.LocalWindowWidthState
 import com.junkfood.seal.ui.common.Route
 import com.junkfood.seal.ui.common.ThemedIconColors
 import com.junkfood.seal.ui.page.downloadv2.DownloadPageImplV2
+import com.junkfood.seal.ui.page.security.LockScreen
+import com.junkfood.seal.util.AuthenticationManager
 import kotlinx.coroutines.launch
 
 @Composable
@@ -286,6 +291,21 @@ fun NavigationDrawerSheetContent(
     onDismissRequest: suspend () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
+    var showHiddenContentAuthScreen by remember { mutableStateOf(false) }
+    var hiddenContentAuthDone by remember { mutableStateOf(false) }
+
+    if (showHiddenContentAuthScreen && !hiddenContentAuthDone) {
+        LockScreen(
+            onUnlocked = {
+                hiddenContentAuthDone = true
+                showHiddenContentAuthScreen = false
+                scope.launch { onDismissRequest() }
+                    .invokeOnCompletion { onNavigateToRoute(Route.HIDDEN_CONTENT) }
+            },
+            useBiometric = AuthenticationManager.useBiometric()
+        )
+        return
+    }
     Column(
         modifier =
             modifier
@@ -319,6 +339,22 @@ fun NavigationDrawerSheetContent(
                         scope
                             .launch { onDismissRequest() }
                             .invokeOnCompletion { onNavigateToRoute(Route.DOWNLOADS) }
+                    },
+                    selected = false,
+                    modifier = Modifier.padding(vertical = 2.dp)
+                )
+                NavigationDrawerItem(
+                    label = { Text(stringResource(R.string.hidden_content)) },
+                    icon = { Icon(Icons.Outlined.VisibilityOff, null, tint = ThemedIconColors.secondary) },
+                    onClick = {
+                        if (AuthenticationManager.isSecurityEnabled() && AuthenticationManager.isPinSet()) {
+                            hiddenContentAuthDone = false
+                            showHiddenContentAuthScreen = true
+                        } else {
+                            scope
+                                .launch { onDismissRequest() }
+                                .invokeOnCompletion { onNavigateToRoute(Route.HIDDEN_CONTENT) }
+                        }
                     },
                     selected = false,
                     modifier = Modifier.padding(vertical = 2.dp)

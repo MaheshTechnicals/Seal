@@ -31,6 +31,9 @@ interface VideoInfoDao {
     @Query("UPDATE DownloadedVideoInfo SET isHidden = :hidden WHERE id = :id")
     suspend fun setHidden(id: Int, hidden: Boolean)
 
+    @Query("UPDATE DownloadedVideoInfo SET isHidden = :hidden, videoPath = :newPath WHERE id = :id")
+    suspend fun setHiddenAndPath(id: Int, hidden: Boolean, newPath: String)
+
     @Query("select * from DownloadedVideoInfo")
     suspend fun getDownloadHistory(): List<DownloadedVideoInfo>
 
