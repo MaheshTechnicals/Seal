@@ -5,6 +5,112 @@ All notable changes (starting from v1.7.3) to stable releases will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2026-04-06
+
+### 🔒 Hidden Content & Privacy
+
+* **Hidden Content Management System**
+  + New **Hidden Content** page accessible directly from the navigation drawer
+  + Mark any downloaded video as hidden — it disappears from the home page and download list instantly
+  + Hidden files are physically relocated to a **private isolated directory** inaccessible from the system file manager
+  + Access requires **PIN or biometric authentication** via the existing App Lock system
+  + If App Lock is not set up, the app shows a clear error message guiding you to Settings → SealPlus Extras → App Lock
+  + Optimistic UI: the card vanishes immediately on hide action before the database write completes
+
+### 🎨 Format Selection UI Overhaul
+
+* **Redesigned Format Cards**
+  + File size and bitrate are now shown in dedicated sections on every format card
+  + Improved visual hierarchy for codec, resolution, and quality information at a glance
+
+* **List View for Format Cards**
+  + New list-style layout option for format cards in the format selection page
+  + Toggle it on or off from Settings → SealPlus Extras
+
+* **Merge Audio Stream Option**
+  + New toggle on the Format Page to merge a separate audio stream into the selected video format
+  + Hint text is displayed when the merge option is active so you always know what will happen
+
+* **Removed Suggested Section**
+  + The "Suggested" section has been removed from the format selection page for a cleaner layout
+
+* **Download Dialog Loading State**
+  + Loading screen in the download dialog now shows a thumbnail image alongside the progress indicator instead of a plain spinner
+
+* **SealPlus Extras Expanded**
+  + New format-related preference options added to the SealPlus Extras settings page
+
+### ⬇️ Download Engine Reliability
+
+* **Auto-Retry on Network Error**
+  + Downloads that fail due to a network drop are automatically retried up to **3 times** with a 5-second delay between each attempt
+  + Progress text shows `Retrying (1/3)...` during backoff so you always know what's happening
+
+* **Resume Partial Downloads**
+  + `--continue` is now always passed to yt-dlp so interrupted downloads pick up from the partial file instead of restarting from scratch
+
+* **WiFi-Only Mode Fully Enforced**
+  + The network restriction setting now enforces inside the download engine itself, not just at the enqueue step
+  + Queued tasks **automatically resume** the moment a suitable network becomes available again
+
+* **Fixed Task ID Collision**
+  + Downloading the same URL twice with identical settings would previously overwrite the first task in the queue
+  + Each task now receives a guaranteed-unique ID based on timestamp
+
+### 📊 Download Progress UI
+
+* **Active Download List Sorting**
+  + Downloads are now sorted in a strict, stable order: Running → ReadyWithInfo → Idle → Paused → Canceled/Error → Completed
+  + Within each group, newer tasks appear first
+  + Completed tasks are shown in the active list only until they appear in the recent-downloads section — no duplicates
+
+* **Speed & ETA on Home Cards**
+  + Active download cards now show live speed and estimated time, e.g. `2.50 MiB/s  •  ETA 00:03`
+
+* **Merging Phase Detection**
+  + Download cards now correctly show **"Merging..."** while yt-dlp is post-processing instead of staying frozen at 100%
+
+* **Fixed -1% / 0% Progress Bug**
+  + During the initial phase before yt-dlp reports real progress, the percentage is now hidden instead of showing `-1%` or `Paused 0%`
+  + Progress bar shows a smooth **indeterminate/pulsing animation** when no progress data is available yet
+
+### 🗂️ Completed Downloads
+
+* **Missing File Detection**
+  + If a downloaded file has been deleted or moved, its home page card now renders **grayed out** with a broken-image icon and "File no longer available" label
+
+### ⚡ Performance Improvements
+
+* **Reduced CPU Usage During Downloads**
+  + The internal task scheduler now only fires when a task actually changes state (starts, finishes, errors, pauses) — not on every progress update
+
+* **Reduced Battery & Storage Writes**
+  + Full task list serialization to MMKV storage now only happens on meaningful structural state changes, cutting storage I/O to near zero during normal download progress
+
+### 🌍 Translations
+
+* **61 Languages Updated**
+  + New `video_audio_merge_hint` and `download_and_merge` strings added across all 61 supported languages
+
+* **Build-Breaking Escape Fix**
+  + Corrected unescaped apostrophes in Belarusian (`be`), Punjabi (`pa`), and Ukrainian (`uk`) string files
+
+* **Complete Hebrew Translation** — thanks to [@613avi](https://github.com/613avi)
+  + 185 previously missing Hebrew strings have been filled in
+
+* **Improved Turkish Translation** — thanks to [@mikropsoft](https://github.com/mikropsoft)
+  + Revised and improved accuracy across dozens of Turkish strings
+
+### 🔧 Other Fixes & Improvements
+
+* Added option to **ignore SSL certificates** for filtered networks (e.g. Netfree) — thanks to [@613avi](https://github.com/613avi)
+  + `--no-check-certificate` applied across all 5 request paths: playlist info fetch, video info fetch, video download, and both custom command execution paths
+* Navigation drawer header layout polished — improved text hierarchy, spacing, and logo alignment
+* Sponsors page and component architecture refactored for cleaner separation of concerns
+* Removed & cleaned up unused imports across 24 source files (89 lines removed)
+
+---
+
 ## [2.4.0] - 2026-03-10
 
 ### ✨ Animated Branding & Visual Polish

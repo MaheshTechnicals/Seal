@@ -172,70 +172,107 @@ English
 ## ⬇️ Download & Installation
 
 
-### 🚀 What's New in v2.4?
+### 🚀 What's New in v2.5?
 
 <details open>
-<summary><b>📱 Click to see latest updates - Premium Animations, Icon Theming & Share Intent (March 10, 2026)</b></summary>
+<summary><b>📱 Click to see latest updates - Hidden Content, Download Engine Reliability & Performance (April 6, 2026)</b></summary>
 
-## ✨ Seal Plus v2.4.0 - Premium Animations, Icon Theming & Share Intent
-
----
-
-### ✨ Animated Branding & Visual Polish
-
-* **Animated Glowing "+" Logo**
-  + The "+" in "Seal+" on the home page now features a flowing gradient animation (primary → tertiary → secondary)
-  + Continuous pulsing glow shadow effect for a premium, eye-catching look
-
-* **Gradient Circular Progress Indicator**
-  + Replaced the plain loading spinner with a premium sweep-gradient spinner in the download dialog
-  + Rotating arc with breathing animation and smooth color shifting
-
-### 🎨 UI & Theme Enhancements
-
-* **Typewriter URL Placeholder Animation**
-  + The "Enter URL to download" placeholder text reveals character-by-character with a typewriter effect
-  + Flowing gradient brush matching the Seal+ brand colors
-
-* **Redesigned Navigation Drawer Header**
-  + Center-aligned modern header with app logo, title, subtitle, and version badge
-  + Removed active/selected state for cleaner navigation
-
-* **Dark Theme On by Default**
-  + New installations default to dark theme; existing users keep their saved preference
-
-### 🎯 Consistent Icon Theming
-
-* **Material Theme Color Refactor**
-  + Refactored icon tinting across 30+ screens to use `MaterialTheme.colorScheme`
-  + Consistent look across Light, Dark, and Gradient Dark themes
-
-### 🍞 Themed Toast System
-
-* **Custom Themed Toast Manager**
-  + Replaced standard Android toasts with a branded themed toast system matching Material 3
-
-### 🔗 Share Intent & Navigation
-
-* **Share Intent URL Handling**
-  + URLs shared from other apps automatically pre-fill in the download input field
-
-* **Navigation Route Updates**
-  + Sponsor page now redirects to Support Developer page
-  + Settings toggle click behavior and icon animations improved
+## ✨ Seal Plus v2.5.0 - Hidden Content, Download Engine Reliability & Performance
 
 ---
 
-### ✨ Key Features (v2.4)
+### 🔒 Hidden Content & Privacy
 
-* ✨ **Animated Glowing "+"** - Flowing gradient animation on Seal+ branding
-* 🎨 **Typewriter URL Placeholder** - Character-by-character animated input hint
-* 🔄 **Gradient Spinner** - Premium sweep-gradient loading indicator
-* 🧭 **Redesigned Navigation Drawer** - Center-aligned header with logo and version badge
-* 🎯 **30+ Icon Theme Refactor** - Consistent MaterialTheme colors across all screens
-* 🍞 **Themed Toast System** - Branded toast notifications matching app theme
-* 🔗 **Share Intent Support** - Pre-fill URLs from external app shares
-* 🌙 **Dark Theme Default** - Dark mode enabled by default for new users
+* **Hidden Content Management System**
+  + New **Hidden Content** page accessible directly from the navigation drawer
+  + Mark any downloaded video as hidden — it disappears from the home page and download list instantly
+  + Hidden files are physically relocated to a **private isolated directory** inaccessible from the system file manager
+  + Access requires **PIN or biometric authentication** via the existing App Lock system
+  + If App Lock is not set up, the app shows a clear error message guiding you to Settings → SealPlus Extras → App Lock
+  + Optimistic UI: the card vanishes immediately on hide action before the database write completes
+
+### 🎨 Format Selection UI Overhaul
+
+* **Redesigned Format Cards**
+  + File size and bitrate are now shown in dedicated sections on every format card
+  + Improved visual hierarchy for codec, resolution, and quality information at a glance
+
+* **List View for Format Cards**
+  + New list-style layout option for format cards in the format selection page
+  + Toggle it on or off from Settings → SealPlus Extras
+
+* **Merge Audio Stream Option**
+  + New toggle on the Format Page to merge a separate audio stream into the selected video format
+  + Hint text is displayed when the merge option is active so you always know what will happen
+
+* **Removed Suggested Section**
+  + The "Suggested" section has been removed from the format selection page for a cleaner layout
+
+* **Download Dialog Loading State**
+  + Loading screen in the download dialog now shows a thumbnail image alongside the progress indicator instead of a plain spinner
+
+### ⬇️ Download Engine Reliability
+
+* **Auto-Retry on Network Error**
+  + Downloads failing due to network drops are automatically retried up to **3 times** with 5-second delay
+  + Progress text shows `Retrying (1/3)...` during backoff
+
+* **Resume Partial Downloads**
+  + `--continue` always passed to yt-dlp so interrupted downloads pick up from where they left off
+
+* **WiFi-Only Mode Fully Enforced**
+  + Network restriction now enforces inside the download engine itself, not just at enqueue
+  + Queued tasks **automatically resume** on network reconnect
+
+### 📊 Download Progress UI
+
+* **Active Download List Sorting**
+  + Downloads are now sorted in a strict, stable order: Running → ReadyWithInfo → Idle → Paused → Canceled/Error → Completed
+  + Within each group, newer tasks appear first
+  + Completed tasks are shown in the active list only until they appear in the recent-downloads section — no duplicates
+
+* **Speed & ETA on Home Cards** — e.g. `2.50 MiB/s  •  ETA 00:03`
+* **Merging Phase Detection** — cards correctly show **"Merging..."** during post-processing
+* **Fixed -1% / 0% Progress Bug** — smooth indeterminate animation before yt-dlp reports progress
+
+### 🗂️ Completed Downloads
+
+* **Missing File Detection**
+  + If a downloaded file has been deleted or moved, its home page card now renders **grayed out** with a broken-image icon and "File no longer available" label
+
+### ⚡ Performance Improvements
+
+* **Reduced CPU Usage During Downloads** — scheduler only fires on state changes, not every progress tick
+* **Reduced Battery & Storage Writes** — MMKV writes reduced to near zero during active downloads
+
+### 🔧 Other Fixes & Improvements
+
+* **SSL Certificate Bypass** — ignore SSL certificates for filtered networks (e.g. Netfree) — thanks to [@613avi](https://github.com/613avi)
+* Navigation drawer header polished — improved text hierarchy, spacing, and logo alignment
+* Removed & cleaned up unused imports across 24 source files
+
+### 🌍 Translations
+
+* **61 Languages Updated** — new merge-hint strings across all supported locales
+* **Complete Hebrew Translation** — thanks to [@613avi](https://github.com/613avi)
+* **Improved Turkish Translation** — thanks to [@mikropsoft](https://github.com/mikropsoft)
+
+---
+
+### ✨ Key Features (v2.5)
+
+* 🔒 **Hidden Content System** - Biometric-protected private vault with file relocation & optimistic UI
+* 🎨 **List View & Redesigned Format Cards** - File size, bitrate, and codec info at a glance
+* 🔀 **Merge Audio Stream Option** - Combine separate audio into any video format
+* 📋 **Active Download Sorting** - Stable order: Running → ReadyWithInfo → Queued → Paused → Done
+* 🔄 **Auto-Retry on Network Error** - Up to 3 automatic retries with 5s backoff
+* ▶️ **Resume Partial Downloads** - Continue interrupted downloads, never restart from zero
+* 📶 **WiFi-Only Fully Enforced** - Network restriction respected engine-side, auto-resumes
+* 📊 **Speed & ETA on Home Cards** - Live download speed and time remaining
+* 🔀 **Merging Phase Indicator** - Cards correctly show "Merging..." during post-processing
+* 🖼️ **Missing File Detection** - Grayed-out cards for deleted/moved files
+* ⚡ **CPU & Storage Optimized** - Scheduler and MMKV writes reduced to near zero
+* 🌍 **61 Languages Updated** - New merge-hint strings across all supported locales
 * ⏯️ **Pause/Resume downloads** with queue support
 * 🌐 Download from 1000+ sites via yt-dlp
 
@@ -243,6 +280,33 @@ English
 
 See [CHANGELOG.md](https://github.com/MaheshTechnicals/Sealplus/blob/main/CHANGELOG.md) for complete version history.
 
+</details>
+
+<details>
+<summary><b>📱 Previous Release - v2.4 (March 10, 2026)</b></summary>
+
+#### ✨ Seal Plus v2.4.0 - Premium Animations, Icon Theming & Share Intent
+
+#### ✨ Animated Branding & Visual Polish
+- ✅ **Animated Glowing "+" Logo** - Flowing gradient animation (primary → tertiary → secondary)
+- ✅ **Gradient Circular Progress Indicator** - Premium sweep-gradient spinner in download dialog
+
+#### 🎨 UI & Theme Enhancements
+- ✅ **Typewriter URL Placeholder Animation** - Character-by-character animated input hint
+- ✅ **Redesigned Navigation Drawer Header** - Center-aligned header with logo and version badge
+- ✅ **Dark Theme On by Default** - New installations default to dark theme
+
+#### 🎯 Consistent Icon Theming
+- ✅ **Material Theme Color Refactor** - 30+ screens using `MaterialTheme.colorScheme`
+
+#### 🍞 Themed Toast System
+- ✅ **Custom Themed Toast Manager** - Material 3 branded toast notifications
+
+#### 🔗 Share Intent & Navigation
+- ✅ **Share Intent URL Handling** - URLs from other apps auto-fill in download field
+- ✅ **Navigation Route Updates** - Sponsor page redirects to Support Developer page
+
+[View Full Changelog →](https://github.com/MaheshTechnicals/Sealplus/blob/main/CHANGELOG.md)
 </details>
 
 <details>
@@ -343,15 +407,19 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 ### 🚀 Latest Releases
 
 - **Latest Stable**: [Download from GitHub Releases](https://github.com/MaheshTechnicals/Sealplus/releases/latest)
-  - ✅ **Current Version**: v2.4.0 (March 2026)
-  - ✨ **Animated Glowing "+"** - Flowing gradient on Seal+ branding
-  - 🎨 **Typewriter URL Placeholder** - Animated input hint with gradient
-  - 🔄 **Gradient Spinner** - Premium sweep-gradient loading indicator
-  - 🧭 **Redesigned Nav Drawer** - Center-aligned header with logo and version badge
-  - 🎯 **30+ Icon Theme Refactor** - Consistent MaterialTheme colors across screens
-  - 🍞 **Themed Toast System** - Branded toast notifications
-  - 🔗 **Share Intent Support** - Pre-fill URLs from external shares
-  - 🌙 **Dark Theme Default** - Dark mode for new users
+  - ✅ **Current Version**: v2.5.0 (April 2026)
+  - 🔒 **Hidden Content System** - Biometric-protected private vault with file relocation
+  - 🎨 **List View & Redesigned Format Cards** - File size, bitrate, and codec info at a glance
+  - 🔀 **Merge Audio Stream Option** - Combine separate audio into any video format
+  - 📋 **Active Download Sorting** - Stable order: Running → Queued → Paused → Done
+  - 🔄 **Auto-Retry on Network Error** - Up to 3 automatic retries with 5s backoff
+  - ▶️ **Resume Partial Downloads** - Continue interrupted downloads, never restart from zero
+  - 📶 **WiFi-Only Fully Enforced** - Network restriction respected engine-side, auto-resumes
+  - 📊 **Speed & ETA on Home Cards** - Live download speed and time remaining
+  - 🔀 **Merging Phase Indicator** - Cards correctly show "Merging..." during post-processing
+  - 🖼️ **Missing File Detection** - Grayed-out cards for deleted/moved files
+  - ⚡ **CPU & Storage Optimized** - Near-zero overhead during active downloads
+  - 🌍 **61 Languages Updated** - New merge-hint strings across all locales
   - ⏯️ **Pause/Resume Downloads** - Full download control with queue
   - 🌐 **1000+ Sites** - Download from YouTube, Instagram, TikTok & more
   - 🚀 **Auto-Update System** enabled for seamless updates
@@ -367,8 +435,8 @@ For most Android devices, install the **arm64-v8a** version for optimal performa
 |------------|---------------|
 | **Minimum Android** | Android 7.0 (API 24) |
 | **Target Android** | Android 14 (API 36) |
-| **Current Version** | 2.4.0 |
-| **Release Date** | March 10, 2026 |
+| **Current Version** | 2.5.0 |
+| **Release Date** | April 6, 2026 |
 
 ### 🏗️ Architecture Support
 
