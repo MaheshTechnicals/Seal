@@ -773,6 +773,7 @@ object DownloadUtil {
             request
                 .apply {
                     addOption("--no-mtime")
+                    addOption("--continue")
                     //                addOption("-v")
                     if (cookies) {
                         enableCookies(userAgentString)

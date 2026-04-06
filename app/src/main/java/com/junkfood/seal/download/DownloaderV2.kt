@@ -2,6 +2,8 @@ package com.junkfood.seal.download
 
 import android.app.PendingIntent
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
 import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshotFlow
@@ -33,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -116,13 +119,39 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val taskStateMap = mutableStateMapOf<Task, Task.State>()
     private val resumedProgressMap = mutableMapOf<String, Float>()
+    // Tracks how many auto-retries have been attempted for each task (keyed by task ID).
+    // Cleared on success or after MAX_AUTO_RETRIES exhausted.
+    private val retryCountMap = mutableMapOf<String, Int>()
+
+    companion object {
+        private const val MAX_AUTO_RETRIES = 3
+        private const val RETRY_DELAY_MS = 5_000L
+        private val NETWORK_ERROR_KEYWORDS = listOf(
+            "Unable to connect", "Connection reset", "timed out", "connect timed out",
+            "HTTP Error 5", "Network is unreachable", "nodename nor servname",
+            "Failed to establish", "RemoteDisconnected", "SSLError"
+        )
+    }
     private val snapshotFlow = snapshotFlow { taskStateMap.toMap() }
 
     init {
+        // Re-trigger doYourWork() when suitable network becomes available
+        // (e.g. WiFi reconnects after the restriction blocked queued tasks).
+        App.connectivityManager.registerDefaultNetworkCallback(
+            object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) = doYourWork()
+            }
+        )
+
         scope.launch(Dispatchers.Default) {
+            // Only trigger doYourWork() when a state TYPE changes (not on every progress tick).
+            // Progress updates change Running.progress/progressText every ~200ms — filtering those
+            // out prevents hundreds of redundant doYourWork() calls per second.
             snapshotFlow
+                .map { map -> map.mapValues { (_, state) -> state.downloadState::class } }
+                .distinctUntilChanged()
                 .onEach { doYourWork() }
-                .map { it.countRunning() }
+                .map { it.values.count { cls -> cls == Running::class || cls == FetchingInfo::class } }
                 .distinctUntilChanged()
                 .collect { if (it > 0) App.startService() else App.stopService() }
         }
@@ -131,12 +160,30 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
             // don't write before we read
             enqueueFromBackup()
 
+            // Only write backup when a structurally important state changes.
+            // Strip volatile Running.progress/progressText before comparing so that the constant
+            // stream of progress callbacks (~5/sec) does NOT trigger a full MMKV serialization.
             snapshotFlow
-                .map { it.filter { it.value.downloadState !is Completed } }
+                .map { map ->
+                    map
+                        .filter { (_, state) -> state.downloadState !is Completed }
+                        .mapValues { (_, state) ->
+                            state.copy(
+                                downloadState = when (val ds = state.downloadState) {
+                                    is Running -> ds.copy(progress = -1f, progressText = "")
+                                    else -> ds
+                                }
+                            )
+                        }
+                }
                 .distinctUntilChanged()
-                .collect {
-                    it.forEach { Log.d(TAG, it.value.viewState.title) }
-                    PreferenceUtil.encodeTaskListBackup(it)
+                .collect { snapshot ->
+                    snapshot.forEach { (_, state) -> Log.d(TAG, state.viewState.title) }
+                    // Write back original map (with real progress) so paused-on-kill tasks
+                    // restore with the last known progress value.
+                    val original = taskStateMap
+                        .filter { (_, state) -> state.downloadState !is Completed }
+                    PreferenceUtil.encodeTaskListBackup(original)
                 }
         }
     }
@@ -245,6 +292,8 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
 
     /** Processes pending tasks, prioritizing downloads. */
     private fun doYourWork() {
+        // Respect WiFi-only / mobile-only restriction set in Network settings.
+        if (!PreferenceUtil.isNetworkAvailableForDownload()) return
         val maxConcurrency = MAX_CONCURRENT_DOWNLOADS.getInt()
         val effectiveLimit = if (maxConcurrency == 0) Int.MAX_VALUE else maxConcurrency
         if (taskStateMap.countRunning() >= effectiveLimit) return
@@ -345,6 +394,7 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
                         },
                     )
                     .onSuccess { pathList ->
+                        retryCountMap.remove(id)  // clear retry counter on success
                         downloadState = Completed(pathList.firstOrNull())
 
                         val text =
@@ -373,13 +423,38 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
                         if (throwable is YoutubeDL.CanceledException) {
                             return@onFailure
                         }
-                        downloadState = Error(throwable = throwable, action = Download)
-                        NotificationUtil.notifyError(
-                            title = viewState.title,
-                            textId = R.string.download_error_msg,
-                            notificationId = notificationId,
-                            report = throwable.stackTraceToString(),
-                        )
+                        val retries = retryCountMap.getOrDefault(id, 0)
+                        val isNetworkError = throwable.message?.let { msg ->
+                            NETWORK_ERROR_KEYWORDS.any { msg.contains(it, ignoreCase = true) }
+                        } ?: false
+
+                        if (isNetworkError && retries < MAX_AUTO_RETRIES) {
+                            val attempt = retries + 1
+                            retryCountMap[id] = attempt
+                            Log.d(TAG, "Network error — retrying ($attempt/$MAX_AUTO_RETRIES) in ${RETRY_DELAY_MS}ms: ${throwable.message}")
+                            // Show retrying status in the running card
+                            when (val preState = downloadState) {
+                                is Running -> downloadState = preState.copy(
+                                    progress = preState.progress,
+                                    progressText = "Retrying ($attempt/$MAX_AUTO_RETRIES)..."
+                                )
+                                else -> {}
+                            }
+                            delay(RETRY_DELAY_MS)
+                            // Only retry if still in Running state (user didn't cancel)
+                            if (downloadState is Running) {
+                                downloadState = ReadyWithInfo
+                            }
+                        } else {
+                            retryCountMap.remove(id)
+                            downloadState = Error(throwable = throwable, action = Download)
+                            NotificationUtil.notifyError(
+                                title = viewState.title,
+                                textId = R.string.download_error_msg,
+                                notificationId = notificationId,
+                                report = throwable.stackTraceToString(),
+                            )
+                        }
                     }
             }
             .also { job -> 

@@ -21,7 +21,7 @@ private val TypeInfo.id: String
         }
 
 private fun makeId(url: String, type: TypeInfo, preferences: DownloadUtil.DownloadPreferences): String =
-    "${url}_${type.id}_${preferences.hashCode()}"
+    "${url}_${type.id}_${preferences.hashCode()}_${System.currentTimeMillis()}"
 
 @Serializable
 data class Task(

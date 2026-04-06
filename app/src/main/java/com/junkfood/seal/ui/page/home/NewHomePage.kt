@@ -38,6 +38,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.BatteryChargingFull
+import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.ContentPaste
@@ -98,6 +99,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -969,10 +971,12 @@ fun RecentDownloadCard(
     val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
     val isGradientDark = LocalGradientDarkMode.current
     var showMenu by remember { mutableStateOf(false) }
-    
+    val fileExists = remember(downloadInfo.videoPath) { java.io.File(downloadInfo.videoPath).exists() }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .alpha(if (fileExists) 1f else 0.55f)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -1018,21 +1022,36 @@ fun RecentDownloadCard(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = stringResource(R.string.completed),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = if (isGradientDark && isDarkTheme) {
-                            Color(0xFF4ADE80)
-                        } else {
-                            MaterialTheme.colorScheme.primary
-                        },
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = "100%",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    if (fileExists) {
+                        Text(
+                            text = stringResource(R.string.completed),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (isGradientDark && isDarkTheme) {
+                                Color(0xFF4ADE80)
+                            } else {
+                                MaterialTheme.colorScheme.primary
+                            },
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "100%",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.BrokenImage,
+                            contentDescription = null,
+                            modifier = Modifier.size(14.dp),
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                        Text(
+                            text = stringResource(R.string.file_unavailable),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
             
@@ -1242,6 +1261,19 @@ fun ActiveDownloadCard(
         is Task.DownloadState.Completed -> Color(0xFF4ADE80)
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
+
+    // Parse speed and ETA from yt-dlp progressText.
+    // Example line: "45.3% of 10.00MiB at 2.50MiB/s ETA 00:03"
+    val speedEtaText = if (downloadState is Task.DownloadState.Running && progressText.isNotEmpty()) {
+        val speed = Regex("""at\s+([\d.]+\s*\S+/s)""").find(progressText)?.groupValues?.get(1)
+        val eta = Regex("""ETA\s+(\d+:\d+)""").find(progressText)?.groupValues?.get(1)
+        when {
+            speed != null && eta != null -> "$speed  •  ETA $eta"
+            speed != null -> speed
+            eta != null -> "ETA $eta"
+            else -> null
+        }
+    } else null
     
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -1338,6 +1370,17 @@ fun ActiveDownloadCard(
                                 )
                             }
                         }
+                    }
+
+                    // Speed + ETA line — only shown during active download
+                    if (speedEtaText != null) {
+                        Text(
+                            text = speedEtaText,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 }
                 
