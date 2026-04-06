@@ -1021,6 +1021,9 @@ object DownloadUtil {
                     if (cookies) {
                         enableCookies(userAgentString)
                     }
+                    if (noCheckCertificate) {
+                        addOption("--no-check-certificate")
+                    }
                 }
             }
 
@@ -1063,6 +1066,9 @@ object DownloadUtil {
                     )
                     if (cookies) {
                         enableCookies(userAgentString)
+                    }
+                    if (noCheckCertificate) {
+                        addOption("--no-check-certificate")
                     }
                 }
 
