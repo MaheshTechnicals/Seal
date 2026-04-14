@@ -9,4 +9,4 @@ Disallow: /app/
 Disallow: /buildSrc/
 Disallow: /gradle/
 
-Sitemap: https://maheshtechnicals.github.io/Sealplus/sitemap.xml
+Sitemap: https://sealplus.in/sitemap.xml
