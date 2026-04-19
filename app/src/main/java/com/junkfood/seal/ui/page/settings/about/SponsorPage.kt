@@ -97,6 +97,7 @@ import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.util.makeToast
 import com.junkfood.seal.util.PreferenceUtil.updateInt
 import com.junkfood.seal.util.SHOW_SPONSOR_MSG
+import com.junkfood.seal.util.Sponsor
 import com.junkfood.seal.util.SocialAccount
 import com.junkfood.seal.util.SocialAccounts
 import com.junkfood.seal.util.SponsorEntity
@@ -147,23 +148,21 @@ fun GitHubSponsorsPage(onNavigateBack: () -> Unit) {
         launch(Dispatchers.IO) {
             SHOW_SPONSOR_MSG.updateInt(0)
             SponsorUtil.getSponsors()
-                .onFailure { Log.e(TAG, "DonatePage: ", it) }
-                .onSuccess {
-                    it.data.viewer.sponsorshipsAsMaintainer.nodes.run {
-                        sponsorList.addAll(
-                            filter { node -> (node.tier?.monthlyPriceInDollars ?: 0) in 5 until 10 }
-                        )
-
-                        backerList.addAll(
-                            filter { node ->
-                                (node.tier?.monthlyPriceInDollars ?: 0) in 10 until 25
-                            }
-                        )
-
-                        supporterList.addAll(
-                            filter { node -> (node.tier?.monthlyPriceInDollars ?: 0) >= 25 }
-                        )
-                    }
+                .onFailure { Log.e(TAG, "SponsorPage: ", it) }
+                .onSuccess { response ->
+                    // Map each Sponsor (name + id) to a SponsorShip for the existing tier-based UI.
+                    // The static sponsors.json does not include tier or GitHub login data,
+                    // so all sponsors are shown in the sponsors (☕) section.
+                    sponsorList.addAll(
+                        response.sponsors.map { sp ->
+                            SponsorShip(
+                                sponsorEntity = SponsorEntity(
+                                    login = sp.id.toString(),
+                                    name = sp.name,
+                                )
+                            )
+                        }
+                    )
                 }
         }
     }

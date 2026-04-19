@@ -54,24 +54,10 @@ import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.common.LocalGradientDarkMode
 import com.junkfood.seal.ui.theme.GradientBrushes
 import com.junkfood.seal.ui.theme.GradientDarkColors
+import com.junkfood.seal.util.Sponsor
+import com.junkfood.seal.util.SponsorUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.int
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.util.concurrent.TimeUnit
-
-@Serializable
-data class Sponsor(val id: Int, val name: String)
-
-@Serializable
-data class SponsorsResponse(val sponsors: List<Sponsor> = emptyList())
 
 private const val SPONSORS_TAG = "SponsorsPage"
 
@@ -91,51 +77,16 @@ fun SponsorsPage(onNavigateBack: () -> Unit) {
     LaunchedEffect(retryKey) {
         isLoading = true
         errorMessage = null
-        try {
-            val result = withContext(Dispatchers.IO) {
-                val client = OkHttpClient.Builder()
-                    .connectTimeout(15, TimeUnit.SECONDS)
-                    .readTimeout(15, TimeUnit.SECONDS)
-                    .build()
-                val request = Request.Builder()
-                    .url("https://raw.githubusercontent.com/MaheshTechnicals/Sealplus/refs/heads/main/sponsors.json")
-                    .get()
-                    .addHeader("Accept", "application/json")
-                    .build()
-                val response = client.newCall(request).execute()
-                if (!response.isSuccessful) throw Exception("HTTP ${response.code}: ${response.message}")
-                val jsonString = response.body?.string()
-                    ?: throw Exception("Empty response from server")
-                Log.d(SPONSORS_TAG, "Response: $jsonString")
-                val jsonParser = Json {
-                    ignoreUnknownKeys = true
-                    isLenient = true
-                    coerceInputValues = true
-                }
-                try {
-                    jsonParser.decodeFromString<SponsorsResponse>(jsonString).sponsors
-                } catch (e: SerializationException) {
-                    val arr = Json.parseToJsonElement(jsonString).jsonObject["sponsors"]?.jsonArray
-                        ?: throw Exception("'sponsors' field not found in JSON")
-                    arr.mapNotNull { element ->
-                        runCatching {
-                            val obj = element.jsonObject
-                            Sponsor(
-                                id = obj["id"]?.jsonPrimitive?.int ?: 0,
-                                name = obj["name"]?.jsonPrimitive?.content ?: ""
-                            )
-                        }.getOrNull()
-                    }
-                }
+        withContext(Dispatchers.IO) { SponsorUtil.getSponsors() }
+            .onSuccess { response ->
+                // Reverse so the latest sponsors (added last in JSON) appear at the top
+                sponsors = response.sponsors.reversed()
             }
-            // Reverse so the latest sponsors (added last in JSON) appear at the top
-            sponsors = result.reversed()
-        } catch (e: Exception) {
-            Log.e(SPONSORS_TAG, "Error fetching sponsors", e)
-            errorMessage = e.message ?: "Failed to load sponsors"
-        } finally {
-            isLoading = false
-        }
+            .onFailure { e ->
+                Log.e(SPONSORS_TAG, "Error fetching sponsors", e)
+                errorMessage = e.message ?: "Failed to load sponsors"
+            }
+        isLoading = false
     }
 
     Scaffold(
