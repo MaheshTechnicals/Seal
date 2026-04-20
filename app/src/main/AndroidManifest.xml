@@ -129,7 +129,9 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <receiver android:name=".NotificationActionReceiver" />
+        <receiver
+            android:name=".NotificationActionReceiver"
+            android:exported="false" />
     </application>
 
 </manifest>
