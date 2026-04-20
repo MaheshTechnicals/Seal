@@ -957,10 +957,9 @@ private fun SponsorDialogPreview() {
     val sheetState =
         with(LocalDensity.current) {
             SheetState(
-                initialValue = SheetValue.Expanded,
                 skipPartiallyExpanded = true,
-                velocityThreshold = { 56.dp.toPx() },
-                positionalThreshold = { 125.dp.toPx() },
+                density = this,
+                initialValue = SheetValue.Expanded,
             )
         }
 

@@ -26,14 +26,11 @@ import androidx.compose.ui.unit.dp
 fun SealModalBottomSheet(
     modifier: Modifier = Modifier,
     sheetState: SheetState =
-        with(LocalDensity.current) {
-            SheetState(
-                initialValue = SheetValue.Expanded,
-                skipPartiallyExpanded = true,
-                velocityThreshold = { 56.dp.toPx() },
-                positionalThreshold = { 125.dp.toPx() },
-            )
-        },
+        SheetState(
+            skipPartiallyExpanded = true,
+            density = LocalDensity.current,
+            initialValue = SheetValue.Expanded,
+        ),
     onDismissRequest: () -> Unit,
     contentPadding: PaddingValues = PaddingValues(horizontal = 28.dp),
     properties: ModalBottomSheetProperties = ModalBottomSheetDefaults.properties,
