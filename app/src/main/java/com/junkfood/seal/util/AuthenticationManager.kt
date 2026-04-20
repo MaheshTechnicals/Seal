@@ -16,10 +16,20 @@ import com.junkfood.seal.R
 import com.tencent.mmkv.MMKV
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
+import java.security.SecureRandom
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 
 private const val TAG = "AuthenticationManager"
 private const val KEYSTORE_ALIAS = "SealPlusAuthKey"
 private const val TRANSFORMATION = "AES/GCM/NoPadding"
+
+// PBKDF2 parameters
+private const val PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA256"
+private const val PBKDF2_ITERATIONS = 200_000
+private const val PBKDF2_KEY_LENGTH = 256
+private const val PBKDF2_SALT_BYTES = 16
+private const val HASH_PREFIX_PBKDF2 = "pbkdf2"
 
 object AuthenticationManager {
     
@@ -110,13 +120,36 @@ object AuthenticationManager {
     }
     
     /**
-     * Verify a PIN
+     * Verify a PIN.
+     *
+     * Handles two stored formats:
+     *  - Legacy: plain Base64 SHA-256 (no prefix) — verified and then migrated to PBKDF2 on success.
+     *  - Current: "pbkdf2:<salt_b64>:<hash_b64>" — verified with constant-time comparison.
      */
     fun verifyPin(pin: String): Boolean {
-        val storedHash = prefs?.decodeString(PREF_PIN_HASH, null) ?: return false
+        val stored = prefs?.decodeString(PREF_PIN_HASH, null) ?: return false
         return try {
-            val inputHash = hashPin(pin)
-            storedHash == inputHash
+            if (stored.startsWith("$HASH_PREFIX_PBKDF2:")) {
+                // Current PBKDF2 format
+                val parts = stored.split(":")
+                if (parts.size != 3) return false
+                val salt = Base64.decode(parts[1], Base64.NO_WRAP)
+                val expectedHash = Base64.decode(parts[2], Base64.NO_WRAP)
+                val inputHash = pbkdf2(pin, salt)
+                MessageDigest.isEqual(inputHash, expectedHash)
+            } else {
+                // Legacy unsalted SHA-256 — verify and silently migrate to PBKDF2
+                val digest = MessageDigest.getInstance("SHA-256")
+                val inputHash = digest.digest(pin.toByteArray(StandardCharsets.UTF_8))
+                val inputHashB64 = Base64.encodeToString(inputHash, Base64.NO_WRAP)
+                val matches = stored == inputHashB64
+                if (matches) {
+                    // Upgrade stored hash to PBKDF2 now that we know the plaintext PIN
+                    prefs?.encode(PREF_PIN_HASH, hashPin(pin))
+                    Log.d(TAG, "PIN hash migrated from SHA-256 to PBKDF2")
+                }
+                matches
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Error verifying PIN", e)
             false
@@ -144,12 +177,21 @@ object AuthenticationManager {
     }
     
     /**
-     * Hash a PIN using SHA-256
+     * Hash a PIN using PBKDF2WithHmacSHA256 with a freshly generated random salt.
+     * Returns a string in the format "pbkdf2:<salt_b64>:<hash_b64>".
      */
     private fun hashPin(pin: String): String {
-        val digest = MessageDigest.getInstance("SHA-256")
-        val hash = digest.digest(pin.toByteArray(StandardCharsets.UTF_8))
-        return Base64.encodeToString(hash, Base64.NO_WRAP)
+        val salt = ByteArray(PBKDF2_SALT_BYTES).also { SecureRandom().nextBytes(it) }
+        val hash = pbkdf2(pin, salt)
+        return "$HASH_PREFIX_PBKDF2:${Base64.encodeToString(salt, Base64.NO_WRAP)}:${Base64.encodeToString(hash, Base64.NO_WRAP)}"
+    }
+
+    /**
+     * Derive a key from [pin] and [salt] using PBKDF2WithHmacSHA256.
+     */
+    private fun pbkdf2(pin: String, salt: ByteArray): ByteArray {
+        val spec = PBEKeySpec(pin.toCharArray(), salt, PBKDF2_ITERATIONS, PBKDF2_KEY_LENGTH)
+        return SecretKeyFactory.getInstance(PBKDF2_ALGORITHM).generateSecret(spec).encoded
     }
     
     /**

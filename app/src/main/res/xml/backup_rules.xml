@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!--
+        Exclude MMKV storage from backups.
+        MMKV contains the PIN hash (pin_hash key) and other security-sensitive
+        preferences (security_enabled, use_biometric, etc.).
+        Allowing these to be backed up would let an attacker restore a known-hash
+        state onto a new device and bypass the App Lock.
+    -->
+    <exclude domain="file" path="mmkv/" />
+    <exclude domain="sharedpref" path="mmkv/" />
+</full-backup-content>
