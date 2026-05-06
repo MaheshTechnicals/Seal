@@ -66,3 +66,13 @@
 #-keepnames class <1>$$serializer { # -keepnames suffices; class is kept when serializer() is kept.
 #    static <1>$$serializer INSTANCE;
 #}
+# Keep notification drawable resources from being stripped by ProGuard/R8
+# These are referenced via R.drawable.ic_stat_seal in NotificationUtil.kt
+-keepclassmembers class com.junkfood.seal.R$drawable {
+    public static final int ic_stat_seal*;
+}
+
+# Ensure NotificationUtil is not obfuscated
+-keepclassmembers class com.junkfood.seal.util.NotificationUtil {
+    *;
+}

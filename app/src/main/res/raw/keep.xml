@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Keep resources from being stripped by resource shrinker (isShrinkResources=true) -->
+<resources>
+    <!-- Notification icon resources - MUST keep these even if they appear unused to static analysis -->
+    <!-- Used by NotificationUtil.setSmallIcon(R.drawable.ic_stat_seal) -->
+    <keep name="drawable/ic_stat_seal" />
+    <keep name="drawable/ic_stat_seal_base" />
+    <keep name="drawable-anydpi-v24/ic_stat_seal" />
+    <keep name="drawable-mdpi/ic_stat_seal" />
+    <keep name="drawable-mdpi/ic_stat_seal_base" />
+    <keep name="drawable-hdpi/ic_stat_seal" />
+    <keep name="drawable-hdpi/ic_stat_seal_base" />
+    <keep name="drawable-xhdpi/ic_stat_seal" />
+    <keep name="drawable-xhdpi/ic_stat_seal_base" />
+    <keep name="drawable-xxhdpi/ic_stat_seal" />
+    <keep name="drawable-xxhdpi/ic_stat_seal_base" />
+    <keep name="drawable-xxxhdpi/ic_stat_seal" />
+    <keep name="drawable-xxxhdpi/ic_stat_seal_base" />
+    
+    <!-- Action drawable icons used in notifications -->
+    <keep name="drawable/outline_cancel_24" />
+    <keep name="drawable/outline_content_copy_24" />
+</resources>

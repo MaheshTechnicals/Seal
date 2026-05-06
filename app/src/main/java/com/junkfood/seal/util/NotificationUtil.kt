@@ -111,6 +111,14 @@ object NotificationUtil {
                 isError -> builder.setCategory(NotificationCompat.CATEGORY_ERROR)
             }
         }
+        
+        // Android 16+ (API 35+) - Ensure notification icon is properly set for latest Android
+        if (Build.VERSION.SDK_INT >= 35) {
+            // Explicitly ensure small icon is set (redundant but ensures Android 16 compatibility)
+            builder.setSmallIcon(R.drawable.ic_stat_seal)
+            // Use semantic colors for better theme integration on Android 16+
+            builder.setColor(0xFF1F1F1F) // Dark neutral color that works with system tint
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -137,6 +145,12 @@ object NotificationUtil {
                 // Android 13+ (API 33+) - Additional notification settings
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     // Allow badge on app icon
+                    setShowBadge(true)
+                }
+                
+                // Android 16+ (API 35+) - Ensure icon is properly preserved
+                if (Build.VERSION.SDK_INT >= 35) {
+                    // Just ensure channel is enabled - icon handling is automatic
                     setShowBadge(true)
                 }
                 
