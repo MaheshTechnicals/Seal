@@ -132,6 +132,9 @@ import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialogViewModel
 import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialogViewModel.Action
 import com.junkfood.seal.ui.page.downloadv2.configure.FormatPage
 import com.junkfood.seal.ui.page.downloadv2.configure.PlaylistSelectionPage
+import com.junkfood.seal.ui.component.ConfirmButton
+import com.junkfood.seal.ui.component.DismissButton
+import com.junkfood.seal.ui.component.SealDialog
 import com.junkfood.seal.ui.theme.GradientDarkColors
 import com.junkfood.seal.util.DatabaseUtil
 import com.junkfood.seal.util.DownloadUtil
@@ -759,6 +762,7 @@ fun NewHomePage(
                     key = { it.id }
                 ) { downloadInfo ->
                     var showRecentDetailsDialog by remember { mutableStateOf(false) }
+                    var showRecentDeleteDialog by remember { mutableStateOf(false) }
                     
                     RecentDownloadCard(
                         downloadInfo = downloadInfo,
@@ -784,6 +788,10 @@ fun NewHomePage(
                             view.slightHapticFeedback()
                             showRecentDetailsDialog = true
                         },
+                        onDelete = {
+                            view.slightHapticFeedback()
+                            showRecentDeleteDialog = true
+                        },
                         onHide = {
                             view.slightHapticFeedback()
                             // Optimistically remove from UI immediately, then persist to DB
@@ -798,6 +806,39 @@ fun NewHomePage(
                         RecentDownloadDetailsDialog(
                             downloadInfo = downloadInfo,
                             onDismiss = { showRecentDetailsDialog = false }
+                        )
+                    }
+
+                    if (showRecentDeleteDialog) {
+                        SealDialog(
+                            onDismissRequest = { showRecentDeleteDialog = false },
+                            title = { Text(text = stringResource(R.string.delete_info)) },
+                            icon = {
+                                Icon(
+                                    Icons.Outlined.Delete,
+                                    null,
+                                    tint = MaterialTheme.colorScheme.tertiary
+                                )
+                            },
+                            text = {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+                                    text = stringResource(R.string.delete_info_msg).format(downloadInfo.videoTitle),
+                                )
+                            },
+                            confirmButton = {
+                                ConfirmButton {
+                                    showRecentDeleteDialog = false
+                                    localHiddenIds = localHiddenIds + downloadInfo.id
+                                    scope.launch(Dispatchers.IO) {
+                                        DatabaseUtil.deleteInfoList(
+                                            infoList = listOf(downloadInfo),
+                                            deleteFile = false
+                                        )
+                                    }
+                                }
+                            },
+                            dismissButton = { DismissButton { showRecentDeleteDialog = false } },
                         )
                     }
                 }
@@ -980,6 +1021,7 @@ fun RecentDownloadCard(
     onShare: () -> Unit,
     onCopyLink: () -> Unit,
     onShowDetails: () -> Unit,
+    onDelete: () -> Unit,
     onHide: () -> Unit = {},
     refreshKey: Int = 0,
     modifier: Modifier = Modifier
@@ -1142,6 +1184,20 @@ fun RecentDownloadCard(
                                 imageVector = Icons.Outlined.VisibilityOff,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.delete)) },
+                        onClick = {
+                            onDelete()
+                            showMenu = false
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.tertiary
                             )
                         }
                     )
