@@ -104,6 +104,7 @@ import com.junkfood.seal.util.AUDIO_CONVERSION_FORMAT
 import com.junkfood.seal.util.AUDIO_CONVERT
 import com.junkfood.seal.util.CONVERT_MP3
 import com.junkfood.seal.util.CONVERT_M4A
+import com.junkfood.seal.util.PreferenceUtil.getAudioConvertFormat
 import com.junkfood.seal.util.PreferenceUtil.getBoolean
 import com.junkfood.seal.util.PreferenceUtil.getString
 import com.junkfood.seal.util.PreferenceUtil.updateBoolean
@@ -509,7 +510,7 @@ private fun FormatPageImpl(
     val isListView = FORMAT_LIST_VIEW.getBoolean()
 
     var convertAudio by remember { mutableStateOf(AUDIO_CONVERT.getBoolean()) }
-    var audioConvertFormat by remember { mutableIntStateOf(AUDIO_CONVERSION_FORMAT.getInt()) }
+    var audioConvertFormat by remember { mutableIntStateOf(getAudioConvertFormat()) }
 
     var videoOnlyItemLimit by remember { mutableIntStateOf(6) }
     var audioOnlyItemLimit by remember { mutableIntStateOf(6) }
