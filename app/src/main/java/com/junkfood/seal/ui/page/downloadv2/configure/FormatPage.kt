@@ -100,15 +100,8 @@ import com.junkfood.seal.util.FORMAT_LIST_VIEW
 import com.junkfood.seal.util.Format
 import com.junkfood.seal.util.FormatValidator
 import com.junkfood.seal.util.MERGE_MULTI_AUDIO_STREAM
-import com.junkfood.seal.util.AUDIO_CONVERSION_FORMAT
-import com.junkfood.seal.util.AUDIO_CONVERT
-import com.junkfood.seal.util.CONVERT_MP3
-import com.junkfood.seal.util.CONVERT_M4A
-import com.junkfood.seal.util.PreferenceUtil.getAudioConvertFormat
 import com.junkfood.seal.util.PreferenceUtil.getBoolean
 import com.junkfood.seal.util.PreferenceUtil.getString
-import com.junkfood.seal.util.PreferenceUtil.updateBoolean
-import com.junkfood.seal.util.PreferenceUtil.updateInt
 import com.junkfood.seal.util.PreferenceUtil.updateString
 import com.junkfood.seal.util.SUBTITLE
 import com.junkfood.seal.util.SUBTITLE_LANGUAGE
@@ -508,9 +501,6 @@ private fun FormatPageImpl(
     val duration = videoInfo.duration ?: 0.0
 
     val isListView = FORMAT_LIST_VIEW.getBoolean()
-
-    var convertAudio by remember { mutableStateOf(AUDIO_CONVERT.getBoolean()) }
-    var audioConvertFormat by remember { mutableIntStateOf(getAudioConvertFormat()) }
 
     var videoOnlyItemLimit by remember { mutableIntStateOf(6) }
     var audioOnlyItemLimit by remember { mutableIntStateOf(6) }
@@ -1111,60 +1101,6 @@ private fun FormatPageImpl(
                     }
                 }
 
-                if (audioOnly) {
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Column(modifier = Modifier.padding(horizontal = 12.dp)) {
-                            Text(
-                                text = stringResource(R.string.audio_format),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(bottom = 8.dp)
-                            )
-                            LazyRow(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                contentPadding = PaddingValues(bottom = 8.dp)
-                            ) {
-                                item {
-                                    val selected = !convertAudio
-                                    VideoFilterChip(
-                                        selected = selected,
-                                        onClick = {
-                                            convertAudio = false
-                                            AUDIO_CONVERT.updateBoolean(false)
-                                        },
-                                        label = stringResource(R.string.original)
-                                    )
-                                }
-                                item {
-                                    val selected = convertAudio && audioConvertFormat == CONVERT_MP3
-                                    VideoFilterChip(
-                                        selected = selected,
-                                        onClick = {
-                                            convertAudio = true
-                                            audioConvertFormat = CONVERT_MP3
-                                            AUDIO_CONVERT.updateBoolean(true)
-                                            AUDIO_CONVERSION_FORMAT.updateInt(CONVERT_MP3)
-                                        },
-                                        label = "MP3"
-                                    )
-                                }
-                                item {
-                                    val selected = convertAudio && audioConvertFormat == CONVERT_M4A
-                                    VideoFilterChip(
-                                        selected = selected,
-                                        onClick = {
-                                            convertAudio = true
-                                            audioConvertFormat = CONVERT_M4A
-                                            AUDIO_CONVERT.updateBoolean(true)
-                                            AUDIO_CONVERSION_FORMAT.updateInt(CONVERT_M4A)
-                                        },
-                                        label = "M4A"
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
 
                 itemsIndexed(
                     audioOnlyFormats.subList(
