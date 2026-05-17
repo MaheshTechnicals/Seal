@@ -35,6 +35,7 @@ import com.junkfood.seal.util.NotificationUtil
 import com.junkfood.seal.util.PreferenceUtil
 import com.junkfood.seal.util.PreferenceUtil.getString
 import com.junkfood.seal.util.PreferenceUtil.updateString
+import com.junkfood.seal.util.makeToast
 import com.junkfood.seal.util.SDCARD_URI
 import com.junkfood.seal.util.UpdateUtil
 import com.junkfood.seal.util.VIDEO_DIRECTORY
@@ -183,18 +184,30 @@ class App : Application() {
         fun updateDownloadDir(uri: Uri, directoryType: Directory) {
             when (directoryType) {
                 Directory.AUDIO -> {
+                    if (!FileUtil.isPrimaryStorageUri(uri)) {
+                        context.makeToast(R.string.directory_not_supported)
+                        return
+                    }
                     val path = FileUtil.getRealPath(uri)
                     audioDownloadDir = path
                     PreferenceUtil.encodeString(AUDIO_DIRECTORY, path)
                 }
 
                 Directory.VIDEO -> {
+                    if (!FileUtil.isPrimaryStorageUri(uri)) {
+                        context.makeToast(R.string.directory_not_supported)
+                        return
+                    }
                     val path = FileUtil.getRealPath(uri)
                     videoDownloadDir = path
                     PreferenceUtil.encodeString(VIDEO_DIRECTORY, path)
                 }
 
                 Directory.CUSTOM_COMMAND -> {
+                    if (!FileUtil.isPrimaryStorageUri(uri)) {
+                        context.makeToast(R.string.directory_not_supported)
+                        return
+                    }
                     val path = FileUtil.getRealPath(uri)
                     PreferenceUtil.encodeString(COMMAND_DIRECTORY, path)
                 }

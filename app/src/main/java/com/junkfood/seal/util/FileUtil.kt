@@ -225,6 +225,11 @@ object FileUtil {
 
     fun writeContentToFile(content: String, file: File): File = file.apply { writeText(content) }
 
+    fun isPrimaryStorageUri(treeUri: Uri): Boolean {
+        val path = treeUri.path ?: return false
+        return path.contains("primary:")
+    }
+
     fun getRealPath(treeUri: Uri): String {
         val path: String = treeUri.path.toString()
         return if (path.contains("primary:")) {

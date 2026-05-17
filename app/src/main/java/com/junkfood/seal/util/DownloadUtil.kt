@@ -192,9 +192,9 @@ object DownloadUtil {
                         addOption("--dump-json")
                     } else {
                         addOption("--dump-single-json")
+                        addOption("--no-playlist")
                     }
                     addOption("-R", "1")
-                    addOption("--no-playlist")
                     addOption("--socket-timeout", "5")
                 }
             return getVideoInfo(request, taskKey)
