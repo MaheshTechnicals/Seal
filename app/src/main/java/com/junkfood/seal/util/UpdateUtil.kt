@@ -143,7 +143,7 @@ object UpdateUtil {
                         .getPackageArchiveInfo(apkFile.absolutePath, 0)
                         ?.versionName
                         .toVersion()
-                if (apkVersion <= context.getCurrentVersion()) {
+                if (apkVersion == null || apkVersion <= context.getCurrentVersion()) {
                     apkFile.delete()
                 }
             }
@@ -162,7 +162,7 @@ object UpdateUtil {
 
             Log.d(TAG, apkVersion.toString())
 
-            if (apkVersion >= release.name.toVersion()) {
+            if (apkVersion != null && apkVersion >= release.name.toVersion()) {
                 return@withContext flow<DownloadStatus> {
                     emit(DownloadStatus.Finished(context.getLatestApk()))
                 }
@@ -210,16 +210,22 @@ object UpdateUtil {
 
                                 outputStream.write(data, 0, bytes)
                                 progressBytes += bytes
-                                emit(
-                                    DownloadStatus.Progress(
-                                        percent = ((progressBytes * 100) / totalBytes).toInt()
+                                if (totalBytes > 0L) {
+                                    emit(
+                                        DownloadStatus.Progress(
+                                            percent = ((progressBytes * 100) / totalBytes).toInt()
+                                        )
                                     )
-                                )
+                                } else {
+                                    emit(DownloadStatus.Progress(percent = -1))
+                                }
                             }
 
                             when {
-                                progressBytes < totalBytes -> throw Exception("missing bytes")
-                                progressBytes > totalBytes -> throw Exception("too many bytes")
+                                totalBytes > 0L && progressBytes < totalBytes ->
+                                    throw Exception("missing bytes")
+                                totalBytes > 0L && progressBytes > totalBytes ->
+                                    throw Exception("too many bytes")
                                 else -> deleteFile = false
                             }
                         }
