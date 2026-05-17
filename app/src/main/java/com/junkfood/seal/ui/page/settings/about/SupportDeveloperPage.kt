@@ -3,11 +3,13 @@ package com.junkfood.seal.ui.page.settings.about
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
@@ -23,9 +25,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.junkfood.seal.R
 import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.common.LocalGradientDarkMode
 import com.junkfood.seal.ui.theme.GradientBrushes
@@ -248,7 +252,7 @@ fun SupportDeveloperPage(
             // UPI Payment
             item {
                 DonationOptionCard(
-                    icon = Icons.Outlined.Payment,
+                    iconRes = R.drawable.google_pay,
                     title = "UPI Payment",
                     description = "maheshtechnicals@apl",
                     gradient = if (isDarkTheme && isGradientDark) {
@@ -275,7 +279,7 @@ fun SupportDeveloperPage(
             // PayPal
             item {
                 DonationOptionCard(
-                    icon = Icons.Outlined.AccountBalance,
+                    iconRes = R.drawable.paypal,
                     title = "PayPal",
                     description = "Support via PayPal",
                     gradient = Brush.linearGradient(
@@ -293,7 +297,7 @@ fun SupportDeveloperPage(
             // Buy Me a Coffee
             item {
                 DonationOptionCard(
-                    icon = Icons.Outlined.LocalCafe,
+                    iconRes = R.drawable.coffee_cup,
                     title = "Buy Me a Coffee",
                     description = "Support with a coffee",
                     gradient = Brush.linearGradient(
@@ -419,7 +423,8 @@ private fun openUpiPayment(
 
 @Composable
 private fun DonationOptionCard(
-    icon: ImageVector,
+    @DrawableRes iconRes: Int? = null,
+    icon: ImageVector? = null,
     title: String,
     description: String,
     gradient: Brush,
@@ -453,12 +458,23 @@ private fun DonationOptionCard(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        Icon(
-                            imageVector = icon,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(28.dp)
-                        )
+                        when {
+                            iconRes != null -> {
+                                Image(
+                                    painter = painterResource(iconRes),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                            }
+                            icon != null -> {
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                            }
+                        }
                     }
                 }
                 
