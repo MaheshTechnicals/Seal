@@ -54,6 +54,11 @@
       "id": 11,
       "name": "SANDIPAN PATGIRI",
       "METHOD": "UPI"
+    },
+    {
+      "id": 12,
+      "name": "Benoit Barret",
+      "METHOD": "PAYPAL"
     }
   ]
 }
