@@ -454,7 +454,8 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
                         if (throwable is YoutubeDL.CanceledException) {
                             return@onFailure
                         }
-                        if (isNetworkError(throwable) && !PreferenceUtil.isNetworkAvailableForDownload()) {
+                        val networkUnavailable = !PreferenceUtil.isNetworkAvailableForDownload()
+                        if (networkUnavailable) {
                             ensureNetworkDegradedStart()
                             if (isWithinNetworkGracePeriod()) {
                                 waitingForNetwork[id] = FetchInfo
@@ -558,7 +559,8 @@ class DownloaderV2Impl(private val appContext: Context) : DownloaderV2, KoinComp
                         }
                         val retries = retryCountMap.getOrDefault(id, 0)
                         val isNetworkError = isNetworkError(throwable)
-                        if (isNetworkError && !PreferenceUtil.isNetworkAvailableForDownload()) {
+                        val networkUnavailable = !PreferenceUtil.isNetworkAvailableForDownload()
+                        if (networkUnavailable) {
                             ensureNetworkDegradedStart()
                             retryCountMap.remove(id)
                             if (isWithinNetworkGracePeriod()) {
