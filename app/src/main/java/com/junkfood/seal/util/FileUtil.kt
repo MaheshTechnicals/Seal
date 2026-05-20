@@ -180,6 +180,23 @@ object FileUtil {
         return count
     }
 
+    fun deleteTempFilesByBaseName(baseName: String): Int {
+        val safeName = baseName.trim()
+        if (safeName.length < 3) return 0
+        val tempDir = getExternalTempDir()
+        var count = 0
+        tempDir.walkTopDown().forEach {
+            if (it.name.contains(safeName, ignoreCase = true)) {
+                if (it.isDirectory) {
+                    if (it.deleteRecursively()) count++
+                } else if (it.delete()) {
+                    count++
+                }
+            }
+        }
+        return count
+    }
+
     fun Context.getConfigDirectory(): File = cacheDir
 
     fun Context.getConfigFile(suffix: String = "") = File(getConfigDirectory(), "config$suffix.txt")

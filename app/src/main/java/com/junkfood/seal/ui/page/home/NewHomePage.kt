@@ -139,6 +139,7 @@ import com.junkfood.seal.ui.theme.GradientDarkColors
 import com.junkfood.seal.util.DatabaseUtil
 import com.junkfood.seal.util.DownloadUtil
 import com.junkfood.seal.util.FileUtil
+import java.io.File
 import com.junkfood.seal.util.toFileSizeText
 import com.junkfood.seal.util.getErrorReport
 import com.junkfood.seal.util.makeToast
@@ -831,6 +832,11 @@ fun NewHomePage(
                                     showRecentDeleteDialog = false
                                     localHiddenIds = localHiddenIds + downloadInfo.id
                                     scope.launch(Dispatchers.IO) {
+                                        val baseName =
+                                            File(downloadInfo.videoPath)
+                                                .nameWithoutExtension
+                                                .ifEmpty { downloadInfo.videoTitle }
+                                        FileUtil.deleteTempFilesByBaseName(baseName)
                                         DatabaseUtil.deleteInfoList(
                                             infoList = listOf(downloadInfo),
                                             deleteFile = false
